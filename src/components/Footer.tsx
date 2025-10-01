@@ -94,7 +94,7 @@ export default function Footer() {
                     borderRadius: '50%',
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
                     '&:hover': {
-                      color: '#FBA91E',
+                           color: 'secondary.main',
                       transform: 'translateY(-2px)',
                       backgroundColor: 'rgba(251, 169, 30, 0.2)',
                     },
@@ -170,7 +170,7 @@ export default function Footer() {
                       fontWeight: 400,
                       lineHeight: 1.3,
                       '&:hover': {
-                        color: '#FBA91E',
+                           color: 'secondary.main',
                         transform: 'translateX(4px)',
                       },
                       transition: 'all 0.3s ease',

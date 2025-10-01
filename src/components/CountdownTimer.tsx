@@ -75,7 +75,7 @@ export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
       <Typography
         variant="h6"
         sx={{
-          color: '#FBA91E',
+                  color: 'secondary.main',
           textAlign: 'center',
           mb: 3,
           fontWeight: 600,

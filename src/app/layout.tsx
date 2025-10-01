@@ -105,7 +105,7 @@ export default function RootLayout({
               component="main"
               sx={{
                 flexGrow: 1,
-                pt: { xs: '96px', md: '140px' }, // Increased padding to fully clear integrated sticky header
+                pt: { xs: '80px', md: '120px' }, // Reduced padding to eliminate useless space below header
               }}
             >
               {children}

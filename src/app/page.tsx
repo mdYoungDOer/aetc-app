@@ -34,8 +34,8 @@ export default function HomePage() {
         <Box sx={{ mb: 4, textAlign: 'center' }}>
           <Typography
             variant="h4"
-            sx={{
-              color: '#FBA91E',
+                  sx={{
+                    color: 'secondary.main',
               fontWeight: 700,
               mb: 1,
               fontSize: { xs: '1.5rem', md: '2rem' },
@@ -65,11 +65,11 @@ export default function HomePage() {
             href="/registration"
             variant="contained"
             size="large"
-            sx={{
-              backgroundColor: '#FBA91E',
+                  sx={{
+                    backgroundColor: 'secondary.main',
               color: '#000',
               '&:hover': {
-                backgroundColor: '#e59915',
+                backgroundColor: 'secondary.dark',
               },
             }}
           >

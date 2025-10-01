@@ -109,7 +109,7 @@ export default function HomepageSpeakerCard({
                 width: 120,
                 height: 120,
                 backgroundColor: '#293972',
-                color: '#FBA91E',
+                    color: 'secondary.main',
                 fontSize: '2.5rem',
                 fontWeight: 700,
                 border: '4px solid #FFFFFF',
@@ -140,7 +140,7 @@ export default function HomepageSpeakerCard({
             <Typography
               variant="body2"
               sx={{ 
-                color: '#FBA91E', 
+                    color: 'secondary.main',
                 fontWeight: 600, 
                 mb: 0.5,
                 fontSize: '0.9rem',
