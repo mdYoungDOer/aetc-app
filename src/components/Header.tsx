@@ -20,7 +20,8 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import { Menu as MenuIcon, X, ChevronDown, Moon, Sun } from 'lucide-react';
+import { Menu as MenuIcon, X, ChevronDown, Moon, Sun, Search } from 'lucide-react';
+import GlobalSearch from './GlobalSearch';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme as useNextTheme } from 'next-themes';
@@ -69,6 +70,7 @@ const navItems: NavItem[] = [
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [searchOpen, setSearchOpen] = React.useState(false);
   const [anchorEls, setAnchorEls] = React.useState<{ [key: string]: HTMLElement | null }>({});
   const [mobileExpanded, setMobileExpanded] = React.useState<{ [key: string]: boolean }>({});
   const { theme, setTheme } = useNextTheme();
@@ -273,8 +275,13 @@ export default function Header() {
             ))}
           </Box>
 
+          {/* Search Button */}
+          <IconButton onClick={() => setSearchOpen(true)} sx={{ mr: 1 }} title="Search">
+            <Search size={20} />
+          </IconButton>
+
           {/* Theme Toggle */}
-          <IconButton onClick={toggleTheme} sx={{ mr: { xs: 1, md: 0 } }}>
+          <IconButton onClick={toggleTheme} sx={{ mr: { xs: 1, md: 0 } }} title="Toggle theme">
             <AnimatePresence mode="wait">
               <motion.div
                 key={theme}
@@ -312,6 +319,9 @@ export default function Header() {
       >
         {drawer}
       </Drawer>
+
+      {/* Global Search */}
+      <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
     </AppBar>
   );
 }

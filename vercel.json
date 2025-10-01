@@ -1,0 +1,29 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
+    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key",
+    "SENDGRID_API_KEY": "@sendgrid_api_key",
+    "SENDGRID_FROM_EMAIL": "@sendgrid_from_email",
+    "SENDGRID_FROM_NAME": "@sendgrid_from_name",
+    "PAYSTACK_PUBLIC_KEY": "@paystack_public_key",
+    "PAYSTACK_SECRET_KEY": "@paystack_secret_key"
+  },
+  "headers": [
+    {
+      "source": "/api/paystack/webhook",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    }
+  ]
+}
+
