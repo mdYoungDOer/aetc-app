@@ -14,10 +14,6 @@ export default function CMSPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    loadPage();
-  }, [slug]);
-
   const loadPage = async () => {
     try {
       // Check if Supabase is configured
@@ -41,6 +37,11 @@ export default function CMSPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug]);
 
   if (loading) {
     return (

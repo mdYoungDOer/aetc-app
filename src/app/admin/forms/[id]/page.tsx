@@ -39,10 +39,6 @@ export default function FormEditor() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    loadForm();
-  }, [formId]);
-
   const loadForm = async () => {
     try {
       const { data, error } = await supabase
@@ -62,6 +58,11 @@ export default function FormEditor() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadForm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formId]);
 
   const handleSave = async () => {
     setSaving(true);

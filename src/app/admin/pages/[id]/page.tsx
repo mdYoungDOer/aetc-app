@@ -33,10 +33,6 @@ export default function PageEditor() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    loadPage();
-  }, [pageId]);
-
   const loadPage = async () => {
     try {
       const data = await getPageById(pageId);
@@ -57,6 +53,11 @@ export default function PageEditor() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageId]);
 
   const handleSave = async () => {
     setSaving(true);

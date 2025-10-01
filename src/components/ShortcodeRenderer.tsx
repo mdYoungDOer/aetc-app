@@ -21,10 +21,6 @@ export default function ShortcodeRenderer({ shortcode }: ShortcodeRendererProps)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    loadShortcodeContent();
-  }, [shortcode]);
-
   const loadShortcodeContent = async () => {
     // Parse form shortcode: [form id="form-id"]
     const formMatch = shortcode.match(/\[form\s+id="([^"]+)"\]/);
@@ -52,6 +48,11 @@ export default function ShortcodeRenderer({ shortcode }: ShortcodeRendererProps)
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadShortcodeContent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shortcode]);
 
   if (loading) {
     return (
