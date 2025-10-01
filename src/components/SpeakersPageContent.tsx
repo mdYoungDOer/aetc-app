@@ -15,7 +15,7 @@ export default function SpeakersPageContent() {
       try {
         const allSpeakers = await speakerService.getSpeakers({
           active: true,
-          orderBy: 'display_order',
+          orderBy: 'order_index',
           orderDirection: 'asc',
         });
         setSpeakers(allSpeakers);
@@ -29,11 +29,14 @@ export default function SpeakersPageContent() {
             title: 'Minister of Energy and Green Transition',
             company: 'Ghana',
             bio: 'Leading Ghana\'s energy transition and green development initiatives.',
+            featured: true,
+            order_index: 1,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Legacy fields for backward compatibility
             is_featured: true,
             is_active: true,
             display_order: 1,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           },
           {
             id: '2',
@@ -41,11 +44,14 @@ export default function SpeakersPageContent() {
             title: 'Minister for Finance',
             company: 'Ghana',
             bio: 'Overseeing Ghana\'s economic policies and financial frameworks for energy development.',
+            featured: true,
+            order_index: 2,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Legacy fields for backward compatibility
             is_featured: true,
             is_active: true,
             display_order: 2,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           },
           {
             id: '3',
@@ -53,11 +59,14 @@ export default function SpeakersPageContent() {
             title: 'Hon. Minister of State, Petroleum Resources (Oil)',
             company: 'Nigeria',
             bio: 'Leading Nigeria\'s petroleum sector development and energy policy initiatives.',
+            featured: true,
+            order_index: 3,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Legacy fields for backward compatibility
             is_featured: true,
             is_active: true,
             display_order: 3,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           },
           {
             id: '4',
@@ -65,11 +74,14 @@ export default function SpeakersPageContent() {
             title: 'Minister of Petroleum and Mineral Resources',
             company: 'Egypt',
             bio: 'Overseeing Egypt\'s petroleum and mineral resources sector development.',
+            featured: true,
+            order_index: 4,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Legacy fields for backward compatibility
             is_featured: true,
             is_active: true,
             display_order: 4,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           },
           {
             id: '5',
@@ -77,11 +89,14 @@ export default function SpeakersPageContent() {
             title: 'Minister of State Gas',
             company: 'Ministry of Petroleum Resources, Nigeria',
             bio: 'Leading Nigeria\'s gas sector development and policy implementation.',
+            featured: true,
+            order_index: 5,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Legacy fields for backward compatibility
             is_featured: true,
             is_active: true,
             display_order: 5,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           },
           {
             id: '6',
@@ -89,11 +104,14 @@ export default function SpeakersPageContent() {
             title: 'Minister of Mineral Resources, Oil and Gas',
             company: 'Angola',
             bio: 'Overseeing Angola\'s mineral resources and energy sector development.',
+            featured: true,
+            order_index: 6,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Legacy fields for backward compatibility
             is_featured: true,
             is_active: true,
             display_order: 6,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           },
         ]);
       } finally {

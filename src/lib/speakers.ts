@@ -7,16 +7,24 @@ export interface Speaker {
   company: string;
   bio?: string;
   image_url?: string;
+  social_links?: {
+    linkedin?: string;
+    twitter?: string;
+    website?: string;
+  };
+  featured: boolean;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+  // Legacy fields for backward compatibility
   linkedin_url?: string;
   twitter_url?: string;
   website_url?: string;
   email?: string;
   phone?: string;
-  is_featured: boolean;
-  is_active: boolean;
-  display_order: number;
-  created_at: string;
-  updated_at: string;
+  is_featured?: boolean;
+  is_active?: boolean;
+  display_order?: number;
 }
 
 export class SpeakerService {
@@ -26,7 +34,7 @@ export class SpeakerService {
     featured?: boolean;
     active?: boolean;
     limit?: number;
-    orderBy?: 'display_order' | 'name' | 'created_at';
+    orderBy?: 'order_index' | 'name' | 'created_at';
     orderDirection?: 'asc' | 'desc';
   } = {}): Promise<Speaker[]> {
     try {
@@ -36,15 +44,14 @@ export class SpeakerService {
 
       // Apply filters
       if (options.featured !== undefined) {
-        query = query.eq('is_featured', options.featured);
+        query = query.eq('featured', options.featured);
       }
 
-      if (options.active !== undefined) {
-        query = query.eq('is_active', options.active);
-      }
+      // Note: No is_active filter since the column doesn't exist in the current table
+      // All speakers in the table are considered active
 
       // Apply ordering
-      const orderBy = options.orderBy || 'display_order';
+      const orderBy = options.orderBy || 'order_index';
       const orderDirection = options.orderDirection || 'asc';
       query = query.order(orderBy, { ascending: orderDirection === 'asc' });
 
@@ -60,7 +67,16 @@ export class SpeakerService {
         throw new Error('Failed to fetch speakers');
       }
 
-      return data || [];
+      // Transform data to include legacy fields for backward compatibility
+      return (data || []).map(speaker => ({
+        ...speaker,
+        is_featured: speaker.featured,
+        is_active: true, // All speakers are considered active
+        display_order: speaker.order_index,
+        linkedin_url: speaker.social_links?.linkedin,
+        twitter_url: speaker.social_links?.twitter,
+        website_url: speaker.social_links?.website,
+      }));
     } catch (error) {
       console.error('SpeakerService.getSpeakers error:', error);
       return [];
@@ -72,7 +88,7 @@ export class SpeakerService {
       featured: true,
       active: true,
       limit,
-      orderBy: 'display_order',
+      orderBy: 'order_index',
       orderDirection: 'asc',
     });
   }
@@ -90,7 +106,18 @@ export class SpeakerService {
         return null;
       }
 
-      return data;
+      if (!data) return null;
+
+      // Transform data to include legacy fields for backward compatibility
+      return {
+        ...data,
+        is_featured: data.featured,
+        is_active: true, // All speakers are considered active
+        display_order: data.order_index,
+        linkedin_url: data.social_links?.linkedin,
+        twitter_url: data.social_links?.twitter,
+        website_url: data.social_links?.website,
+      };
     } catch (error) {
       console.error('SpeakerService.getSpeakerById error:', error);
       return null;

@@ -10,6 +10,7 @@ import CustomCard from '@/components/ui/CustomCard';
 import CountdownTimer from '@/components/CountdownTimer';
 import SponsorsSection from '@/components/SponsorsSection';
 import HomepageSpeakers from '@/components/HomepageSpeakers';
+import KeyStatsSection from '@/components/KeyStatsSection';
 
 export const metadata: Metadata = {
   title: 'Africa Energy Technology Conference 2026 | Home',
@@ -84,7 +85,7 @@ export default function HomePage() {
               borderColor: '#FFFFFF',
               color: '#FFFFFF',
               '&:hover': {
-                borderColor: '#FBA91E',
+                borderColor: 'secondary.main',
                 backgroundColor: 'rgba(251, 169, 30, 0.1)',
               },
             }}
@@ -93,6 +94,9 @@ export default function HomePage() {
           </CustomButton>
         </Box>
       </Hero>
+
+      {/* Key Facts/Stats Section */}
+      <KeyStatsSection />
 
       {/* Main Content */}
       <main id="main-content">
@@ -221,27 +225,27 @@ export default function HomePage() {
             {[
               {
                 icon: Users,
-                title: '3k+ Attendees',
+                title: 'Networking Opportunities',
                 description:
-                  'Connect with government representatives, policymakers, and industry leaders from 45+ countries.',
+                  'Connect with key stakeholders, industry leaders, and policymakers from the energy sector. This conference provides an invaluable platform to forge relationships, establish partnerships, and collaborate on initiatives that can drive industry growth and innovation. Networking sessions, social events, and breakout meetings will enable you to build a robust professional network.',
               },
               {
                 icon: Lightbulb,
-                title: '50+ Strategic Sessions',
+                title: 'Insightful Discussions and Panels',
                 description:
-                  'Participate in thought-provoking discussions and panels featuring 200+ A-list speakers & VIPs.',
+                  'Participate in thought-provoking discussions and panels featuring experts and thought leaders in the energy industry. Gain insights into the latest trends, challenges, and solutions in the energy sector. These sessions will offer valuable knowledge that can inform your strategies and decision-making.',
               },
               {
                 icon: Target,
-                title: 'Investment Opportunities',
+                title: 'Investment and Business Opportunities',
                 description:
-                  'Explore numerous investment opportunities with financial institutions, investors, and ESG advisors.',
+                  'Explore numerous investment opportunities and engage with financial institutions, investors, and ESG advisors. The conference provides a unique chance to present your projects, discover funding sources, and enter into potential investment partnerships that can help bring your energy initiatives to life.',
               },
               {
                 icon: Globe,
-                title: '100+ Partners',
+                title: 'Innovation and Technology Showcase',
                 description:
-                  'Network with 100+ partners and sponsors supporting Africa\'s energy transformation.',
+                  'Discover cutting-edge technologies and innovative solutions that are driving the future of energy. Exhibitions and demonstrations will highlight the latest advancements in energy technology, offering you the chance to see these innovations first-hand and understand how they can be applied to your work or projects.',
               },
             ].map((highlight, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>

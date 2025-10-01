@@ -7,6 +7,7 @@ import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import SponsorsSection from '@/components/SponsorsSection';
+import KeyStatsSection from '@/components/KeyStatsSection';
 
 export const metadata: Metadata = {
   title: 'About the Conference | Africa Energy Technology Conference 2026',
@@ -64,6 +65,9 @@ export default function AboutPage() {
             </Grid>
           </Grid>
         </Section>
+
+        {/* Key Facts/Stats Section */}
+        <KeyStatsSection />
 
         {/* Key Topics Section */}
         <Section

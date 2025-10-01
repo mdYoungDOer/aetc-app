@@ -27,11 +27,14 @@ export default function HomepageSpeakers() {
             title: 'Chief Energy Officer',
             company: 'Ghana Energy Commission',
             bio: 'Leading Ghana\'s energy sector transformation with over 15 years of experience.',
+            featured: true,
+            order_index: 1,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Legacy fields for backward compatibility
             is_featured: true,
             is_active: true,
             display_order: 1,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           },
           {
             id: '2',
@@ -39,11 +42,14 @@ export default function HomepageSpeakers() {
             title: 'CEO',
             company: 'Solar Innovations Africa',
             bio: 'Pioneering solar energy solutions across Africa with innovative technology.',
+            featured: true,
+            order_index: 2,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Legacy fields for backward compatibility
             is_featured: true,
             is_active: true,
             display_order: 2,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           },
           {
             id: '3',
@@ -51,11 +57,14 @@ export default function HomepageSpeakers() {
             title: 'Director of Research',
             company: 'African Energy Institute',
             bio: 'Leading research in renewable energy technologies and sustainable development.',
+            featured: true,
+            order_index: 3,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Legacy fields for backward compatibility
             is_featured: true,
             is_active: true,
             display_order: 3,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           },
           {
             id: '4',
@@ -63,11 +72,14 @@ export default function HomepageSpeakers() {
             title: 'Investment Director',
             company: 'Africa Energy Fund',
             bio: 'Driving investment in Africa\'s energy sector with focus on sustainable growth.',
+            featured: true,
+            order_index: 4,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Legacy fields for backward compatibility
             is_featured: true,
             is_active: true,
             display_order: 4,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           },
         ]);
       } finally {
