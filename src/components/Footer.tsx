@@ -37,34 +37,45 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        backgroundColor: '#181C2C',
+        backgroundColor: '#1A1D29',
         color: 'rgba(255, 255, 255, 0.87)',
-        pt: 6,
-        pb: 3,
+        pt: 8,
+        pb: 4,
         mt: 'auto',
       }}
     >
       <Container maxWidth="xl">
-        <Grid container spacing={4}>
+        <Grid container spacing={6}>
           {/* Logo and Description */}
-          <Grid item xs={12} md={4}>
-            <Box sx={{ mb: 3 }}>
+          <Grid item xs={12} md={5}>
+            <Box sx={{ mb: 4 }}>
               <Image
                 src="/AETC_Logo-second.png"
                 alt="AET Conference Logo"
-                width={100}
-                height={100}
-                style={{ objectFit: 'contain' }}
+                width={160}
+                height={160}
+                style={{ 
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4))',
+                }}
               />
             </Box>
             <Typography
-              variant="body2"
-              sx={{ color: 'rgba(255, 255, 255, 0.60)', mb: 2, lineHeight: 1.7 }}
+              variant="body1"
+              sx={{ 
+                color: 'rgba(255, 255, 255, 0.70)', 
+                mb: 4, 
+                lineHeight: 1.8,
+                fontSize: '1rem',
+                maxWidth: '400px'
+              }}
             >
               Advancing Africa's energy future through innovation, collaboration, and sustainable
               technology solutions.
             </Typography>
-            <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+            
+            {/* Social Media Links */}
+            <Stack direction="row" spacing={3} sx={{ mb: 4 }}>
               {socialLinks.map((social) => (
                 <MuiLink
                   key={social.label}
@@ -72,42 +83,99 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{
-                    color: 'rgba(255, 255, 255, 0.60)',
+                    color: 'rgba(255, 255, 255, 0.70)',
                     '&:hover': {
                       color: '#FBA91E',
+                      transform: 'translateY(-2px)',
                     },
-                    transition: 'color 0.3s ease',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 40,
+                    height: 40,
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(251, 169, 30, 0.2)',
+                    },
                   }}
                 >
                   <social.icon size={20} />
                 </MuiLink>
               ))}
             </Stack>
+
+            {/* Get In Touch Section */}
+            <Box>
+              <Typography
+                variant="h6"
+                sx={{ 
+                  fontWeight: 700, 
+                  color: '#FFFFFF', 
+                  mb: 3, 
+                  fontSize: '1.1rem' 
+                }}
+              >
+                Get In Touch
+              </Typography>
+              <Stack spacing={2}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <MapPin size={18} color="rgba(255, 255, 255, 0.70)" />
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.70)' }}>
+                    Accra, Ghana
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Mail size={18} color="rgba(255, 255, 255, 0.70)" />
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.70)' }}>
+                    info@aetconference.com
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Phone size={18} color="rgba(255, 255, 255, 0.70)" />
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.70)' }}>
+                    +233 502 519 909
+                  </Typography>
+                </Box>
+              </Stack>
+            </Box>
           </Grid>
 
           {/* Footer Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
-            <Grid item xs={6} md={2} key={title}>
+            <Grid item xs={6} md={2.3} key={title}>
               <Typography
                 variant="h6"
-                sx={{ fontWeight: 600, color: '#FFFFFF', mb: 2, fontSize: '1rem' }}
+                sx={{ 
+                  fontWeight: 700, 
+                  color: '#FFFFFF', 
+                  mb: 3, 
+                  fontSize: '1rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}
               >
                 {title}
               </Typography>
-              <Stack spacing={1}>
+              <Stack spacing={2.5}>
                 {links.map((link) => (
                   <MuiLink
                     key={link.label}
                     component={Link}
                     href={link.path}
                     sx={{
-                      color: 'rgba(255, 255, 255, 0.60)',
+                      color: 'rgba(255, 255, 255, 0.70)',
                       textDecoration: 'none',
-                      fontSize: '0.875rem',
+                      fontSize: '0.95rem',
+                      fontWeight: 400,
+                      lineHeight: 1.6,
                       '&:hover': {
                         color: '#FBA91E',
+                        transform: 'translateX(4px)',
                       },
-                      transition: 'color 0.3s ease',
+                      transition: 'all 0.3s ease',
+                      display: 'block',
                     }}
                   >
                     {link.label}
@@ -116,46 +184,6 @@ export default function Footer() {
               </Stack>
             </Grid>
           ))}
-
-          {/* Contact Information */}
-          <Grid item xs={12} md={4}>
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: 600, color: '#FFFFFF', mb: 2, fontSize: '1rem' }}
-            >
-              Get In Touch
-            </Typography>
-            <Stack spacing={1.5}>
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                <MapPin size={18} style={{ marginTop: 2, flexShrink: 0 }} />
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.60)' }}>
-                  Accra, Ghana
-                </Typography>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Mail size={18} style={{ flexShrink: 0 }} />
-                <MuiLink
-                  href="mailto:info@aetconference.com"
-                  sx={{
-                    color: 'rgba(255, 255, 255, 0.60)',
-                    textDecoration: 'none',
-                    fontSize: '0.875rem',
-                    '&:hover': {
-                      color: '#FBA91E',
-                    },
-                  }}
-                >
-                  info@aetconference.com
-                </MuiLink>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Phone size={18} style={{ flexShrink: 0 }} />
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.60)' }}>
-                  +233 XX XXX XXXX
-                </Typography>
-              </Box>
-            </Stack>
-          </Grid>
         </Grid>
 
         {/* Copyright */}

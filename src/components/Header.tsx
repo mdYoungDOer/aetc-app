@@ -53,6 +53,8 @@ const navItems: NavItem[] = [
     children: [
       { label: 'Schedule', path: '/programme#schedule' },
       { label: 'Sessions', path: '/programme#sessions' },
+      { label: '2025 Programme', path: 'https://dkgtromwsfhdpwjixoua.supabase.co/storage/v1/object/public/aetc-files/2025-programme.pdf' },
+      { label: '2024 Programme', path: 'https://dkgtromwsfhdpwjixoua.supabase.co/storage/v1/object/public/aetc-files/AETC-Conference-Agenda.pdf' },
     ],
   },
   { label: 'Speakers', path: '/speakers' },
@@ -169,10 +171,12 @@ export default function Header() {
                     <ListItemButton
                       key={child.label}
                       sx={{ pl: 4 }}
-                      component={Link}
+                      component={child.path.startsWith('http') ? 'a' : Link}
                       href={child.path}
+                      target={child.path.startsWith('http') ? '_blank' : undefined}
+                      rel={child.path.startsWith('http') ? 'noopener noreferrer' : undefined}
                       onClick={(e: any) => {
-                        if (child.path.includes('#')) {
+                        if (child.path.includes('#') && !child.path.startsWith('http')) {
                           handleSmoothScroll(e, child.path);
                         }
                         setMobileOpen(false);
@@ -231,10 +235,11 @@ export default function Header() {
           borderBottom: '1px solid',
           borderColor: 'divider',
           top: { xs: 0, md: '40px' }, // Account for topbar height
+          py: 1.25, // 10px padding top and bottom
         }}
       >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ py: 0 }}>
           {/* Logo */}
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: { xs: 1, md: 0 }, mr: 4 }}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
@@ -276,10 +281,12 @@ export default function Header() {
                       {item.children.map((child) => (
                         <MenuItem
                           key={child.label}
-                          component={Link}
+                          component={child.path.startsWith('http') ? 'a' : Link}
                           href={child.path}
+                          target={child.path.startsWith('http') ? '_blank' : undefined}
+                          rel={child.path.startsWith('http') ? 'noopener noreferrer' : undefined}
                           onClick={(e: any) => {
-                            if (child.path.includes('#')) {
+                            if (child.path.includes('#') && !child.path.startsWith('http')) {
                               handleSmoothScroll(e, child.path);
                             }
                             handleMenuClose(item.label);
