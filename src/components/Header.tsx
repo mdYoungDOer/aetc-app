@@ -120,10 +120,7 @@ export default function Header() {
 
   const drawer = (
     <Box sx={{ width: 280 }}>
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>
-          AET Conference 2026
-        </Typography>
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
         <IconButton onClick={handleDrawerToggle}>
           <X size={24} />
         </IconButton>
@@ -202,18 +199,6 @@ export default function Header() {
                 priority
                 style={{ objectFit: 'contain' }}
               />
-              <Typography
-                variant="h6"
-                noWrap
-                sx={{
-                  ml: 2,
-                  fontWeight: 700,
-                  color: 'primary.main',
-                  display: { xs: 'none', sm: 'block' },
-                }}
-              >
-                AET Conference 2026
-              </Typography>
             </Link>
           </Box>
 

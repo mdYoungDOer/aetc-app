@@ -48,7 +48,7 @@ export default function Footer() {
         <Grid container spacing={4}>
           {/* Logo and Description */}
           <Grid item xs={12} md={4}>
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{ mb: 3 }}>
               <Image
                 src="/AETC_Logo-second.png"
                 alt="AET Conference Logo"
@@ -57,12 +57,6 @@ export default function Footer() {
                 style={{ objectFit: 'contain' }}
               />
             </Box>
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: 700, color: '#FFFFFF', mb: 2 }}
-            >
-              Africa Energy Technology Conference 2026
-            </Typography>
             <Typography
               variant="body2"
               sx={{ color: 'rgba(255, 255, 255, 0.60)', mb: 2, lineHeight: 1.7 }}
