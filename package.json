@@ -13,14 +13,19 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
+    "@react-page/editor": "^5.4.5",
+    "@react-page/plugins-image": "^5.4.5",
+    "@react-page/plugins-slate": "^5.4.5",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/supabase-js": "^2.43.4",
     "date-fns": "^3.6.0",
+    "dompurify": "^3.2.7",
     "framer-motion": "^11.2.10",
     "lucide-react": "^0.395.0",
     "next": "14.2.4",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.51.5",
     "zod": "^3.23.8"
@@ -34,4 +39,3 @@
     "typescript": "^5.4.5"
   }
 }
-
