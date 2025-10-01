@@ -12,8 +12,8 @@
     "deploy:do": "echo 'Deploy to DigitalOcean App Platform'"
   },
   "engines": {
-    "node": ">=18.0.0 <=20.0.0",
-    "npm": ">=8.0.0"
+    "node": "20.x",
+    "npm": ">=9.0.0"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

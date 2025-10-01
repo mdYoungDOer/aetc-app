@@ -7,14 +7,29 @@ echo "🚀 Starting DigitalOcean build process..."
 echo "✅ Node.js version: $(node --version)"
 echo "✅ NPM version: $(npm --version)"
 
+# Check if we need to update npm
+NODE_VERSION=$(node --version | cut -d'v' -f2)
+NPM_VERSION=$(npm --version)
+
+echo "🔍 Node.js: $NODE_VERSION, NPM: $NPM_VERSION"
+
+# If Node.js is 20.0.0 or lower, we need to handle npm compatibility
+if [[ "$NODE_VERSION" == "20.0.0" ]]; then
+    echo "⚠️  Node.js 20.0.0 detected, using npm install instead of npm ci"
+    BUILD_CMD="npm install"
+else
+    echo "✅ Using npm ci for faster install"
+    BUILD_CMD="npm ci"
+fi
+
 # Clean install to ensure package-lock.json is in sync
 echo "🧹 Cleaning previous installations..."
-rm -rf node_modules package-lock.json
+rm -rf node_modules
 
-# Install dependencies with clean cache
-echo "📦 Installing dependencies..."
+# Install dependencies
+echo "📦 Installing dependencies with $BUILD_CMD..."
 npm cache clean --force
-npm install --no-optional
+$BUILD_CMD
 
 # Build the application
 echo "🔨 Building application..."
