@@ -3,23 +3,18 @@
 # DigitalOcean Build Script for AETC 2026 App
 echo "🚀 Starting DigitalOcean build process..."
 
-# Set Node.js version
-export NODE_VERSION=18.20.4
-
-# Install Node.js if not present
-if ! command -v node &> /dev/null; then
-    echo "📦 Installing Node.js $NODE_VERSION..."
-    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-    sudo apt-get install -y nodejs
-fi
-
 # Verify Node.js version
 echo "✅ Node.js version: $(node --version)"
 echo "✅ NPM version: $(npm --version)"
 
-# Install dependencies
+# Clean install to ensure package-lock.json is in sync
+echo "🧹 Cleaning previous installations..."
+rm -rf node_modules package-lock.json
+
+# Install dependencies with clean cache
 echo "📦 Installing dependencies..."
-npm ci --only=production
+npm cache clean --force
+npm install --no-optional
 
 # Build the application
 echo "🔨 Building application..."
