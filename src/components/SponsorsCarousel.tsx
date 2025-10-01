@@ -2,16 +2,23 @@
 
 import { Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
-const sponsorPlaceholders = [
-  'Energy Corp',
-  'Tech Solutions',
-  'Green Power',
-  'Solar Innovations',
-  'Wind Energy Ltd',
-  'Hydro Systems',
-  'Smart Grid Co',
-  'African Energy',
+const partnerLogos = [
+  { name: 'NLCC', src: '/Partners/NLCC.jpg' },
+  { name: 'Pitch Hub', src: '/Partners/Pitch-Hub.jpg' },
+  { name: 'EY', src: '/Partners/EY.jpg' },
+  { name: 'CEIBS', src: '/Partners/CEIBS.jpg' },
+  { name: 'ARDA', src: '/Partners/ARDA.jpg' },
+  { name: 'Or Noir', src: '/Partners/Or-Noir.jpg' },
+  { name: 'Brevity', src: '/Partners/Brevity.jpg' },
+  { name: 'Claron Health', src: '/Partners/Claron-Health-Int.jpg' },
+  { name: 'UN Global Compact', src: '/Partners/UN-global-compact.jpg' },
+  { name: 'Navingo', src: '/Partners/Navingo.jpg' },
+  { name: 'LL', src: '/Partners/LL.jpg' },
+  { name: 'AECh', src: '/Partners/AECh.jpg' },
+  { name: 'APPO', src: '/Partners/APPO.jpg' },
+  { name: 'MEGT', src: '/Partners/MEGT_Logo.jpg' },
 ];
 
 export default function SponsorsCarousel() {
@@ -58,7 +65,7 @@ export default function SponsorsCarousel() {
           width: 'max-content',
         }}
       >
-        {[...sponsorPlaceholders, ...sponsorPlaceholders].map((sponsor, index) => (
+        {[...partnerLogos, ...partnerLogos].map((partner, index) => (
           <Box
             key={index}
             sx={{
@@ -73,19 +80,22 @@ export default function SponsorsCarousel() {
               px: 3,
               border: '1px solid',
               borderColor: 'divider',
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
-            <Typography
-              variant="h6"
-              sx={{
-                color: 'text.secondary',
-                fontWeight: 600,
-                fontSize: '0.875rem',
-                textAlign: 'center',
+            <Image
+              src={partner.src}
+              alt={`${partner.name} logo`}
+              width={140}
+              height={80}
+              style={{
+                objectFit: 'contain',
+                maxWidth: '100%',
+                maxHeight: '100%',
               }}
-            >
-              {sponsor}
-            </Typography>
+              quality={85}
+            />
           </Box>
         ))}
       </motion.div>

@@ -65,12 +65,14 @@ export default function VenuePage() {
                 }}
               >
                 <Image
-                  src="/Images/AETC 2025 PICS 1-67.JPG"
+                  src="/images-optimized/aetc-2025-pics-1-67.webp"
                   alt="Conference venue"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   style={{ objectFit: 'cover' }}
                   loading="lazy"
+                  quality={85}
+                  priority={false}
                 />
               </Box>
             </Grid>

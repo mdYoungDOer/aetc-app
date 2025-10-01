@@ -5,6 +5,7 @@ import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import SponsorsSection from '@/components/SponsorsSection';
 
 export const metadata: Metadata = {
   title: 'Programme | Africa Energy Technology Conference 2026',
@@ -290,6 +291,12 @@ export default function ProgrammePage() {
             </Typography>
           </Box>
         </Section>
+
+        {/* Sponsors Section */}
+        <SponsorsSection 
+          title="Our Partners"
+          subtitle="Organizations supporting the conference"
+        />
       </main>
     </>
   );

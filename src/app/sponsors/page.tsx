@@ -6,7 +6,7 @@ import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import CustomButton from '@/components/ui/CustomButton';
-import SponsorsCarousel from '@/components/SponsorsCarousel';
+import SponsorsSection from '@/components/SponsorsSection';
 
 export const metadata: Metadata = {
   title: 'Sponsors & Partners | Africa Energy Technology Conference 2026',
@@ -94,13 +94,13 @@ export default function SponsorsPage() {
 
       <main>
         {/* Current Sponsors */}
-        <Section
-          id="current-sponsors"
+        <SponsorsSection 
+          variant="grid"
           title="Our Sponsors"
           subtitle="Thank you to our partners supporting AETC 2026"
-          py={8}
-        >
-          <SponsorsCarousel />
+        />
+        
+        <Section py={6}>
           <Box
             sx={{
               textAlign: 'center',

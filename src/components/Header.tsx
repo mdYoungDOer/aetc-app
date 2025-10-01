@@ -20,7 +20,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import { Menu as MenuIcon, X, ChevronDown, Moon, Sun, Search } from 'lucide-react';
+import { Menu as MenuIcon, X, ChevronDown, Moon, Sun, Search, Ticket } from 'lucide-react';
 import GlobalSearch from './GlobalSearch';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -55,14 +55,6 @@ const navItems: NavItem[] = [
   },
   { label: 'Speakers', path: '/speakers' },
   { label: 'Venue', path: '/venue' },
-  {
-    label: 'Registration',
-    path: '/registration',
-    children: [
-      { label: 'Ticket Types', path: '/registration#ticket-types' },
-      { label: 'Buy Tickets', path: '/registration#buy-tickets' },
-    ],
-  },
   { label: 'Sponsors', path: '/sponsors' },
   { label: 'News', path: '/news' },
   { label: 'Contact', path: '/contact' },
@@ -174,6 +166,36 @@ export default function Header() {
             )}
           </Box>
         ))}
+        
+        {/* Mobile Buy Pass Button */}
+        <Box sx={{ p: 2, mt: 2 }}>
+          <Button
+            component={Link}
+            href="/registration"
+            variant="contained"
+            fullWidth
+            startIcon={<Ticket size={18} />}
+            sx={{
+              backgroundColor: '#FBA91E',
+              color: '#000000',
+              fontWeight: 600,
+              py: 2,
+              borderRadius: '8px',
+              textTransform: 'none',
+              fontSize: '16px',
+              boxShadow: '0 2px 8px rgba(251, 169, 30, 0.3)',
+              '&:hover': {
+                backgroundColor: '#e59915',
+                boxShadow: '0 4px 12px rgba(251, 169, 30, 0.4)',
+                transform: 'translateY(-1px)',
+              },
+              transition: 'all 0.3s ease',
+            }}
+            onClick={() => setMobileOpen(false)}
+          >
+            Buy Your 2026 Pass
+          </Button>
+        </Box>
       </List>
     </Box>
   );
@@ -281,7 +303,7 @@ export default function Header() {
           </IconButton>
 
           {/* Theme Toggle */}
-          <IconButton onClick={toggleTheme} sx={{ mr: { xs: 1, md: 0 } }} title="Toggle theme">
+          <IconButton onClick={toggleTheme} sx={{ mr: 1 }} title="Toggle theme">
             <AnimatePresence mode="wait">
               <motion.div
                 key={theme}
@@ -294,6 +316,34 @@ export default function Header() {
               </motion.div>
             </AnimatePresence>
           </IconButton>
+
+          {/* Buy Pass Button */}
+          <Button
+            component={Link}
+            href="/registration"
+            variant="contained"
+            startIcon={<Ticket size={18} />}
+            sx={{
+              backgroundColor: '#FBA91E',
+              color: '#000000',
+              fontWeight: 600,
+              px: 3,
+              py: 1.5,
+              borderRadius: '8px',
+              textTransform: 'none',
+              fontSize: '14px',
+              boxShadow: '0 2px 8px rgba(251, 169, 30, 0.3)',
+              '&:hover': {
+                backgroundColor: '#e59915',
+                boxShadow: '0 4px 12px rgba(251, 169, 30, 0.4)',
+                transform: 'translateY(-1px)',
+              },
+              transition: 'all 0.3s ease',
+              display: { xs: 'none', sm: 'flex' },
+            }}
+          >
+            Buy Your 2026 Pass
+          </Button>
 
           {/* Mobile menu button */}
           <IconButton

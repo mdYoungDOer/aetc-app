@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { paystackService } from '@/lib/paystack';
+import { sendGridService } from '@/lib/sendgrid';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -138,11 +139,40 @@ export async function POST(request: NextRequest) {
             })
             .eq('order_id', order.id);
 
+          // Send OTP email with professional template
+          try {
+            await sendGridService.sendOTP(
+              order.customer_email,
+              otpCode,
+              order.customer_name
+            );
+          } catch (emailError) {
+            console.error('Error sending OTP email:', emailError);
+          }
+
           sendOtp = true;
         }
       } catch (error) {
         console.error('Error creating user account:', error);
       }
+    }
+
+    // Send purchase confirmation email
+    try {
+      await sendGridService.sendTicketConfirmation(
+        order.customer_email,
+        {
+          orderId: order.id,
+          customerName: order.customer_name,
+          customerEmail: order.customer_email,
+          totalAmount: order.total_amount,
+          quantity: order.quantity,
+          ticketType: 'Conference Pass', // You might want to get this from ticket data
+        },
+        qrCodeImage
+      );
+    } catch (emailError) {
+      console.error('Error sending confirmation email:', emailError);
     }
 
     return NextResponse.json({

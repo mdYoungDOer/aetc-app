@@ -6,6 +6,7 @@ import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import SponsorsSection from '@/components/SponsorsSection';
 
 export const metadata: Metadata = {
   title: 'About the Conference | Africa Energy Technology Conference 2026',
@@ -15,11 +16,11 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <PageBreadcrumb 
-        title="About the Conference"
-        subtitle="Driving sustainable energy solutions across Africa"
-        backgroundImage="/Images/AETC 2025 PICS 1-24.JPG"
-      />
+        <PageBreadcrumb
+          title="About AETC 2026"
+          subtitle="Innovate, Invest, Implement: Revolutionised Financing for Sustainable Energy Sector Growth in Africa"
+          backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        />
 
       <main>
         {/* Overview Section */}
@@ -27,21 +28,16 @@ export default function AboutPage() {
           <Grid container spacing={6} alignItems="center">
             <Grid item xs={12} md={6}>
               <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color: 'primary.main' }}>
-                Africa's Premier Energy Technology Event
+                About AETC 2026
               </Typography>
               <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.8 }}>
-                The Africa Energy Technology Conference is a premier gathering of energy professionals,
-                innovators, and policymakers dedicated to advancing sustainable energy solutions across
-                the African continent.
+                The Africa Energy Technology Conference is set to return on May 26-28, 2026, with a renewed focus on innovation, investment, and implementation. Building on the success of our inaugural event, this sophomore conference and exhibition will continue to be Africa's premiere energy technology exhibition and networking forum.
               </Typography>
               <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.8 }}>
-                Our conference provides a platform for knowledge exchange, networking, and collaboration,
-                fostering partnerships that drive meaningful change in Africa's energy landscape.
+                Hosted once again in Ghana by the AFRICA ENERGY TECHNOLOGY CENTRE (AETC), this three-day conference will attract government representatives, policymakers, energy technology leaders, and industry heavyweights from around the globe, providing unparalleled opportunities to explore investment and sponsorship prospects.
               </Typography>
               <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8 }}>
-                With a focus on innovation, sustainability, and accessibility, AETC 2026 brings together
-                stakeholders from across the energy value chain to chart a path toward a cleaner, more
-                reliable energy future for all Africans.
+                The conference aims to revolutionize the financing landscape for energy technology innovation and energy projects in Africa, ensuring that investments are not only profitable but also socially and environmentally responsible.
               </Typography>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -55,61 +51,63 @@ export default function AboutPage() {
                 }}
               >
                 <Image
-                  src="/Images/AETC 2025 PICS 1-57.JPG"
+                  src="/images-optimized/aetc-2025-pics-1-57.webp"
                   alt="Conference overview"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   style={{ objectFit: 'cover' }}
                   loading="lazy"
+                  quality={85}
+                  priority={false}
                 />
               </Box>
             </Grid>
           </Grid>
         </Section>
 
-        {/* Themes Section */}
+        {/* Key Topics Section */}
         <Section
           id="themes"
-          title="Conference Themes"
-          subtitle="Exploring critical areas shaping Africa's energy future"
+          title="Key Topics"
+          subtitle="AETC 2026 is set to drive transformative conversations around Africa's energy future"
           backgroundColor="paper"
         >
           <Grid container spacing={4}>
             {[
               {
-                icon: Zap,
-                title: 'Energy Transition',
-                description: 'Accelerating the shift from fossil fuels to renewable energy sources across Africa.',
+                icon: Lightbulb,
+                title: 'Innovation in Energy Technology',
+                description: 'Advancements in renewable energy sources, smart grids, AI and Big Data in energy optimization, and emerging energy storage solutions.',
                 color: 'primary' as const,
               },
               {
-                icon: Lightbulb,
-                title: 'Innovation & Technology',
-                description: 'Exploring solar, wind, and hydroelectric solutions tailored for African markets.',
+                icon: Zap,
+                title: 'Subsea & Oil & Gas',
+                description: 'Unlocking offshore potential, sustainable innovation, investment & infrastructure, safety & security, and Africa\'s energy future.',
                 color: 'secondary' as const,
               },
               {
-                icon: Globe,
-                title: 'Energy Access & Equity',
-                description: 'Addressing challenges in bringing reliable energy to underserved communities.',
+                icon: TrendingUp,
+                title: 'Financing & Investment',
+                description: 'Innovative financing models, risk mitigation, investment incentives, and policy frameworks to attract investment.',
                 color: 'success' as const,
               },
               {
-                icon: Target,
-                title: 'Policy & Regulation',
-                description: 'Creating frameworks that attract investment and support sustainable growth.',
+                icon: Globe,
+                title: 'Renewable Energy Technologies',
+                description: 'Solar, wind, hydropower, bioenergy, and ocean energy technologies applicable to Africa for sustainable energy solutions.',
                 color: 'primary' as const,
               },
               {
-                icon: TrendingUp,
-                title: 'Investment & Finance',
-                description: 'Connecting projects with funding sources and exploring innovative financing models.',
+                icon: Target,
+                title: 'Cross-Cutting Themes',
+                description: 'Broader themes that intersect with the energy sector, including collaboration and policy integration.',
                 color: 'secondary' as const,
               },
               {
                 icon: Users,
-                title: 'Capacity Building',
-                description: 'Developing local expertise and skills for the evolving energy sector.',
+                title: 'Implementation Focus',
+                description: 'Practical execution strategies, project implementation best practices, and ensuring effective delivery of energy projects.',
                 color: 'success' as const,
               },
             ].map((theme, index) => (
@@ -223,6 +221,76 @@ export default function AboutPage() {
           </Grid>
         </Section>
 
+        {/* Founder's Message */}
+        <Section backgroundColor="paper" py={8}>
+          <Box sx={{ textAlign: 'center', maxWidth: 900, mx: 'auto' }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                mb: 4,
+                color: 'primary.main',
+              }}
+            >
+              Message from the Founder & President (AETC)
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: 'text.secondary',
+                lineHeight: 1.8,
+                mb: 3,
+                fontSize: '1.1rem',
+              }}
+            >
+              "Dear Esteemed Industry Colleagues,
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: 'text.secondary',
+                lineHeight: 1.8,
+                mb: 3,
+                fontSize: '1.1rem',
+              }}
+            >
+              It is with great anticipation and excitement that I invite you to join us for the Africa Energy Technology Conference 2026 (AETC), a historic gathering that represents a bold step forward in Africa's energy journey.
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: 'text.secondary',
+                lineHeight: 1.8,
+                mb: 3,
+                fontSize: '1.1rem',
+              }}
+            >
+              Following the incredible success of our inaugural event, this sophomore conference and exhibition builds on the momentum to explore the critical theme: "Innovate, Invest, Implement: Revolutionised Financing for Sustainable Energy Sector Growth in Africa." In a world where energy is the foundation of economic development, Africa stands at the crossroads of unparalleled opportunity.
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: 'text.secondary',
+                lineHeight: 1.8,
+                mb: 4,
+                fontSize: '1.1rem',
+              }}
+            >
+              What sets this conference and exhibition apart is not just its focus on energy technology but also the unique vision behind it. AETC is the first energy technology-driven conference in Africa spearheaded by an African woman. This distinction reflects our commitment to inclusivity and the empowerment of voices that have been too often excluded from the global energy dialogue."
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                color: 'primary.main',
+                fontStyle: 'italic',
+              }}
+            >
+              — Emelia Akumah, Founder & President, Africa Energy Technology Centre
+            </Typography>
+          </Box>
+        </Section>
+
         {/* Vision Statement */}
         <Section backgroundColor="dark" py={8}>
           <Box sx={{ textAlign: 'center', maxWidth: 800, mx: 'auto' }}>
@@ -251,6 +319,12 @@ export default function AboutPage() {
             </Typography>
           </Box>
         </Section>
+
+        {/* Sponsors Section */}
+        <SponsorsSection 
+          title="Our Trusted Partners"
+          subtitle="Organizations supporting Africa's energy transformation"
+        />
       </main>
     </>
   );

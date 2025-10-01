@@ -21,14 +21,14 @@ const contactMethods = [
   {
     icon: Phone,
     title: 'Call Us',
-    primary: '+233 XX XXX XXXX',
+    primary: '+233 502 519 909',
     secondary: 'Monday - Friday, 9AM - 5PM GMT',
   },
   {
     icon: MapPin,
     title: 'Visit Us',
-    primary: 'Accra, Ghana',
-    secondary: 'Conference Secretariat',
+    primary: 'Labadi Beach Hotel, Accra, Ghana',
+    secondary: 'Conference Venue',
   },
 ];
 

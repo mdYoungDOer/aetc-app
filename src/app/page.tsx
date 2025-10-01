@@ -8,7 +8,7 @@ import Section from '@/components/ui/Section';
 import CustomButton from '@/components/ui/CustomButton';
 import CustomCard from '@/components/ui/CustomCard';
 import CountdownTimer from '@/components/CountdownTimer';
-import SponsorsCarousel from '@/components/SponsorsCarousel';
+import SponsorsSection from '@/components/SponsorsSection';
 
 export const metadata: Metadata = {
   title: 'Africa Energy Technology Conference 2026 | Home',
@@ -27,12 +27,12 @@ export default function HomePage() {
       </a>
 
       {/* Hero Section with Countdown */}
-      <Hero
-        title="Africa Energy Technology Conference 2026"
-        subtitle="Powering Africa's Future Through Innovation and Sustainable Technology"
-        backgroundImage="/Images/AETC 2025 PICS 1-24.JPG"
-        height="80vh"
-      >
+        <Hero
+          title="Africa Energy Technology Conference 2026"
+          subtitle="Innovate, Invest, Implement: Revolutionised Financing for Sustainable Energy Sector Growth in Africa"
+          backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+          height="80vh"
+        >
         <Box sx={{ mb: 4 }}>
           <CountdownTimer targetDate={conferenceDate} />
         </Box>
@@ -197,28 +197,28 @@ export default function HomePage() {
           <Grid container spacing={4}>
             {[
               {
-                icon: Lightbulb,
-                title: 'Innovation Showcase',
+                icon: Users,
+                title: '3k+ Attendees',
                 description:
-                  'Discover cutting-edge renewable energy technologies and solutions designed for African markets.',
+                  'Connect with government representatives, policymakers, and industry leaders from 45+ countries.',
               },
               {
-                icon: Users,
-                title: 'Networking Opportunities',
+                icon: Lightbulb,
+                title: '50+ Strategic Sessions',
                 description:
-                  'Connect with 1000+ industry leaders, investors, and policymakers shaping Africa\'s energy future.',
+                  'Participate in thought-provoking discussions and panels featuring 200+ A-list speakers & VIPs.',
               },
               {
                 icon: Target,
-                title: 'Strategic Insights',
+                title: 'Investment Opportunities',
                 description:
-                  'Gain actionable insights from expert-led sessions on policy, investment, and market trends.',
+                  'Explore numerous investment opportunities with financial institutions, investors, and ESG advisors.',
               },
               {
                 icon: Globe,
-                title: 'Pan-African Collaboration',
+                title: '100+ Partners',
                 description:
-                  'Foster partnerships across borders to accelerate sustainable energy access throughout Africa.',
+                  'Network with 100+ partners and sponsors supporting Africa\'s energy transformation.',
               },
             ].map((highlight, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
@@ -264,12 +264,14 @@ export default function HomePage() {
                 }}
               >
                 <Image
-                  src="/Images/AETC 2025 PICS 1-69.JPG"
+                  src="/images-optimized/aetc-2025-pics-1-69.webp"
                   alt="Conference attendees networking"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   style={{ objectFit: 'cover' }}
                   loading="lazy"
+                  quality={85}
+                  priority={false}
                 />
               </Box>
             </Grid>
@@ -377,27 +379,7 @@ export default function HomePage() {
         </Section>
 
         {/* Sponsors Section */}
-        <Section
-          id="sponsors"
-          title="Our Sponsors & Partners"
-          subtitle="Supporting Africa's energy transformation"
-          py={6}
-        >
-          <SponsorsCarousel />
-          <Box sx={{ textAlign: 'center', mt: 4 }}>
-            <CustomButton
-              component={Link}
-              href="/sponsors"
-              variant="outlined"
-              sx={{
-                borderColor: 'primary.main',
-                color: 'primary.main',
-              }}
-            >
-              Become a Sponsor
-            </CustomButton>
-          </Box>
-        </Section>
+        <SponsorsSection />
       </main>
     </>
   );
