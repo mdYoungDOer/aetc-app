@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { Box, Grid, Typography } from '@mui/material';
-import { Calendar, MapPin, Users, ArrowRight, Lightbulb, Target, Globe } from 'lucide-react';
+import { Calendar, MapPin, Users, ArrowRight, Lightbulb, Target, Globe, Network, MessageSquare, TrendingUp, Zap } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Hero from '@/components/ui/Hero';
@@ -224,25 +224,25 @@ export default function HomePage() {
           <Grid container spacing={4}>
             {[
               {
-                icon: Users,
+                icon: Network,
                 title: 'Networking Opportunities',
                 description:
                   'Connect with key stakeholders, industry leaders, and policymakers from the energy sector. This conference provides an invaluable platform to forge relationships, establish partnerships, and collaborate on initiatives that can drive industry growth and innovation. Networking sessions, social events, and breakout meetings will enable you to build a robust professional network.',
               },
               {
-                icon: Lightbulb,
+                icon: MessageSquare,
                 title: 'Insightful Discussions and Panels',
                 description:
                   'Participate in thought-provoking discussions and panels featuring experts and thought leaders in the energy industry. Gain insights into the latest trends, challenges, and solutions in the energy sector. These sessions will offer valuable knowledge that can inform your strategies and decision-making.',
               },
               {
-                icon: Target,
+                icon: TrendingUp,
                 title: 'Investment and Business Opportunities',
                 description:
                   'Explore numerous investment opportunities and engage with financial institutions, investors, and ESG advisors. The conference provides a unique chance to present your projects, discover funding sources, and enter into potential investment partnerships that can help bring your energy initiatives to life.',
               },
               {
-                icon: Globe,
+                icon: Zap,
                 title: 'Innovation and Technology Showcase',
                 description:
                   'Discover cutting-edge technologies and innovative solutions that are driving the future of energy. Exhibitions and demonstrations will highlight the latest advancements in energy technology, offering you the chance to see these innovations first-hand and understand how they can be applied to your work or projects.',
