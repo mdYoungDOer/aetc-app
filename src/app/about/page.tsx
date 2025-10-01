@@ -1,7 +1,10 @@
 import { Metadata } from 'next';
-import { Box, Container, Typography, Grid, Card, CardContent } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import Image from 'next/image';
-import { Target, Lightbulb, Globe } from 'lucide-react';
+import { Target, Lightbulb, Globe, Zap, Users, TrendingUp } from 'lucide-react';
+import Hero from '@/components/ui/Hero';
+import Section from '@/components/ui/Section';
+import CustomCard from '@/components/ui/CustomCard';
 
 export const metadata: Metadata = {
   title: 'About the Conference | Africa Energy Technology Conference 2026',
@@ -11,111 +14,110 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      {/* Hero Section */}
-      <Box
-        sx={{
-          position: 'relative',
-          minHeight: '40vh',
-          display: 'flex',
-          alignItems: 'center',
-          background: 'linear-gradient(135deg, #293972 0%, #1a2550 100%)',
-        }}
-      >
-        <Container maxWidth="xl">
-          <Typography
-            variant="h2"
-            sx={{
-              fontSize: { xs: '2rem', md: '3rem' },
-              fontWeight: 700,
-              color: '#FFFFFF',
-              mb: 2,
-            }}
-          >
-            About the Conference
-          </Typography>
-          <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.87)' }}>
-            Driving sustainable energy solutions across Africa
-          </Typography>
-        </Container>
-      </Box>
+      <Hero
+        title="About the Conference"
+        subtitle="Driving sustainable energy solutions across Africa"
+        height="40vh"
+      />
 
-      {/* Overview Section */}
-      <Box id="overview" sx={{ py: 8, backgroundColor: 'background.paper' }}>
-        <Container maxWidth="xl">
+      <main>
+        {/* Overview Section */}
+        <Section id="overview" title="Conference Overview" py={10}>
           <Grid container spacing={6} alignItems="center">
             <Grid item xs={12} md={6}>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 3 }}>
-                Conference Overview
+              <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color: 'primary.main' }}>
+                Africa's Premier Energy Technology Event
               </Typography>
               <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.8 }}>
                 The Africa Energy Technology Conference is a premier gathering of energy professionals,
                 innovators, and policymakers dedicated to advancing sustainable energy solutions across
                 the African continent.
               </Typography>
-              <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8 }}>
+              <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.8 }}>
                 Our conference provides a platform for knowledge exchange, networking, and collaboration,
                 fostering partnerships that drive meaningful change in Africa's energy landscape.
+              </Typography>
+              <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8 }}>
+                With a focus on innovation, sustainability, and accessibility, AETC 2026 brings together
+                stakeholders from across the energy value chain to chart a path toward a cleaner, more
+                reliable energy future for all Africans.
               </Typography>
             </Grid>
             <Grid item xs={12} md={6}>
               <Box
                 sx={{
                   position: 'relative',
-                  height: '400px',
-                  borderRadius: 2,
+                  height: '450px',
+                  borderRadius: '8px',
                   overflow: 'hidden',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.12)',
                 }}
               >
                 <Image
                   src="/Images/AETC 2025 PICS 1-57.JPG"
                   alt="Conference overview"
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   style={{ objectFit: 'cover' }}
+                  loading="lazy"
                 />
               </Box>
             </Grid>
           </Grid>
-        </Container>
-      </Box>
+        </Section>
 
-      {/* Themes Section */}
-      <Box id="themes" sx={{ py: 8, backgroundColor: 'background.default' }}>
-        <Container maxWidth="xl">
-          <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, textAlign: 'center' }}>
-            Conference Themes
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'text.secondary', textAlign: 'center', mb: 6 }}>
-            Exploring critical areas shaping Africa's energy future
-          </Typography>
+        {/* Themes Section */}
+        <Section
+          id="themes"
+          title="Conference Themes"
+          subtitle="Exploring critical areas shaping Africa's energy future"
+          backgroundColor="paper"
+        >
           <Grid container spacing={4}>
             {[
               {
+                icon: Zap,
+                title: 'Energy Transition',
+                description: 'Accelerating the shift from fossil fuels to renewable energy sources across Africa.',
+                color: 'primary' as const,
+              },
+              {
                 icon: Lightbulb,
-                title: 'Renewable Energy Innovation',
+                title: 'Innovation & Technology',
                 description: 'Exploring solar, wind, and hydroelectric solutions tailored for African markets.',
+                color: 'secondary' as const,
               },
               {
                 icon: Globe,
                 title: 'Energy Access & Equity',
                 description: 'Addressing challenges in bringing reliable energy to underserved communities.',
+                color: 'success' as const,
               },
               {
                 icon: Target,
-                title: 'Policy & Investment',
+                title: 'Policy & Regulation',
                 description: 'Creating frameworks that attract investment and support sustainable growth.',
+                color: 'primary' as const,
+              },
+              {
+                icon: TrendingUp,
+                title: 'Investment & Finance',
+                description: 'Connecting projects with funding sources and exploring innovative financing models.',
+                color: 'secondary' as const,
+              },
+              {
+                icon: Users,
+                title: 'Capacity Building',
+                description: 'Developing local expertise and skills for the evolving energy sector.',
+                color: 'success' as const,
               },
             ].map((theme, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Card
-                  sx={{
-                    height: '100%',
-                    transition: 'transform 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                    },
-                  }}
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <CustomCard
+                  accentColor={theme.color}
+                  sx={{ height: '100%' }}
                 >
-                  <CardContent sx={{ p: 4 }}>
+                  <Box sx={{ p: 4 }}>
                     <Box
                       sx={{
                         backgroundColor: 'primary.main',
@@ -127,6 +129,7 @@ export default function AboutPage() {
                         justifyContent: 'center',
                         mb: 3,
                       }}
+                      aria-hidden="true"
                     >
                       <theme.icon size={32} color="#FBA91E" />
                     </Box>
@@ -136,34 +139,64 @@ export default function AboutPage() {
                     <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7 }}>
                       {theme.description}
                     </Typography>
-                  </CardContent>
-                </Card>
+                  </Box>
+                </CustomCard>
               </Grid>
             ))}
           </Grid>
-        </Container>
-      </Box>
+        </Section>
 
-      {/* Objectives Section */}
-      <Box id="objectives" sx={{ py: 8, backgroundColor: 'background.paper' }}>
-        <Container maxWidth="xl">
-          <Typography variant="h3" sx={{ fontWeight: 700, mb: 1, textAlign: 'center' }}>
-            Our Objectives
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'text.secondary', textAlign: 'center', mb: 6 }}>
-            What we aim to achieve together
-          </Typography>
+        {/* Objectives Section */}
+        <Section
+          id="objectives"
+          title="Our Objectives"
+          subtitle="What we aim to achieve together"
+          py={10}
+        >
           <Grid container spacing={3}>
             {[
-              'Foster collaboration between public and private sectors',
-              'Showcase innovative energy technologies and solutions',
-              'Promote sustainable and inclusive energy policies',
-              'Build capacity through knowledge sharing and training',
-              'Create networking opportunities for industry stakeholders',
-              'Advance Africa\'s position in the global energy transition',
+              {
+                title: 'Foster Public-Private Collaboration',
+                description: 'Bridge the gap between government initiatives and private sector innovation to accelerate energy projects.',
+              },
+              {
+                title: 'Showcase Innovative Solutions',
+                description: 'Highlight cutting-edge energy technologies and best practices from across Africa and the globe.',
+              },
+              {
+                title: 'Promote Sustainable Policies',
+                description: 'Advocate for inclusive energy policies that prioritize both economic growth and environmental protection.',
+              },
+              {
+                title: 'Build Technical Capacity',
+                description: 'Provide training and knowledge-sharing opportunities to develop local energy expertise.',
+              },
+              {
+                title: 'Create Networking Opportunities',
+                description: 'Connect industry stakeholders, investors, and innovators to forge lasting partnerships.',
+              },
+              {
+                title: 'Advance Energy Transition',
+                description: 'Position Africa as a leader in the global shift toward renewable and sustainable energy.',
+              },
             ].map((objective, index) => (
               <Grid item xs={12} md={6} key={index}>
-                <Box sx={{ display: 'flex', gap: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 2,
+                    p: 3,
+                    borderRadius: '8px',
+                    backgroundColor: 'background.paper',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      borderColor: '#78C044',
+                      boxShadow: '0 4px 12px rgba(120, 192, 68, 0.15)',
+                    },
+                  }}
+                >
                   <Box
                     sx={{
                       width: 8,
@@ -173,17 +206,51 @@ export default function AboutPage() {
                       mt: 1,
                       flexShrink: 0,
                     }}
+                    aria-hidden="true"
                   />
-                  <Typography variant="body1" sx={{ lineHeight: 1.8 }}>
-                    {objective}
-                  </Typography>
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                      {objective.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7 }}>
+                      {objective.description}
+                    </Typography>
+                  </Box>
                 </Box>
               </Grid>
             ))}
           </Grid>
-        </Container>
-      </Box>
+        </Section>
+
+        {/* Vision Statement */}
+        <Section backgroundColor="dark" py={8}>
+          <Box sx={{ textAlign: 'center', maxWidth: 800, mx: 'auto' }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                mb: 3,
+                color: '#FFFFFF',
+              }}
+            >
+              Our Vision
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                color: 'rgba(255, 255, 255, 0.87)',
+                lineHeight: 1.8,
+                fontWeight: 400,
+                fontStyle: 'italic',
+              }}
+            >
+              "To be Africa's leading platform for energy technology innovation, collaboration, and
+              transformation, driving sustainable development and universal energy access across the
+              continent."
+            </Typography>
+          </Box>
+        </Section>
+      </main>
     </>
   );
 }
-

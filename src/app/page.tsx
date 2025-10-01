@@ -1,8 +1,14 @@
 import { Metadata } from 'next';
-import { Box, Container, Typography, Button, Grid } from '@mui/material';
-import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react';
+import { Box, Grid, Typography } from '@mui/material';
+import { Calendar, MapPin, Users, ArrowRight, Lightbulb, Target, Globe } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Hero from '@/components/ui/Hero';
+import Section from '@/components/ui/Section';
+import CustomButton from '@/components/ui/CustomButton';
+import CustomCard from '@/components/ui/CustomCard';
+import CountdownTimer from '@/components/CountdownTimer';
+import SponsorsCarousel from '@/components/SponsorsCarousel';
 
 export const metadata: Metadata = {
   title: 'Africa Energy Technology Conference 2026 | Home',
@@ -10,107 +16,78 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  // Set conference date (placeholder - adjust as needed)
+  const conferenceDate = new Date('2026-09-15T09:00:00');
+
   return (
     <>
-      {/* Hero Section */}
-      <Box
-        sx={{
-          position: 'relative',
-          minHeight: { xs: '60vh', md: '80vh' },
-          display: 'flex',
-          alignItems: 'center',
-          background: 'linear-gradient(135deg, #293972 0%, #1a2550 100%)',
-          overflow: 'hidden',
-        }}
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            opacity: 0.1,
-            backgroundImage: 'url(/Images/AETC\\ 2025\\ PICS\\ 1-24.JPG)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1 }}>
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={7}>
-              <Typography
-                variant="h1"
-                sx={{
-                  fontSize: { xs: '2.5rem', md: '3.5rem', lg: '4.5rem' },
-                  fontWeight: 800,
-                  color: '#FFFFFF',
-                  mb: 2,
-                  lineHeight: 1.2,
-                }}
-              >
-                Africa Energy Technology Conference 2026
-              </Typography>
-              <Typography
-                variant="h5"
-                sx={{
-                  color: 'rgba(255, 255, 255, 0.87)',
-                  mb: 4,
-                  lineHeight: 1.6,
-                  fontWeight: 400,
-                }}
-              >
-                Powering Africa's Future Through Innovation and Sustainable Technology
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                <Button
-                  component={Link}
-                  href="/registration"
-                  variant="contained"
-                  size="large"
-                  sx={{
-                    backgroundColor: '#FBA91E',
-                    color: '#000',
-                    '&:hover': {
-                      backgroundColor: '#e59915',
-                    },
-                    px: 4,
-                    py: 1.5,
-                  }}
-                  endIcon={<ArrowRight size={20} />}
-                >
-                  Register Now
-                </Button>
-                <Button
-                  component={Link}
-                  href="/programme"
-                  variant="outlined"
-                  size="large"
-                  sx={{
-                    borderColor: '#FFFFFF',
-                    color: '#FFFFFF',
-                    '&:hover': {
-                      borderColor: '#FBA91E',
-                      backgroundColor: 'rgba(251, 169, 30, 0.1)',
-                    },
-                    px: 4,
-                    py: 1.5,
-                  }}
-                >
-                  View Programme
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
+      {/* Skip to main content for accessibility */}
+      <a href="#main-content" className="skip-to-main">
+        Skip to main content
+      </a>
 
-      {/* Key Info Section */}
-      <Box sx={{ py: 6, backgroundColor: 'background.paper' }}>
-        <Container maxWidth="xl">
+      {/* Hero Section with Countdown */}
+      <Hero
+        title="Africa Energy Technology Conference 2026"
+        subtitle="Powering Africa's Future Through Innovation and Sustainable Technology"
+        backgroundImage="/Images/AETC 2025 PICS 1-24.JPG"
+        height="80vh"
+      >
+        <Box sx={{ mb: 4 }}>
+          <CountdownTimer targetDate={conferenceDate} />
+        </Box>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+          <CustomButton
+            component={Link}
+            href="/registration"
+            variant="contained"
+            size="large"
+            sx={{
+              backgroundColor: '#FBA91E',
+              color: '#000',
+              '&:hover': {
+                backgroundColor: '#e59915',
+              },
+            }}
+          >
+            Register Now <ArrowRight size={20} style={{ marginLeft: 8 }} />
+          </CustomButton>
+          <CustomButton
+            component={Link}
+            href="/programme"
+            variant="outlined"
+            size="large"
+            sx={{
+              borderColor: '#FFFFFF',
+              color: '#FFFFFF',
+              '&:hover': {
+                borderColor: '#FBA91E',
+                backgroundColor: 'rgba(251, 169, 30, 0.1)',
+              },
+            }}
+          >
+            View Programme
+          </CustomButton>
+        </Box>
+      </Hero>
+
+      {/* Main Content */}
+      <main id="main-content">
+        {/* Key Info Section */}
+        <Section id="key-info" py={6}>
           <Grid container spacing={4}>
             <Grid item xs={12} md={4}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  p: 3,
+                  borderRadius: '8px',
+                  backgroundColor: 'background.paper',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                }}
+              >
                 <Box
                   sx={{
                     backgroundColor: 'primary.main',
@@ -119,7 +96,9 @@ export default function HomePage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    flexShrink: 0,
                   }}
+                  aria-hidden="true"
                 >
                   <Calendar size={32} color="#FBA91E" />
                 </Box>
@@ -128,13 +107,23 @@ export default function HomePage() {
                     Conference Dates
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    TBA 2026
+                    September 15-17, 2026
                   </Typography>
                 </Box>
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  p: 3,
+                  borderRadius: '8px',
+                  backgroundColor: 'background.paper',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                }}
+              >
                 <Box
                   sx={{
                     backgroundColor: 'primary.main',
@@ -143,7 +132,9 @@ export default function HomePage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    flexShrink: 0,
                   }}
+                  aria-hidden="true"
                 >
                   <MapPin size={32} color="#FBA91E" />
                 </Box>
@@ -158,7 +149,17 @@ export default function HomePage() {
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  p: 3,
+                  borderRadius: '8px',
+                  backgroundColor: 'background.paper',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                }}
+              >
                 <Box
                   sx={{
                     backgroundColor: 'primary.main',
@@ -167,7 +168,9 @@ export default function HomePage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    flexShrink: 0,
                   }}
+                  aria-hidden="true"
                 >
                   <Users size={32} color="#FBA91E" />
                 </Box>
@@ -182,27 +185,91 @@ export default function HomePage() {
               </Box>
             </Grid>
           </Grid>
-        </Container>
-      </Box>
+        </Section>
 
-      {/* About Preview Section */}
-      <Box sx={{ py: 8, backgroundColor: 'background.default' }}>
-        <Container maxWidth="xl">
+        {/* Conference Highlights */}
+        <Section
+          id="highlights"
+          title="Why Attend AETC 2026"
+          subtitle="Join Africa's most influential energy technology gathering"
+          backgroundColor="paper"
+        >
+          <Grid container spacing={4}>
+            {[
+              {
+                icon: Lightbulb,
+                title: 'Innovation Showcase',
+                description:
+                  'Discover cutting-edge renewable energy technologies and solutions designed for African markets.',
+              },
+              {
+                icon: Users,
+                title: 'Networking Opportunities',
+                description:
+                  'Connect with 1000+ industry leaders, investors, and policymakers shaping Africa\'s energy future.',
+              },
+              {
+                icon: Target,
+                title: 'Strategic Insights',
+                description:
+                  'Gain actionable insights from expert-led sessions on policy, investment, and market trends.',
+              },
+              {
+                icon: Globe,
+                title: 'Pan-African Collaboration',
+                description:
+                  'Foster partnerships across borders to accelerate sustainable energy access throughout Africa.',
+              },
+            ].map((highlight, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <CustomCard accentColor="success" sx={{ height: '100%', p: 3 }}>
+                  <Box
+                    sx={{
+                      backgroundColor: 'primary.main',
+                      borderRadius: '50%',
+                      width: 64,
+                      height: 64,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mb: 3,
+                    }}
+                    aria-hidden="true"
+                  >
+                    <highlight.icon size={32} color="#FBA91E" />
+                  </Box>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 1.5 }}>
+                    {highlight.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7 }}>
+                    {highlight.description}
+                  </Typography>
+                </CustomCard>
+              </Grid>
+            ))}
+          </Grid>
+        </Section>
+
+        {/* About Preview Section */}
+        <Section id="about-preview" py={10}>
           <Grid container spacing={6} alignItems="center">
             <Grid item xs={12} md={6}>
               <Box
                 sx={{
                   position: 'relative',
-                  height: { xs: '300px', md: '400px' },
-                  borderRadius: 2,
+                  height: { xs: '300px', md: '450px' },
+                  borderRadius: '8px',
                   overflow: 'hidden',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.12)',
                 }}
               >
                 <Image
                   src="/Images/AETC 2025 PICS 1-69.JPG"
-                  alt="Conference venue"
+                  alt="Conference attendees networking"
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   style={{ objectFit: 'cover' }}
+                  loading="lazy"
                 />
               </Box>
             </Grid>
@@ -216,31 +283,122 @@ export default function HomePage() {
               <Typography variant="h3" sx={{ fontWeight: 700, mb: 2, mt: 1 }}>
                 Shaping Africa's Energy Future
               </Typography>
-              <Typography variant="body1" sx={{ color: 'text.secondary', mb: 3, lineHeight: 1.8 }}>
+              <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.8 }}>
                 The Africa Energy Technology Conference brings together industry leaders, innovators,
                 and policymakers to explore cutting-edge solutions for Africa's energy challenges.
-                Join us for thought-provoking discussions, networking opportunities, and insights
-                into the future of sustainable energy in Africa.
               </Typography>
-              <Button
+              <Typography variant="body1" sx={{ color: 'text.secondary', mb: 3, lineHeight: 1.8 }}>
+                Join us for thought-provoking discussions, networking opportunities, and insights
+                into the future of sustainable energy across the continent.
+              </Typography>
+              <CustomButton
                 component={Link}
                 href="/about"
                 variant="contained"
                 sx={{
                   backgroundColor: 'primary.main',
+                  color: '#FFFFFF',
                   '&:hover': {
                     backgroundColor: '#1f2a5a',
                   },
                 }}
-                endIcon={<ArrowRight size={18} />}
               >
-                Learn More
-              </Button>
+                Learn More <ArrowRight size={18} style={{ marginLeft: 8 }} />
+              </CustomButton>
             </Grid>
           </Grid>
-        </Container>
-      </Box>
+        </Section>
+
+        {/* Speakers Teaser */}
+        <Section
+          id="speakers-preview"
+          title="Featured Speakers"
+          subtitle="Learn from industry leaders and innovators"
+          backgroundColor="paper"
+        >
+          <Grid container spacing={4}>
+            {[
+              { name: 'Dr. Kwame Mensah', title: 'Chief Energy Officer', org: 'Ghana Energy Commission' },
+              { name: 'Amina Hassan', title: 'CEO', org: 'Solar Innovations Africa' },
+              { name: 'Prof. David Osei', title: 'Director of Research', org: 'African Energy Institute' },
+              { name: 'Fatima Diallo', title: 'Investment Director', org: 'Africa Energy Fund' },
+            ].map((speaker, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <CustomCard sx={{ textAlign: 'center', p: 3 }}>
+                  <Box
+                    sx={{
+                      width: 120,
+                      height: 120,
+                      borderRadius: '50%',
+                      backgroundColor: 'primary.main',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mx: 'auto',
+                      mb: 2,
+                      fontSize: '2.5rem',
+                      fontWeight: 700,
+                      color: '#FBA91E',
+                    }}
+                    aria-label={`${speaker.name} profile`}
+                  >
+                    {speaker.name.charAt(0)}
+                  </Box>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
+                    {speaker.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'secondary.main', fontWeight: 600, mb: 0.5 }}>
+                    {speaker.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                    {speaker.org}
+                  </Typography>
+                </CustomCard>
+              </Grid>
+            ))}
+          </Grid>
+          <Box sx={{ textAlign: 'center', mt: 4 }}>
+            <CustomButton
+              component={Link}
+              href="/speakers"
+              variant="outlined"
+              sx={{
+                borderColor: 'primary.main',
+                color: 'primary.main',
+                '&:hover': {
+                  borderColor: 'primary.main',
+                  backgroundColor: 'rgba(41, 57, 114, 0.08)',
+                },
+              }}
+            >
+              View All Speakers
+            </CustomButton>
+          </Box>
+        </Section>
+
+        {/* Sponsors Section */}
+        <Section
+          id="sponsors"
+          title="Our Sponsors & Partners"
+          subtitle="Supporting Africa's energy transformation"
+          py={6}
+        >
+          <SponsorsCarousel />
+          <Box sx={{ textAlign: 'center', mt: 4 }}>
+            <CustomButton
+              component={Link}
+              href="/sponsors"
+              variant="outlined"
+              sx={{
+                borderColor: 'primary.main',
+                color: 'primary.main',
+              }}
+            >
+              Become a Sponsor
+            </CustomButton>
+          </Box>
+        </Section>
+      </main>
     </>
   );
 }
-

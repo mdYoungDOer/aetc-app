@@ -96,6 +96,28 @@ export default function Header() {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return pathname === '/';
+    }
+    return pathname.startsWith(path);
+  };
+
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.includes('#')) {
+      e.preventDefault();
+      const [path, hash] = href.split('#');
+      if (path === pathname || path === '') {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        window.location.href = href;
+      }
+    }
+  };
+
   const drawer = (
     <Box sx={{ width: 280 }}>
       <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -113,14 +135,17 @@ export default function Header() {
               <ListItemButton
                 component={item.children ? 'div' : Link}
                 href={!item.children ? item.path : undefined}
-                onClick={() => {
+                onClick={(e: any) => {
                   if (item.children) {
                     handleMobileExpand(item.label);
                   } else {
+                    if (item.path.includes('#')) {
+                      handleSmoothScroll(e, item.path);
+                    }
                     setMobileOpen(false);
                   }
                 }}
-                selected={pathname === item.path}
+                selected={isActive(item.path)}
               >
                 <ListItemText primary={item.label} />
                 {item.children && <ChevronDown size={20} />}
@@ -135,7 +160,12 @@ export default function Header() {
                       sx={{ pl: 4 }}
                       component={Link}
                       href={child.path}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={(e: any) => {
+                        if (child.path.includes('#')) {
+                          handleSmoothScroll(e, child.path);
+                        }
+                        setMobileOpen(false);
+                      }}
                     >
                       <ListItemText primary={child.label} />
                     </ListItemButton>
@@ -213,7 +243,12 @@ export default function Header() {
                           key={child.label}
                           component={Link}
                           href={child.path}
-                          onClick={() => handleMenuClose(item.label)}
+                          onClick={(e: any) => {
+                            if (child.path.includes('#')) {
+                              handleSmoothScroll(e, child.path);
+                            }
+                            handleMenuClose(item.label);
+                          }}
                         >
                           {child.label}
                         </MenuItem>
@@ -224,9 +259,26 @@ export default function Header() {
                   <Button
                     component={Link}
                     href={item.path}
+                    onClick={(e: any) => {
+                      if (item.path.includes('#')) {
+                        handleSmoothScroll(e, item.path);
+                      }
+                    }}
                     sx={{
-                      color: pathname === item.path ? 'primary.main' : 'text.primary',
-                      fontWeight: pathname === item.path ? 600 : 400,
+                      color: isActive(item.path) ? 'primary.main' : 'text.primary',
+                      fontWeight: isActive(item.path) ? 600 : 400,
+                      position: 'relative',
+                      '&::after': isActive(item.path)
+                        ? {
+                            content: '""',
+                            position: 'absolute',
+                            bottom: 0,
+                            left: '20%',
+                            right: '20%',
+                            height: '2px',
+                            backgroundColor: 'primary.main',
+                          }
+                        : {},
                     }}
                   >
                     {item.label}
