@@ -168,7 +168,10 @@ export default function Footer() {
           }}
         >
           <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.60)' }}>
-          © {new Date().getFullYear()} Africa Energy Technology Conference. All rights reserved. Powered by <Link href="tel:+233548327906 target="_blank" rel="noopener noreferrer">Mega Web Services</Link>
+            © {new Date().getFullYear()} Africa Energy Technology Conference. All rights reserved. Powered by{' '}
+            <MuiLink href="tel:+233548327906" target="_blank" rel="noopener noreferrer" sx={{ color: 'secondary.main', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
+              Mega Web Services
+            </MuiLink>
           </Typography>
         </Box>
       </Container>
