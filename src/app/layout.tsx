@@ -105,7 +105,7 @@ export default function RootLayout({
               component="main"
               sx={{
                 flexGrow: 1,
-                pt: { xs: '48px', md: '88px' }, // Further reduced padding to eliminate white space
+                pt: 0, // Removed padding completely to eliminate white space below header
               }}
             >
               {children}

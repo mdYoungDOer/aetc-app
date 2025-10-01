@@ -22,11 +22,6 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Skip to main content for accessibility */}
-      <a href="#main-content" className="skip-to-main">
-        Skip to main content
-      </a>
-
       {/* Hero Section with Countdown */}
         <Hero
           title="Africa Energy Technology Conference 2026"
@@ -64,7 +59,7 @@ export default function HomePage() {
         <Box sx={{ mb: 4 }}>
           <CountdownTimer targetDate={conferenceDate} />
         </Box>
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', pb: 4, pt: 2 }}>
           <CustomButton
             component={Link}
             href="/registration"

@@ -76,6 +76,7 @@ export default function Hero({
           position: 'relative',
           zIndex: 1,
           textAlign: align,
+          py: 4, // Add vertical padding to the content container
         }}
       >
         <motion.div
