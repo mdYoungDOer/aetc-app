@@ -70,6 +70,66 @@ CREATE TABLE IF NOT EXISTS form_submissions (
   user_agent TEXT
 );
 
+-- Form entries table (same as form_submissions but with user reference)
+CREATE TABLE IF NOT EXISTS form_entries (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  form_id UUID REFERENCES forms(id) ON DELETE CASCADE,
+  data_json JSONB NOT NULL,
+  user_id UUID REFERENCES auth.users(id),
+  timestamp TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  ip_address INET
+);
+
+-- Tickets table
+CREATE TABLE IF NOT EXISTS tickets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  type TEXT NOT NULL CHECK (type IN ('earlybird', 'standard', 'student', 'vip')),
+  name TEXT NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  currency TEXT DEFAULT 'GHS',
+  stock INTEGER DEFAULT 0,
+  available INTEGER DEFAULT 0,
+  description TEXT,
+  features JSONB DEFAULT '[]'::jsonb,
+  active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
+);
+
+-- Orders table
+CREATE TABLE IF NOT EXISTS orders (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  ticket_id UUID REFERENCES tickets(id),
+  quantity INTEGER DEFAULT 1,
+  total_amount DECIMAL(10, 2) NOT NULL,
+  currency TEXT DEFAULT 'GHS',
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'paid', 'failed', 'cancelled', 'refunded')),
+  paystack_reference TEXT UNIQUE,
+  payment_data JSONB,
+  customer_name TEXT,
+  customer_email TEXT,
+  customer_phone TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  paid_at TIMESTAMP WITH TIME ZONE
+);
+
+-- User tickets table
+CREATE TABLE IF NOT EXISTS user_tickets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id),
+  ticket_id UUID REFERENCES tickets(id),
+  qr_code TEXT,
+  ticket_number TEXT UNIQUE,
+  attendee_name TEXT,
+  attendee_email TEXT,
+  checked_in BOOLEAN DEFAULT false,
+  checked_in_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
+);
+
 -- Speakers table (if not exists)
 CREATE TABLE IF NOT EXISTS speakers (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -93,6 +153,15 @@ CREATE INDEX IF NOT EXISTS idx_blocks_section_id ON blocks(section_id);
 CREATE INDEX IF NOT EXISTS idx_revisions_page_id ON revisions(page_id);
 CREATE INDEX IF NOT EXISTS idx_forms_slug ON forms(slug);
 CREATE INDEX IF NOT EXISTS idx_form_submissions_form_id ON form_submissions(form_id);
+CREATE INDEX IF NOT EXISTS idx_form_entries_form_id ON form_entries(form_id);
+CREATE INDEX IF NOT EXISTS idx_form_entries_user_id ON form_entries(user_id);
+CREATE INDEX IF NOT EXISTS idx_tickets_type ON tickets(type);
+CREATE INDEX IF NOT EXISTS idx_tickets_active ON tickets(active);
+CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);
+CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
+CREATE INDEX IF NOT EXISTS idx_orders_paystack_ref ON orders(paystack_reference);
+CREATE INDEX IF NOT EXISTS idx_user_tickets_order_id ON user_tickets(order_id);
+CREATE INDEX IF NOT EXISTS idx_user_tickets_user_id ON user_tickets(user_id);
 
 -- Enable Row Level Security
 ALTER TABLE pages ENABLE ROW LEVEL SECURITY;
@@ -101,6 +170,10 @@ ALTER TABLE blocks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE revisions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE forms ENABLE ROW LEVEL SECURITY;
 ALTER TABLE form_submissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE form_entries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tickets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_tickets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE speakers ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for pages (public read, authenticated write)
@@ -153,6 +226,46 @@ CREATE POLICY "Public can read featured speakers" ON speakers
 CREATE POLICY "Authenticated users can manage speakers" ON speakers
   FOR ALL USING (auth.role() = 'authenticated');
 
+-- RLS Policies for form_entries
+CREATE POLICY "Users can read own entries" ON form_entries
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Anyone can create entries" ON form_entries
+  FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Authenticated users can read all entries" ON form_entries
+  FOR SELECT USING (auth.role() = 'authenticated');
+
+-- RLS Policies for tickets
+CREATE POLICY "Public can read active tickets" ON tickets
+  FOR SELECT USING (active = true);
+
+CREATE POLICY "Authenticated users can manage tickets" ON tickets
+  FOR ALL USING (auth.role() = 'authenticated');
+
+-- RLS Policies for orders
+CREATE POLICY "Users can read own orders" ON orders
+  FOR SELECT USING (auth.uid() = user_id OR customer_email = auth.jwt()->>'email');
+
+CREATE POLICY "Anyone can create orders" ON orders
+  FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Users can update own pending orders" ON orders
+  FOR UPDATE USING (auth.uid() = user_id AND status = 'pending');
+
+CREATE POLICY "Authenticated users can read all orders" ON orders
+  FOR SELECT USING (auth.role() = 'authenticated');
+
+-- RLS Policies for user_tickets
+CREATE POLICY "Users can read own tickets" ON user_tickets
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "System can create tickets" ON user_tickets
+  FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Authenticated users can read all tickets" ON user_tickets
+  FOR SELECT USING (auth.role() = 'authenticated');
+
 -- Create updated_at trigger function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -176,5 +289,11 @@ CREATE TRIGGER update_forms_updated_at BEFORE UPDATE ON forms
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_speakers_updated_at BEFORE UPDATE ON speakers
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_tickets_updated_at BEFORE UPDATE ON tickets
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_orders_updated_at BEFORE UPDATE ON orders
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 

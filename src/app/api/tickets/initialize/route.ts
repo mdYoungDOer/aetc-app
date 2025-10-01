@@ -1,0 +1,103 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+import { paystackService } from '@/lib/paystack';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { ticketId, quantity, customerName, customerEmail, customerPhone, userId } = body;
+
+    // Validate input
+    if (!ticketId || !quantity || !customerEmail || !customerName) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    // Get ticket details
+    const { data: ticket, error: ticketError } = await supabase
+      .from('tickets')
+      .select('*')
+      .eq('id', ticketId)
+      .eq('active', true)
+      .single();
+
+    if (ticketError || !ticket) {
+      return NextResponse.json({ error: 'Ticket not found or not available' }, { status: 404 });
+    }
+
+    // Check availability
+    if (ticket.available < quantity) {
+      return NextResponse.json({ error: 'Not enough tickets available' }, { status: 400 });
+    }
+
+    // Calculate total
+    const totalAmount = ticket.price * quantity;
+
+    // Generate Paystack reference
+    const reference = paystackService.generateReference('AETC');
+
+    // Create order in database
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .insert([
+        {
+          user_id: userId || null,
+          ticket_id: ticketId,
+          quantity,
+          total_amount: totalAmount,
+          currency: 'GHS',
+          status: 'pending',
+          paystack_reference: reference,
+          customer_name: customerName,
+          customer_email: customerEmail,
+          customer_phone: customerPhone,
+        },
+      ])
+      .select()
+      .single();
+
+    if (orderError) {
+      console.error('Error creating order:', orderError);
+      return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
+    }
+
+    // Initialize Paystack payment
+    const paymentData = await paystackService.initializePayment({
+      email: customerEmail,
+      amount: paystackService.cedisToPesewas(totalAmount),
+      reference,
+      metadata: {
+        orderId: order.id,
+        ticketType: ticket.name,
+        quantity,
+        customerName,
+      },
+      callback_url: `${process.env.NEXT_PUBLIC_SITE_URL}/payment/callback`,
+    });
+
+    if (!paymentData.status) {
+      return NextResponse.json({ error: 'Failed to initialize payment' }, { status: 500 });
+    }
+
+    // Update available stock (optimistic)
+    await supabase
+      .from('tickets')
+      .update({ available: ticket.available - quantity })
+      .eq('id', ticketId);
+
+    return NextResponse.json({
+      authorization_url: paymentData.data.authorization_url,
+      access_code: paymentData.data.access_code,
+      reference,
+      orderId: order.id,
+    });
+  } catch (error) {
+    console.error('Initialize ticket error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { PageBlock } from './PageBuilder';
 import ShortcodeRenderer from './ShortcodeRenderer';
+import FormEmbed from './FormEmbed';
 import { parseShortcodes, hasShortcode } from '@/utils/shortcodes';
 
 interface CMSPageRendererProps {
@@ -191,9 +192,7 @@ function BlockRenderer({ block }: { block: PageBlock }) {
       return (
         <Box component="section" sx={{ py: 8, backgroundColor: 'background.paper' }}>
           <Container maxWidth="md">
-            <Typography variant="body1" sx={{ color: 'text.secondary', textAlign: 'center' }}>
-              Form embed (ID: {block.data.formId}) - Coming soon
-            </Typography>
+            <FormEmbed slug={block.data.formSlug} id={block.data.formId} />
           </Container>
         </Box>
       );

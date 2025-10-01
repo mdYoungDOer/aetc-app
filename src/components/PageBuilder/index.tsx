@@ -93,6 +93,7 @@ export default function PageBuilder({ initialBlocks = [], onChange, onSave }: Pa
       case 'form':
         return {
           formId: '',
+          formSlug: 'contact',
         };
       default:
         return {};
@@ -364,6 +365,19 @@ function BlockEditor({ block, onUpdate }: { block: PageBlock; onUpdate: (data: a
         </Box>
       );
 
+    case 'form':
+      return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            label="Form Slug or ID"
+            value={block.data.formSlug || block.data.formId || ''}
+            onChange={(e) => handleChange('formSlug', e.target.value)}
+            fullWidth
+            helperText="Enter the form slug (e.g., 'contact') or form ID"
+          />
+        </Box>
+      );
+
     default:
       return <Typography color="text.secondary">Editor for {block.type} coming soon...</Typography>;
   }
@@ -423,6 +437,25 @@ function BlockPreview({ block }: { block: PageBlock }) {
               {block.data.caption}
             </Typography>
           )}
+        </Box>
+      );
+
+    case 'form':
+      return (
+        <Box
+          sx={{
+            p: 3,
+            backgroundColor: 'background.default',
+            borderRadius: '8px',
+            textAlign: 'center',
+          }}
+        >
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            📋 Form: {block.data.formSlug || block.data.formId || 'Not configured'}
+          </Typography>
+          <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 1 }}>
+            Form will be rendered on the live page
+          </Typography>
         </Box>
       );
 
