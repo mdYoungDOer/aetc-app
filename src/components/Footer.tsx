@@ -117,22 +117,22 @@ export default function Footer() {
               >
                 Get In Touch
               </Typography>
-              <Stack spacing={2}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <MapPin size={18} color="rgba(255, 255, 255, 0.70)" />
-                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.70)' }}>
+              <Stack spacing={1.5}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <MapPin size={16} color="rgba(255, 255, 255, 0.70)" />
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.70)', fontSize: '0.9rem' }}>
                     Accra, Ghana
                   </Typography>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Mail size={18} color="rgba(255, 255, 255, 0.70)" />
-                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.70)' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <Mail size={16} color="rgba(255, 255, 255, 0.70)" />
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.70)', fontSize: '0.9rem' }}>
                     info@aetconference.com
                   </Typography>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Phone size={18} color="rgba(255, 255, 255, 0.70)" />
-                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.70)' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <Phone size={16} color="rgba(255, 255, 255, 0.70)" />
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.70)', fontSize: '0.9rem' }}>
                     +233 502 519 909
                   </Typography>
                 </Box>
@@ -148,7 +148,7 @@ export default function Footer() {
                 sx={{ 
                   fontWeight: 700, 
                   color: '#FFFFFF', 
-                  mb: 3, 
+                  mb: 2, 
                   fontSize: '1rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px'
@@ -156,7 +156,7 @@ export default function Footer() {
               >
                 {title}
               </Typography>
-              <Stack spacing={2.5}>
+              <Stack spacing={1.2}>
                 {links.map((link) => (
                   <MuiLink
                     key={link.label}
@@ -165,9 +165,9 @@ export default function Footer() {
                     sx={{
                       color: 'rgba(255, 255, 255, 0.70)',
                       textDecoration: 'none',
-                      fontSize: '0.95rem',
+                      fontSize: '0.9rem',
                       fontWeight: 400,
-                      lineHeight: 1.6,
+                      lineHeight: 1.4,
                       '&:hover': {
                         color: '#FBA91E',
                         transform: 'translateX(4px)',

@@ -235,7 +235,7 @@ export default function Header() {
           borderBottom: '1px solid',
           borderColor: 'divider',
           top: { xs: 0, md: '40px' }, // Account for topbar height
-          py: 1.25, // 10px padding top and bottom
+          py: 0.5, // Reduced padding: 4px top and bottom
         }}
       >
       <Container maxWidth="xl">

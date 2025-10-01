@@ -104,7 +104,7 @@ export default function RootLayout({
               component="main"
               sx={{
                 flexGrow: 1,
-                pt: { xs: '84px', md: '130px' }, // Account for topbar + header with padding
+                pt: { xs: '64px', md: '104px' }, // Account for topbar + header (reduced padding)
               }}
             >
               {children}

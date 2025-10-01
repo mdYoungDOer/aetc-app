@@ -1,12 +1,13 @@
 import { Metadata } from 'next';
-import { Box, Grid, Typography, Avatar } from '@mui/material';
-import { Linkedin, Twitter, ArrowRight } from 'lucide-react';
+import { Box, Grid, Typography } from '@mui/material';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import CustomButton from '@/components/ui/CustomButton';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import SpeakerCard from '@/components/SpeakerCard';
 
 export const metadata: Metadata = {
   title: 'Speakers | Africa Energy Technology Conference 2026',
@@ -144,79 +145,14 @@ export default function SpeakersPage() {
           <Grid container spacing={4}>
             {speakers.map((speaker, index) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                <CustomCard
-                  sx={{
-                    height: '100%',
-                    textAlign: 'center',
-                  }}
-                >
-                  <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
-                    <Avatar
-                      sx={{
-                        width: 120,
-                        height: 120,
-                        mx: 'auto',
-                        mb: 2,
-                        backgroundColor: 'primary.main',
-                        fontSize: '2.5rem',
-                        fontWeight: 700,
-                        color: '#FBA91E',
-                      }}
-                      aria-label={`${speaker.name} profile`}
-                    >
-                      {speaker.name.split(' ').map(n => n.charAt(0)).join('')}
-                    </Avatar>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
-                      {speaker.name}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: 'secondary.main', fontWeight: 600, mb: 0.5 }}
-                    >
-                      {speaker.title}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                      {speaker.company}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: 'text.secondary',
-                        mb: 2,
-                        lineHeight: 1.6,
-                        flexGrow: 1,
-                      }}
-                    >
-                      {speaker.bio}
-                    </Typography>
-                    <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'center' }}>
-                      <Box
-                        component="a"
-                        href="#"
-                        aria-label={`${speaker.name} LinkedIn`}
-                        sx={{
-                          color: 'text.secondary',
-                          transition: 'color 0.3s',
-                          '&:hover': { color: 'primary.main' },
-                        }}
-                      >
-                        <Linkedin size={18} />
-                      </Box>
-                      <Box
-                        component="a"
-                        href="#"
-                        aria-label={`${speaker.name} Twitter`}
-                        sx={{
-                          color: 'text.secondary',
-                          transition: 'color 0.3s',
-                          '&:hover': { color: 'primary.main' },
-                        }}
-                      >
-                        <Twitter size={18} />
-                      </Box>
-                    </Box>
-                  </Box>
-                </CustomCard>
+                <SpeakerCard
+                  name={speaker.name}
+                  title={speaker.title}
+                  company={speaker.company}
+                  bio={speaker.bio}
+                  linkedinUrl="#"
+                  twitterUrl="#"
+                />
               </Grid>
             ))}
           </Grid>
