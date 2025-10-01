@@ -3,6 +3,8 @@
 import { Box, Grid, Typography, Card, CardContent } from '@mui/material';
 import { FileText, FormInput, Users, Ticket } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 const stats = [
   { label: 'Total Pages', value: '12', icon: FileText, color: '#293972' },
   { label: 'Forms', value: '5', icon: FormInput, color: '#FBA91E' },

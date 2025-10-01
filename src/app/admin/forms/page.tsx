@@ -26,6 +26,8 @@ import { Form } from '@/types/cms';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export default function AdminForms() {
   const [forms, setForms] = useState<Form[]>([]);
   const [loading, setLoading] = useState(true);

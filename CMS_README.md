@@ -40,7 +40,7 @@ A custom Content Management System built specifically for the Africa Energy Tech
 
 ## Setup Instructions
 
-### 1. Database Setup
+###  1. Database Setup
 
 Run the SQL schema in your Supabase project:
 
@@ -52,12 +52,16 @@ This will create all necessary tables with Row Level Security (RLS) policies.
 
 ### 2. Environment Variables
 
-Ensure your `.env.local` file has:
+**IMPORTANT**: Set these environment variables BEFORE building the app.
+
+Create a `.env.local` file in the project root:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
+
+**Note**: The build will show errors for admin/auth pages if env vars are not set. This is expected and can be ignored - these pages work fine at runtime. To build without errors, set valid Supabase credentials first.
 
 ### 3. Create Admin User
 
