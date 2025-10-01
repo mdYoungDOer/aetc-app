@@ -84,10 +84,6 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   sx={{
                     color: 'rgba(255, 255, 255, 0.70)',
-                    '&:hover': {
-                      color: '#FBA91E',
-                      transform: 'translateY(-2px)',
-                    },
                     transition: 'all 0.3s ease',
                     display: 'flex',
                     alignItems: 'center',
@@ -97,6 +93,8 @@ export default function Footer() {
                     borderRadius: '50%',
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
                     '&:hover': {
+                      color: '#FBA91E',
+                      transform: 'translateY(-2px)',
                       backgroundColor: 'rgba(251, 169, 30, 0.2)',
                     },
                   }}
