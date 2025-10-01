@@ -79,7 +79,7 @@ export class SpeakerService {
       }));
     } catch (error) {
       console.error('SpeakerService.getSpeakers error:', error);
-      return [];
+      throw error; // Re-throw error instead of returning empty array
     }
   }
 
