@@ -88,6 +88,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
         />
+        <script src="https://js.paystack.co/v1/inline.js" async></script>
       </head>
       <body>
         <Providers>

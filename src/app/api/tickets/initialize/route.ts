@@ -65,24 +65,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
     }
 
-    // Initialize Paystack payment
-    const paymentData = await paystackService.initializePayment({
-      email: customerEmail,
-      amount: paystackService.cedisToPesewas(totalAmount),
-      reference,
-      metadata: {
-        orderId: order.id,
-        ticketType: ticket.name,
-        quantity,
-        customerName,
-      },
-      callback_url: `${process.env.NEXT_PUBLIC_SITE_URL}/payment/callback`,
-    });
-
-    if (!paymentData.status) {
-      return NextResponse.json({ error: 'Failed to initialize payment' }, { status: 500 });
-    }
-
     // Update available stock (optimistic)
     await supabase
       .from('tickets')
@@ -90,8 +72,7 @@ export async function POST(request: NextRequest) {
       .eq('id', ticketId);
 
     return NextResponse.json({
-      authorization_url: paymentData.data.authorization_url,
-      access_code: paymentData.data.access_code,
+      amount: paystackService.cedisToPesewas(totalAmount),
       reference,
       orderId: order.id,
     });
