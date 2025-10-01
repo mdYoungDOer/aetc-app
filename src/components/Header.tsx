@@ -226,7 +226,6 @@ export default function Header() {
 
   return (
     <>
-      <TopBar />
       <AppBar
         position="fixed"
         elevation={0}
@@ -234,11 +233,74 @@ export default function Header() {
           backgroundColor: 'background.paper',
           borderBottom: '1px solid',
           borderColor: 'divider',
-          top: { xs: 0, md: '40px' }, // Account for topbar height
+          top: 0, // Remove topbar offset since it's now included
         }}
       >
-      <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ py: 0 }}>
+        {/* TopBar content integrated into sticky header */}
+        <Box
+          sx={{
+            backgroundColor: '#1A1D29',
+            color: 'rgba(255, 255, 255, 0.87)',
+            py: 1,
+            display: { xs: 'none', md: 'block' },
+          }}
+        >
+          <Container maxWidth="xl">
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              {/* Contact Info */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Box sx={{ width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    📍
+                  </Box>
+                  <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>
+                    Accra, Ghana
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Box sx={{ width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    ✉️
+                  </Box>
+                  <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>
+                    info@aetconference.com
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Box sx={{ width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    📞
+                  </Box>
+                  <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>
+                    +233 502 519 909
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* Social Media Links */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Box sx={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    📘
+                  </Box>
+                  <Box sx={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    🐦
+                  </Box>
+                  <Box sx={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    💼
+                  </Box>
+                  <Box sx={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    📺
+                  </Box>
+                  <Box sx={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    💬
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Container>
+        </Box>
+
+        <Container maxWidth="xl">
+          <Toolbar disableGutters sx={{ py: 0 }}>
           {/* Logo */}
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: { xs: 1, md: 0 }, mr: 4 }}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
