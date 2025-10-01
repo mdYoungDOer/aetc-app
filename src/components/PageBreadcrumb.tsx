@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Typography, Container } from '@mui/material';
-import Image from 'next/image';
+import OptimizedImage from './OptimizedImage';
 
 interface PageBreadcrumbProps {
   title: string;
@@ -32,7 +32,7 @@ export default function PageBreadcrumb({ title, subtitle, backgroundImage }: Pag
       }}
     >
       {/* Background Image */}
-      <Image
+      <OptimizedImage
         src={backgroundImage}
         alt={`${title} background`}
         fill
@@ -41,6 +41,8 @@ export default function PageBreadcrumb({ title, subtitle, backgroundImage }: Pag
           zIndex: 0,
         }}
         priority
+        sizes="100vw"
+        quality={90}
       />
       
       {/* Content */}
