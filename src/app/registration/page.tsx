@@ -8,6 +8,7 @@ import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import CustomButton from '@/components/ui/CustomButton';
 import TicketPurchaseModal from '@/components/TicketPurchaseModal';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
