@@ -75,10 +75,10 @@ export default function RegistrationPage() {
 
   return (
     <>
-      <Hero
+      <PageBreadcrumb 
         title="Registration & Tickets"
         subtitle="Secure your spot at Africa's premier energy technology conference"
-        height="40vh"
+        backgroundImage="/Images/AETC 2025 PICS 1-59 (1).JPG"
       />
 
       <main>

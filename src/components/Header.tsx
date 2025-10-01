@@ -37,7 +37,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: 'Home', path: '/' },
   {
-    label: 'About the Conference',
+    label: 'About',
     path: '/about',
     children: [
       { label: 'Overview', path: '/about#overview' },
@@ -54,18 +54,18 @@ const navItems: NavItem[] = [
     ],
   },
   { label: 'Speakers', path: '/speakers' },
-  { label: 'Venue & Logistics', path: '/venue' },
+  { label: 'Venue', path: '/venue' },
   {
-    label: 'Registration & Tickets',
+    label: 'Registration',
     path: '/registration',
     children: [
       { label: 'Ticket Types', path: '/registration#ticket-types' },
       { label: 'Buy Tickets', path: '/registration#buy-tickets' },
     ],
   },
-  { label: 'Sponsors & Partners', path: '/sponsors' },
-  { label: 'News & Updates', path: '/news' },
-  { label: 'Contact Us', path: '/contact' },
+  { label: 'Sponsors', path: '/sponsors' },
+  { label: 'News', path: '/news' },
+  { label: 'Contact', path: '/contact' },
 ];
 
 export default function Header() {
@@ -196,8 +196,8 @@ export default function Header() {
               <Image
                 src="/AETC_Logo-main.png"
                 alt="AET Conference Logo"
-                width={50}
-                height={50}
+                width={70}
+                height={70}
                 priority
                 style={{ objectFit: 'contain' }}
               />

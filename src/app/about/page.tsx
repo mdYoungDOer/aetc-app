@@ -5,6 +5,7 @@ import { Target, Lightbulb, Globe, Zap, Users, TrendingUp } from 'lucide-react';
 import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 
 export const metadata: Metadata = {
   title: 'About the Conference | Africa Energy Technology Conference 2026',
@@ -14,10 +15,10 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <Hero
+      <PageBreadcrumb 
         title="About the Conference"
         subtitle="Driving sustainable energy solutions across Africa"
-        height="40vh"
+        backgroundImage="/Images/AETC 2025 PICS 1-24.JPG"
       />
 
       <main>

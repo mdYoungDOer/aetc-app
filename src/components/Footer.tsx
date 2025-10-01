@@ -52,8 +52,8 @@ export default function Footer() {
               <Image
                 src="/AETC_Logo-second.png"
                 alt="AET Conference Logo"
-                width={60}
-                height={60}
+                width={100}
+                height={100}
                 style={{ objectFit: 'contain' }}
               />
             </Box>

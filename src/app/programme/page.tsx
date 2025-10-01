@@ -4,6 +4,7 @@ import { Clock, MapPin, Coffee, Users } from 'lucide-react';
 import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 
 export const metadata: Metadata = {
   title: 'Programme | Africa Energy Technology Conference 2026',
@@ -69,10 +70,10 @@ const tracks = [
 export default function ProgrammePage() {
   return (
     <>
-      <Hero
+      <PageBreadcrumb 
         title="Conference Programme"
         subtitle="Explore our comprehensive schedule and sessions"
-        height="40vh"
+        backgroundImage="/Images/AETC 2025 PICS 1-69.JPG"
       />
 
       <main>

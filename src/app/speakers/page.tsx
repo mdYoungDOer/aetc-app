@@ -6,6 +6,7 @@ import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import CustomButton from '@/components/ui/CustomButton';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 
 export const metadata: Metadata = {
   title: 'Speakers | Africa Energy Technology Conference 2026',
@@ -66,10 +67,10 @@ const speakers = [
 export default function SpeakersPage() {
   return (
     <>
-      <Hero
+      <PageBreadcrumb 
         title="Our Speakers"
         subtitle="Learn from leading experts in energy technology and innovation"
-        height="40vh"
+        backgroundImage="/Images/AETC 2025 PICS 1-77 (1).JPG"
       />
 
       <main>
