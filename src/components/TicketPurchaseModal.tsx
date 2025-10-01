@@ -127,7 +127,7 @@ export default function TicketPurchaseModal({ open, onClose, ticket }: TicketPur
 
       // Use Paystack inline modal instead of redirect
       const handler = (window as any).PaystackPop.setup({
-        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || process.env.PAYSTACK_PUBLIC_KEY,
         email: data.customerEmail,
         amount: result.amount,
         currency: 'GHS',

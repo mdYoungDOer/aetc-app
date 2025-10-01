@@ -26,7 +26,15 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/admin';
 
-  const supabase = createSupabaseClient();
+  // Initialize Supabase client with error handling
+  let supabase;
+  try {
+    supabase = createSupabaseClient();
+  } catch (error) {
+    console.error('Failed to initialize Supabase client:', error);
+    setError('Configuration error. Please contact support.');
+    return null;
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
