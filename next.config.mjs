@@ -13,8 +13,6 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['@mui/material', '@mui/icons-material', 'lucide-react'],
   },
-  // Enable standalone output for Docker
-  output: 'standalone',
   // Optimize for production
   compress: true,
 };
