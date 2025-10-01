@@ -39,13 +39,14 @@ export default function Footer() {
       sx={{
         backgroundColor: '#1A1D29',
         color: 'rgba(255, 255, 255, 0.87)',
-        pt: 8,
-        pb: 4,
+        pt: 6,
+        pb: 3,
         mt: 'auto',
+        minHeight: 'auto',
       }}
     >
       <Container maxWidth="xl">
-        <Grid container spacing={6}>
+        <Grid container spacing={4}>
           {/* Logo and Description */}
           <Grid item xs={12} md={5}>
             <Box sx={{ mb: 4 }}>

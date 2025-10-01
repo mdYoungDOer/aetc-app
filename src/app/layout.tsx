@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import Providers from '@/components/Providers';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import BackToTop from '@/components/BackToTop';
 import { generateEventSchema, generateOrganizationSchema } from '@/utils/schema-org';
 import './globals.css';
 
@@ -104,12 +105,13 @@ export default function RootLayout({
               component="main"
               sx={{
                 flexGrow: 1,
-                pt: { xs: '64px', md: '104px' }, // Account for topbar + header (reduced padding)
+                pt: { xs: '64px', md: '104px' }, // Account for topbar + header
               }}
             >
               {children}
             </Box>
             <Footer />
+            <BackToTop />
           </Box>
         </Providers>
       </body>
