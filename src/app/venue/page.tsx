@@ -2,9 +2,11 @@ import { Metadata } from 'next';
 import { Box, Grid, Typography } from '@mui/material';
 import { MapPin, Hotel, Plane, Car, Utensils, Wifi } from 'lucide-react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
+import { AdomiBridgeIcon, OsuCastleIcon } from '@/components/icons';
 
 export const metadata: Metadata = {
   title: 'Venue & Logistics | Africa Energy Technology Conference 2026',
@@ -191,9 +193,18 @@ export default function VenuePage() {
                   >
                     <Hotel size={32} color="#FBA91E" />
                   </Box>
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
-                    Accommodation
-                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                    <OsuCastleIcon 
+                      size={20} 
+                      sx={{ 
+                        color: 'secondary.main',
+                        filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))',
+                      }} 
+                    />
+                    <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                      Accommodation
+                    </Typography>
+                  </Box>
                   <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.7 }}>
                     We've partnered with several hotels near the venue offering special rates for
                     conference attendees.
@@ -222,9 +233,18 @@ export default function VenuePage() {
                   >
                     <Car size={32} color="#FBA91E" />
                   </Box>
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
-                    Local Transportation
-                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                    <AdomiBridgeIcon 
+                      size={20} 
+                      sx={{ 
+                        color: 'secondary.main',
+                        filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))',
+                      }} 
+                    />
+                    <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                      Local Transportation
+                    </Typography>
+                  </Box>
                   <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.7 }}>
                     Shuttle services will be available from partner hotels to the conference venue.
                   </Typography>

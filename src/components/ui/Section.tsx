@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 
 interface SectionProps {
   id?: string;
-  title?: string;
+  title?: string | ReactNode;
   subtitle?: string;
   children: ReactNode;
   backgroundColor?: 'default' | 'paper' | 'dark';
@@ -44,18 +44,29 @@ export default function Section({
       <Container maxWidth={maxWidth}>
         {title && (
           <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Typography
-              id={`${id}-title`}
-              variant="h3"
-              component="h2"
-              sx={{
-                fontWeight: 700,
-                mb: subtitle ? 1 : 0,
-                color: backgroundColor === 'dark' ? '#FFFFFF' : 'inherit',
-              }}
-            >
-              {title}
-            </Typography>
+            {typeof title === 'string' ? (
+              <Typography
+                id={`${id}-title`}
+                variant="h3"
+                component="h2"
+                sx={{
+                  fontWeight: 700,
+                  mb: subtitle ? 1 : 0,
+                  color: backgroundColor === 'dark' ? '#FFFFFF' : 'inherit',
+                }}
+              >
+                {title}
+              </Typography>
+            ) : (
+              <Box
+                id={`${id}-title`}
+                sx={{
+                  mb: subtitle ? 1 : 0,
+                }}
+              >
+                {title}
+              </Box>
+            )}
             {subtitle && (
               <Typography
                 variant="body1"

@@ -2,12 +2,14 @@ import { Metadata } from 'next';
 import { Box, Grid, Typography } from '@mui/material';
 import Image from 'next/image';
 import { Target, Lightbulb, Globe, Zap, Users, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
 import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import SponsorsSection from '@/components/SponsorsSection';
 import KeyStatsSection from '@/components/KeyStatsSection';
+import { GyeNyameIcon, DwennimmenIcon } from '@/components/icons';
 
 export const metadata: Metadata = {
   title: 'About the Conference | Africa Energy Technology Conference 2026',
@@ -25,7 +27,25 @@ export default function AboutPage() {
 
       <main>
         {/* Overview Section */}
-        <Section id="overview" title="Conference Overview" py={10}>
+        <Section 
+          id="overview" 
+          title={
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+              <GyeNyameIcon 
+                size={32} 
+                sx={{ 
+                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+                  transition: 'transform 0.3s ease',
+                  '&:hover': {
+                    transform: 'scale(1.1)',
+                  }
+                }} 
+              />
+              <span>Conference Overview</span>
+            </Box>
+          } 
+          py={10}
+        >
           <Grid container spacing={6} alignItems="center">
             <Grid item xs={12} md={6}>
               <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color: 'primary.main' }}>

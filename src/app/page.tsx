@@ -11,6 +11,13 @@ import CountdownTimer from '@/components/CountdownTimer';
 import SponsorsSection from '@/components/SponsorsSection';
 import HomepageSpeakers from '@/components/HomepageSpeakers';
 import KeyStatsSection from '@/components/KeyStatsSection';
+import { 
+  SankofaIcon, 
+  KentePatternIcon, 
+  BlackStarSquareIcon, 
+  AdomiBridgeIcon,
+  ElephantIcon 
+} from '@/components/icons';
 
 export const metadata: Metadata = {
   title: 'Africa Energy Technology Conference 2026 | Home',
@@ -31,8 +38,50 @@ export default function HomePage() {
           height="80vh"
           align="center"
         >
+        {/* Kente Pattern Background Overlay */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            opacity: 0.05,
+            zIndex: 1,
+          }}
+        >
+          <KentePatternIcon size={200} opacity={0.1} />
+        </Box>
+
+        {/* Sankofa Icon with Tagline */}
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 3, zIndex: 2, position: 'relative' }}>
+          <SankofaIcon 
+            size={32} 
+            sx={{ 
+              mr: 2,
+              filter: 'drop-shadow(0 0 10px rgba(251, 169, 30, 0.3))',
+              transition: 'transform 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.1)',
+                filter: 'drop-shadow(0 0 15px rgba(251, 169, 30, 0.5))',
+              }
+            }} 
+          />
+          <Typography
+            variant="h6"
+            sx={{
+              color: 'secondary.main',
+              fontWeight: 600,
+              fontSize: { xs: '1rem', md: '1.2rem' },
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+            }}
+          >
+            Innovate, Invest, Implement
+          </Typography>
+        </Box>
+
         {/* Conference Date and Venue */}
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
+        <Box sx={{ mb: 4, textAlign: 'center', zIndex: 2, position: 'relative' }}>
           <Typography
             variant="h4"
                   sx={{
@@ -57,8 +106,19 @@ export default function HomePage() {
           </Typography>
         </Box>
 
-        <Box sx={{ mb: 4 }}>
-          <CountdownTimer targetDate={conferenceDate} />
+        {/* Countdown with Adomi Bridge Icon */}
+        <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, position: 'relative' }}>
+          <AdomiBridgeIcon 
+            size={28} 
+            sx={{ 
+              mr: 2,
+              opacity: 0.8,
+              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))'
+            }} 
+          />
+          <Box sx={{ flex: 1 }}>
+            <CountdownTimer targetDate={conferenceDate} />
+          </Box>
         </Box>
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', pb: 4, pt: 2 }}>
           <CustomButton

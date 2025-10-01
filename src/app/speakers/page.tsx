@@ -8,6 +8,7 @@ import CustomCard from '@/components/ui/CustomCard';
 import CustomButton from '@/components/ui/CustomButton';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import SpeakersPageContent from '@/components/SpeakersPageContent';
+import { DwennimmenIcon, OsuCastleIcon } from '@/components/icons';
 
 export const metadata: Metadata = {
   title: 'Speakers | Africa Energy Technology Conference 2026',
@@ -28,7 +29,21 @@ export default function SpeakersPage() {
         {/* Speakers Grid */}
         <Section
           id="speakers-grid"
-          title="Featured Speakers"
+          title={
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+              <DwennimmenIcon 
+                size={28} 
+                sx={{ 
+                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+                  transition: 'transform 0.3s ease',
+                  '&:hover': {
+                    transform: 'scale(1.1)',
+                  }
+                }} 
+              />
+              <span>Featured Speakers</span>
+            </Box>
+          }
           subtitle="Industry leaders sharing insights and expertise"
           py={10}
         >

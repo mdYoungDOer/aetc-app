@@ -4,6 +4,7 @@ import { Box, Container, Grid, Typography, Link as MuiLink, Stack } from '@mui/m
 import { Linkedin, Twitter, Facebook, Mail, Phone, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { GyeNyameIcon, KentePatternIcon } from '@/components/icons';
 
 const footerLinks = {
   'Quick Links': [
@@ -185,21 +186,52 @@ export default function Footer() {
           ))}
         </Grid>
 
-        {/* Copyright */}
+        {/* Kente Pattern Divider */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            my: 3,
+            opacity: 0.3,
+          }}
+        >
+          <KentePatternIcon size={200} opacity={0.2} />
+        </Box>
+
+        {/* Copyright with Gye Nyame Icon */}
         <Box
           sx={{
             borderTop: '1px solid rgba(255, 255, 255, 0.1)',
             mt: 3,
             pt: 2,
             textAlign: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 2,
           }}
         >
+          <GyeNyameIcon 
+            size={24} 
+            sx={{ 
+              opacity: 0.6,
+              filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))',
+            }} 
+          />
           <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.60)' }}>
             © {new Date().getFullYear()} Africa Energy Technology Conference. All rights reserved. Powered by{' '}
             <MuiLink href="tel:+233548327906" target="_blank" rel="noopener noreferrer" sx={{ color: 'secondary.main', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
               Mega Web Services
             </MuiLink>
           </Typography>
+          <GyeNyameIcon 
+            size={24} 
+            sx={{ 
+              opacity: 0.6,
+              filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))',
+            }} 
+          />
         </Box>
       </Container>
     </Box>
