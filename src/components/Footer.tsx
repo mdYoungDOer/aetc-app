@@ -174,7 +174,7 @@ export default function Footer() {
           }}
         >
           <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.60)' }}>
-            © 2026 Africa Energy Technology Conference. All rights reserved.
+          © {new Date().getFullYear()} Africa Energy Technology Conference. All rights reserved. Powered by <Link href="tel:+233548327906 target="_blank" rel="noopener noreferrer">Mega Web Services</Link>
           </Typography>
         </Box>
       </Container>
