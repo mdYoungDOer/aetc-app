@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Box,
@@ -25,6 +25,23 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/admin';
+  
+  // Check for error messages from URL parameters
+  const urlError = searchParams.get('error');
+  useEffect(() => {
+    if (urlError) {
+      switch (urlError) {
+        case 'unauthorized':
+          setError('You do not have admin privileges. Please contact support.');
+          break;
+        case 'system_error':
+          setError('System error occurred. Please try again or contact support.');
+          break;
+        default:
+          setError('Authentication failed. Please try again.');
+      }
+    }
+  }, [urlError]);
 
   // Initialize Supabase client with error handling
   const supabase = createSupabaseClient();
@@ -35,17 +52,39 @@ function LoginForm() {
     setError('');
 
     try {
+      console.log('🔐 Attempting login for:', email);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Login error:', error);
+        throw error;
+      }
+
+      console.log('✅ Login successful:', data.user?.email);
+      console.log('📊 Session data:', data.session);
 
       if (data.user) {
-        router.push(redirect);
+        // Wait a moment for session to be established
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Verify session is established
+        const { data: sessionData } = await supabase.auth.getSession();
+        console.log('🔍 Current session:', sessionData.session);
+        
+        if (sessionData.session) {
+          console.log('🚀 Redirecting to:', redirect);
+          router.push(redirect);
+        } else {
+          console.error('❌ No session found after login');
+          setError('Session not established. Please try again.');
+        }
       }
     } catch (err: any) {
+      console.error('❌ Login failed:', err);
       setError(err.message || 'An error occurred during login');
     } finally {
       setLoading(false);
