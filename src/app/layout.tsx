@@ -61,10 +61,10 @@ export const metadata: Metadata = {
 
 const eventSchema = generateEventSchema({
   name: 'Africa Energy Technology Conference 2026',
-  startDate: '2026-09-15T09:00:00+00:00',
-  endDate: '2026-09-17T17:00:00+00:00',
+  startDate: '2026-05-26T09:00:00+00:00',
+  endDate: '2026-05-28T17:00:00+00:00',
   location: {
-    name: 'Accra International Conference Centre',
+    name: 'Labadi Beach Hotel',
     address: 'Accra, Ghana',
   },
   description: 'Africa\'s premier energy technology conference bringing together industry leaders, innovators, and policymakers.',
@@ -105,7 +105,7 @@ export default function RootLayout({
               component="main"
               sx={{
                 flexGrow: 1,
-                pt: { xs: '64px', md: '104px' }, // Account for topbar + header
+                pt: { xs: '48px', md: '88px' }, // Further reduced padding to eliminate white space
               }}
             >
               {children}

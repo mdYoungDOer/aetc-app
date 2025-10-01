@@ -9,6 +9,7 @@ import CustomButton from '@/components/ui/CustomButton';
 import CustomCard from '@/components/ui/CustomCard';
 import CountdownTimer from '@/components/CountdownTimer';
 import SponsorsSection from '@/components/SponsorsSection';
+import HomepageSpeakers from '@/components/HomepageSpeakers';
 
 export const metadata: Metadata = {
   title: 'Africa Energy Technology Conference 2026 | Home',
@@ -16,8 +17,8 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  // Set conference date (placeholder - adjust as needed)
-  const conferenceDate = new Date('2026-09-15T09:00:00');
+  // Set conference date - May 26-28, 2026
+  const conferenceDate = new Date('2026-05-26T09:00:00');
 
   return (
     <>
@@ -32,11 +33,38 @@ export default function HomePage() {
           subtitle="Innovate, Invest, Implement: Revolutionised Financing for Sustainable Energy Sector Growth in Africa"
           backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
           height="80vh"
+          align="center"
         >
+        {/* Conference Date and Venue */}
+        <Box sx={{ mb: 4, textAlign: 'center' }}>
+          <Typography
+            variant="h4"
+            sx={{
+              color: '#FBA91E',
+              fontWeight: 700,
+              mb: 1,
+              fontSize: { xs: '1.5rem', md: '2rem' },
+            }}
+          >
+            May 26-28, 2026
+          </Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              color: 'rgba(255, 255, 255, 0.9)',
+              fontWeight: 500,
+              mb: 3,
+              fontSize: { xs: '1.1rem', md: '1.3rem' },
+            }}
+          >
+            Labadi Beach Hotel, Accra, Ghana
+          </Typography>
+        </Box>
+
         <Box sx={{ mb: 4 }}>
           <CountdownTimer targetDate={conferenceDate} />
         </Box>
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
           <CustomButton
             component={Link}
             href="/registration"
@@ -107,7 +135,7 @@ export default function HomePage() {
                     Conference Dates
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    September 15-17, 2026
+                    May 26-28, 2026
                   </Typography>
                 </Box>
               </Box>
@@ -143,7 +171,7 @@ export default function HomePage() {
                     Venue
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Accra, Ghana
+                    Labadi Beach Hotel, Accra, Ghana
                   </Typography>
                 </Box>
               </Box>
@@ -318,64 +346,7 @@ export default function HomePage() {
           subtitle="Learn from industry leaders and innovators"
           backgroundColor="paper"
         >
-          <Grid container spacing={4}>
-            {[
-              { name: 'Dr. Kwame Mensah', title: 'Chief Energy Officer', org: 'Ghana Energy Commission' },
-              { name: 'Amina Hassan', title: 'CEO', org: 'Solar Innovations Africa' },
-              { name: 'Prof. David Osei', title: 'Director of Research', org: 'African Energy Institute' },
-              { name: 'Fatima Diallo', title: 'Investment Director', org: 'Africa Energy Fund' },
-            ].map((speaker, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <CustomCard sx={{ textAlign: 'center', p: 3 }}>
-                  <Box
-                    sx={{
-                      width: 120,
-                      height: 120,
-                      borderRadius: '50%',
-                      backgroundColor: 'primary.main',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      mx: 'auto',
-                      mb: 2,
-                      fontSize: '2.5rem',
-                      fontWeight: 700,
-                      color: '#FBA91E',
-                    }}
-                    aria-label={`${speaker.name} profile`}
-                  >
-                    {speaker.name.charAt(0)}
-                  </Box>
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
-                    {speaker.name}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'secondary.main', fontWeight: 600, mb: 0.5 }}>
-                    {speaker.title}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {speaker.org}
-                  </Typography>
-                </CustomCard>
-              </Grid>
-            ))}
-          </Grid>
-          <Box sx={{ textAlign: 'center', mt: 4 }}>
-            <CustomButton
-              component={Link}
-              href="/speakers"
-              variant="outlined"
-              sx={{
-                borderColor: 'primary.main',
-                color: 'primary.main',
-                '&:hover': {
-                  borderColor: 'primary.main',
-                  backgroundColor: 'rgba(41, 57, 114, 0.08)',
-                },
-              }}
-            >
-              View All Speakers
-            </CustomButton>
-          </Box>
+          <HomepageSpeakers />
         </Section>
 
         {/* Sponsors Section */}

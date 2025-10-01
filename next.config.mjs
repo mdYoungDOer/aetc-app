@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Explicitly set Node.js runtime for API routes
+  experimental: {
+    optimizePackageImports: ['@mui/material', '@mui/icons-material', 'lucide-react'],
+    serverComponentsExternalPackages: ['@sendgrid/mail'],
+  },
   images: {
     remotePatterns: [
       {
@@ -23,13 +28,12 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  experimental: {
-    optimizePackageImports: ['@mui/material', '@mui/icons-material', 'lucide-react'],
-  },
   // Optimize for production
   compress: true,
   // Enable static exports for better performance
   output: 'standalone',
+  // Ensure compatibility with Node.js 18
+  swcMinify: true,
 };
 
 export default nextConfig;

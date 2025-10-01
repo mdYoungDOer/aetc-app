@@ -87,9 +87,9 @@ export default function ProgrammePage() {
               future of energy in Africa.
             </Typography>
             <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Chip label="Day 1: September 15" sx={{ fontWeight: 600 }} />
-              <Chip label="Day 2: September 16" sx={{ fontWeight: 600 }} />
-              <Chip label="Day 3: September 17" sx={{ fontWeight: 600 }} />
+              <Chip label="Day 1: May 26" sx={{ fontWeight: 600 }} />
+              <Chip label="Day 2: May 27" sx={{ fontWeight: 600 }} />
+              <Chip label="Day 3: May 28" sx={{ fontWeight: 600 }} />
             </Box>
           </Box>
         </Section>

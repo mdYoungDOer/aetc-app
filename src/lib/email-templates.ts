@@ -80,7 +80,7 @@ export const emailTemplates = {
         <div class="footer">
             <p class="footer-text">
                 <strong>Africa Energy Technology Conference 2026</strong><br>
-                September 15-17, 2026 • Accra, Ghana
+                May 26-28, 2026 • Labadi Beach Hotel, Accra, Ghana
             </p>
             <div class="contact-info">
                 📧 info@aetconference.com • 📞 +233 548 327 906<br>
@@ -105,7 +105,7 @@ To verify your account:
 Security Notice: Never share this code. AETC 2026 will never ask for your verification code via phone or email.
 
 Africa Energy Technology Conference 2026
-September 15-17, 2026 • Accra, Ghana
+May 26-28, 2026 • Labadi Beach Hotel, Accra, Ghana
 📧 info@aetconference.com • 📞 +233 548 327 906
     `
   }),
@@ -231,7 +231,7 @@ September 15-17, 2026 • Accra, Ghana
         <div class="footer">
             <p class="footer-text">
                 <strong>Africa Energy Technology Conference 2026</strong><br>
-                September 15-17, 2026 • Accra, Ghana
+                May 26-28, 2026 • Labadi Beach Hotel, Accra, Ghana
             </p>
             <div class="contact-info">
                 📧 info@aetconference.com • 📞 +233 548 327 906<br>
@@ -356,7 +356,7 @@ Africa Energy Technology Conference 2026
         <div class="footer">
             <p class="footer-text">
                 <strong>Africa Energy Technology Conference 2026</strong><br>
-                September 15-17, 2026 • Accra, Ghana
+                May 26-28, 2026 • Labadi Beach Hotel, Accra, Ghana
             </p>
             <div class="contact-info">
                 📧 info@aetconference.com • 📞 +233 548 327 906<br>
@@ -385,7 +385,7 @@ View Programme: https://aetc.africa/programme
 We're excited to have you join us in Accra for what promises to be an incredible three days of innovation, collaboration, and progress in Africa's energy sector.
 
 Africa Energy Technology Conference 2026
-September 15-17, 2026 • Accra, Ghana
+May 26-28, 2026 • Labadi Beach Hotel, Accra, Ghana
 📧 info@aetconference.com • 📞 +233 548 327 906
     `
   }),
@@ -499,7 +499,7 @@ September 15-17, 2026 • Accra, Ghana
         <div class="footer">
             <p class="footer-text">
                 <strong>Africa Energy Technology Conference 2026</strong><br>
-                September 15-17, 2026 • Accra, Ghana
+                May 26-28, 2026 • Labadi Beach Hotel, Accra, Ghana
             </p>
             <div class="contact-info">
                 📧 info@aetconference.com • 📞 +233 548 327 906<br>
@@ -532,7 +532,7 @@ View Your Tickets: https://aetc.africa/dashboard
 Check Programme: https://aetc.africa/programme
 
 Africa Energy Technology Conference 2026
-September 15-17, 2026 • Accra, Ghana
+May 26-28, 2026 • Labadi Beach Hotel, Accra, Ghana
 📧 info@aetconference.com • 📞 +233 548 327 906
     `
   })

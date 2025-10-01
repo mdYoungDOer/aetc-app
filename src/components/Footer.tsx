@@ -45,17 +45,17 @@ export default function Footer() {
         minHeight: 'auto',
       }}
     >
-      <Container maxWidth="xl">
-        <Grid container spacing={4}>
+      <Container maxWidth="lg">
+        <Grid container spacing={3}>
           {/* Logo and Description */}
           <Grid item xs={12} md={5}>
-            <Box sx={{ mb: 4 }}>
+            <Box sx={{ mb: 3 }}>
               <Image
                 src="/AETC_Logo-second.png"
                 alt="AET Conference Logo"
-                width={160}
-                height={160}
-                style={{ 
+                width={120}
+                height={120}
+                style={{
                   objectFit: 'contain',
                   filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4))',
                 }}
@@ -65,10 +65,10 @@ export default function Footer() {
               variant="body1"
               sx={{ 
                 color: 'rgba(255, 255, 255, 0.70)', 
-                mb: 4, 
-                lineHeight: 1.8,
-                fontSize: '1rem',
-                maxWidth: '400px'
+                mb: 3, 
+                lineHeight: 1.6, 
+                fontSize: '0.9rem',
+                maxWidth: '350px'
               }}
             >
               Advancing Africa's energy future through innovation, collaboration, and sustainable
@@ -76,7 +76,7 @@ export default function Footer() {
             </Typography>
             
             {/* Social Media Links */}
-            <Stack direction="row" spacing={3} sx={{ mb: 4 }}>
+            <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
               {socialLinks.map((social) => (
                 <MuiLink
                   key={social.label}
@@ -89,8 +89,8 @@ export default function Footer() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 40,
-                    height: 40,
+                    width: 36,
+                    height: 36,
                     borderRadius: '50%',
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
                     '&:hover': {
@@ -100,7 +100,7 @@ export default function Footer() {
                     },
                   }}
                 >
-                  <social.icon size={20} />
+                  <social.icon size={18} />
                 </MuiLink>
               ))}
             </Stack>
@@ -143,21 +143,21 @@ export default function Footer() {
 
           {/* Footer Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
-            <Grid item xs={6} md={2.3} key={title}>
+            <Grid item xs={6} md={2.2} key={title}>
               <Typography
                 variant="h6"
                 sx={{ 
                   fontWeight: 700, 
                   color: '#FFFFFF', 
-                  mb: 2, 
-                  fontSize: '1rem',
+                  mb: 1.5, 
+                  fontSize: '0.9rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px'
                 }}
               >
                 {title}
               </Typography>
-              <Stack spacing={1.2}>
+              <Stack spacing={1}>
                 {links.map((link) => (
                   <MuiLink
                     key={link.label}
@@ -166,9 +166,9 @@ export default function Footer() {
                     sx={{
                       color: 'rgba(255, 255, 255, 0.70)',
                       textDecoration: 'none',
-                      fontSize: '0.9rem',
+                      fontSize: '0.85rem',
                       fontWeight: 400,
-                      lineHeight: 1.4,
+                      lineHeight: 1.3,
                       '&:hover': {
                         color: '#FBA91E',
                         transform: 'translateX(4px)',
@@ -189,8 +189,8 @@ export default function Footer() {
         <Box
           sx={{
             borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-            mt: 5,
-            pt: 3,
+            mt: 3,
+            pt: 2,
             textAlign: 'center',
           }}
         >

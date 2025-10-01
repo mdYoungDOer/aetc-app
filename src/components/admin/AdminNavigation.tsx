@@ -31,6 +31,7 @@ import {
   Close as CloseIcon,
   Security,
   History,
+  Person,
 } from '@mui/icons-material';
 import { useAdmin } from '@/hooks/useAdmin';
 
@@ -62,6 +63,12 @@ export default function AdminNavigation({ open, onClose }: AdminNavigationProps)
       title: 'Forms',
       href: '/admin/forms',
       icon: <Description />,
+      show: true,
+    },
+    {
+      title: 'Speakers',
+      href: '/admin/speakers',
+      icon: <Person />,
       show: true,
     },
     {

@@ -19,6 +19,7 @@ export default function PageBreadcrumb({ title, subtitle, backgroundImage }: Pag
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
+        mt: { xs: '-16px', md: '-24px' }, // Negative margin to pull up to header
         '&::before': {
           content: '""',
           position: 'absolute',
