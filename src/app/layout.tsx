@@ -104,7 +104,7 @@ export default function RootLayout({
               component="main"
               sx={{
                 flexGrow: 1,
-                pt: { xs: '64px', md: '70px' },
+                pt: { xs: '64px', md: '110px' }, // Account for topbar + header
               }}
             >
               {children}

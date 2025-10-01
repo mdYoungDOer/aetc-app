@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import {
   AppBar,
   Box,
@@ -22,6 +23,7 @@ import {
 } from '@mui/material';
 import { Menu as MenuIcon, X, ChevronDown, Moon, Sun, Search, Ticket } from 'lucide-react';
 import GlobalSearch from './GlobalSearch';
+import TopBar from './TopBar';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme as useNextTheme } from 'next-themes';
@@ -69,6 +71,11 @@ export default function Header() {
   const muiTheme = useTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -114,7 +121,20 @@ export default function Header() {
 
   const drawer = (
     <Box sx={{ width: 280 }}>
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+          <Image
+            src="/AETC_Logo-main.png"
+            alt="AET Conference Logo"
+            width={60}
+            height={60}
+            priority
+            style={{ 
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+            }}
+          />
+        </Link>
         <IconButton onClick={handleDrawerToggle}>
           <X size={24} />
         </IconButton>
@@ -201,15 +221,18 @@ export default function Header() {
   );
 
   return (
-    <AppBar
-      position="fixed"
-      elevation={0}
-      sx={{
-        backgroundColor: 'background.paper',
-        borderBottom: '1px solid',
-        borderColor: 'divider',
-      }}
-    >
+    <>
+      <TopBar />
+      <AppBar
+        position="fixed"
+        elevation={0}
+        sx={{
+          backgroundColor: 'background.paper',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          top: { xs: 0, md: '40px' }, // Account for topbar height
+        }}
+      >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo */}
@@ -218,10 +241,13 @@ export default function Header() {
               <Image
                 src="/AETC_Logo-main.png"
                 alt="AET Conference Logo"
-                width={70}
-                height={70}
+                width={156}
+                height={90}
                 priority
-                style={{ objectFit: 'contain' }}
+                style={{ 
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+                }}
               />
             </Link>
           </Box>
@@ -304,17 +330,19 @@ export default function Header() {
 
           {/* Theme Toggle */}
           <IconButton onClick={toggleTheme} sx={{ mr: 1 }} title="Toggle theme">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={theme}
-                initial={{ rotate: -180, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 180, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-              </motion.div>
-            </AnimatePresence>
+            {mounted && (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={theme}
+                  initial={{ rotate: -180, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 180, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                </motion.div>
+              </AnimatePresence>
+            )}
           </IconButton>
 
           {/* Buy Pass Button */}
@@ -372,7 +400,8 @@ export default function Header() {
 
       {/* Global Search */}
       <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
-    </AppBar>
+      </AppBar>
+    </>
   );
 }
 
