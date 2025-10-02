@@ -3,7 +3,7 @@
 import { Box, Typography, Grid, Container } from '@mui/material';
 import { Users, Handshake, Globe, Presentation, Mic } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { ElephantIcon, BlackStarSquareIcon } from '@/components/icons';
+// import { ElephantIcon, BlackStarSquareIcon } from '@/components/icons';
 
 interface Stat {
   icon: React.ElementType;
@@ -12,8 +12,8 @@ interface Stat {
 }
 
 const stats: Stat[] = [
-  { icon: ElephantIcon, value: '3k+', label: 'Attendees' },
-  { icon: BlackStarSquareIcon, value: '100+', label: 'Partners & Sponsors' },
+  { icon: Users, value: '3k+', label: 'Attendees' },
+  { icon: Handshake, value: '100+', label: 'Partners & Sponsors' },
   { icon: Globe, value: '45+', label: 'Countries Represented' },
   { icon: Presentation, value: '50+', label: 'Strategic & Technical Sessions' },
   { icon: Mic, value: '200+', label: 'A-List Speakers & VIPs' },
@@ -41,18 +41,7 @@ export default function KeyStatsSection() {
             {stats.map((stat, index) => (
               <Grid item xs={12} sm={6} md={2.4} key={index} sx={{ textAlign: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <stat.icon 
-                    size={48} 
-                    color="#FFFFFF"
-                    sx={{ 
-                      mb: 1,
-                      filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))',
-                      transition: 'transform 0.3s ease',
-                      '&:hover': {
-                        transform: 'scale(1.1)',
-                      }
-                    }}
-                  />
+                  <stat.icon size={48} style={{ marginBottom: '8px', color: '#FFFFFF' }} />
                   <Typography
                     variant="h4"
                     component="div"

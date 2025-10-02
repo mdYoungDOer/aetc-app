@@ -11,7 +11,7 @@ import CustomButton from '@/components/ui/CustomButton';
 import TicketPurchaseModal from '@/components/TicketPurchaseModal';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import { createClient } from '@supabase/supabase-js';
-import { ElephantIcon, KentePatternIcon } from '@/components/icons';
+// import { ElephantIcon, KentePatternIcon } from '@/components/icons';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -124,8 +124,8 @@ export default function RegistrationPage() {
                       }}
                       hoverEffect={!popular}
                     >
-                      {/* Kente Pattern Background for VIP tickets */}
-                      {ticket.type.toLowerCase().includes('vip') && (
+                      {/* Kente Pattern Background for VIP tickets - DISABLED */}
+                      {/* {ticket.type.toLowerCase().includes('vip') && (
                         <Box
                           sx={{
                             position: 'absolute',
@@ -139,7 +139,7 @@ export default function RegistrationPage() {
                         >
                           <KentePatternIcon size={100} opacity={0.05} />
                         </Box>
-                      )}
+                      )} */}
                       <Box sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                         {badge && (
                           <Box
@@ -167,20 +167,9 @@ export default function RegistrationPage() {
                             {badge}
                           </Box>
                         )}
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                          {ticket.type.toLowerCase().includes('vip') && (
-                            <ElephantIcon 
-                              size={24} 
-                              sx={{ 
-                                color: 'secondary.main',
-                                filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))',
-                              }} 
-                            />
-                          )}
-                          <Typography variant="h5" sx={{ fontWeight: 700 }}>
-                            {ticket.name}
-                          </Typography>
-                        </Box>
+                        <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
+                          {ticket.name}
+                        </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 1 }}>
                           <Typography
                             variant="h3"

@@ -4,24 +4,36 @@ import { Box, Container, Grid, Typography, Link as MuiLink, Stack } from '@mui/m
 import { Linkedin, Twitter, Facebook, Mail, Phone, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { GyeNyameIcon, KentePatternIcon } from '@/components/icons';
+// import { GyeNyameIcon, KentePatternIcon } from '@/components/icons';
 
 const footerLinks = {
-  'Quick Links': [
-    { label: 'Home', path: '/' },
-    { label: 'About', path: '/about' },
-    { label: 'Programme', path: '/programme' },
-    { label: 'Speakers', path: '/speakers' },
+  'About AETC': [
+    { label: 'About The Conference', path: '/about' },
+    { label: 'Key Topics', path: '/about/key-topics' },
+    { label: 'Why Attend AETC', path: '/about/why' },
+    { label: 'AETC FAQs', path: '/about/faqs' },
   ],
-  'Information': [
-    { label: 'Venue & Logistics', path: '/venue' },
-    { label: 'Registration', path: '/registration' },
-    { label: 'Sponsors', path: '/sponsors' },
-    { label: 'News', path: '/news' },
+  'Get Involved': [
+    { label: 'Apply To Sponsor', path: '/sponsors' },
+    { label: 'Apply To Exhibit', path: '/exhibit' },
+    { label: 'Apply To Speak', path: '/speakers#call-for-speakers' },
+    { label: 'Partner With Us', path: '/partnership' },
+    { label: 'Apply for Press & Media Pass', path: '/media-pass' },
+    { label: 'Calls For Abstracts', path: '/abstracts' },
+  ],
+  'Plan Your Trip': [
+    { label: 'Conference Venue', path: '/venue' },
+    { label: 'VISA Support Letter Request', path: '/visa-support' },
+    { label: 'Travel & Accommodation', path: '/travel' },
+    { label: 'Accra, Ghana', path: '/accra' },
+  ],
+  'Media': [
+    { label: 'Press Releases', path: '/news' },
+    { label: '2025 Photo Gallery', path: '/gallery/2025' },
+    { label: '2024 Photo Gallery', path: '/gallery/2024' },
   ],
   'Support': [
     { label: 'Contact Us', path: '/contact' },
-    { label: 'FAQ', path: '/faq' },
     { label: 'Privacy Policy', path: '/privacy' },
     { label: 'Terms & Conditions', path: '/terms' },
   ],
@@ -186,52 +198,21 @@ export default function Footer() {
           ))}
         </Grid>
 
-        {/* Kente Pattern Divider */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            my: 3,
-            opacity: 0.3,
-          }}
-        >
-          <KentePatternIcon size={200} opacity={0.2} />
-        </Box>
-
-        {/* Copyright with Gye Nyame Icon */}
+        {/* Copyright */}
         <Box
           sx={{
             borderTop: '1px solid rgba(255, 255, 255, 0.1)',
             mt: 3,
             pt: 2,
             textAlign: 'center',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 2,
           }}
         >
-          <GyeNyameIcon 
-            size={24} 
-            sx={{ 
-              opacity: 0.6,
-              filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))',
-            }} 
-          />
           <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.60)' }}>
             © {new Date().getFullYear()} Africa Energy Technology Conference. All rights reserved. Powered by{' '}
             <MuiLink href="tel:+233548327906" target="_blank" rel="noopener noreferrer" sx={{ color: 'secondary.main', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
               Mega Web Services
             </MuiLink>
           </Typography>
-          <GyeNyameIcon 
-            size={24} 
-            sx={{ 
-              opacity: 0.6,
-              filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))',
-            }} 
-          />
         </Box>
       </Container>
     </Box>
