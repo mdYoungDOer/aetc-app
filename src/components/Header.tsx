@@ -97,7 +97,6 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [anchorEls, setAnchorEls] = React.useState<{ [key: string]: HTMLElement | null }>({});
   const [mobileExpanded, setMobileExpanded] = React.useState<{ [key: string]: boolean }>({});
-  const [hoveredMenu, setHoveredMenu] = React.useState<string | null>(null);
   const { theme, setTheme } = useNextTheme();
   const muiTheme = useTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
@@ -118,22 +117,6 @@ export default function Header() {
 
   const handleMenuClose = (label: string) => {
     setAnchorEls({ ...anchorEls, [label]: null });
-    setHoveredMenu(null);
-  };
-
-  const handleMenuHover = (event: React.MouseEvent<HTMLElement>, label: string) => {
-    setHoveredMenu(label);
-    setAnchorEls({ ...anchorEls, [label]: event.currentTarget });
-  };
-
-  const handleMenuLeave = (label: string) => {
-    // Add a small delay to allow moving to submenu
-    setTimeout(() => {
-      if (hoveredMenu !== label) {
-        setAnchorEls({ ...anchorEls, [label]: null });
-        setHoveredMenu(null);
-      }
-    }, 150);
   };
 
   const handleMobileExpand = (label: string) => {
@@ -489,13 +472,28 @@ export default function Header() {
           {/* Desktop Navigation */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 1 }}>
             {navItems.map((item) => (
-              <Box key={item.label}>
+              <Box 
+                key={item.label}
+                sx={{
+                  position: 'relative',
+                  '&:hover .submenu': {
+                    display: 'block',
+                  },
+                }}
+              >
                 {item.children ? (
                   <>
                     <Button
                       onClick={(e) => handleMenuOpen(e, item.label)}
-                      onMouseEnter={(e) => handleMenuHover(e, item.label)}
-                      onMouseLeave={() => handleMenuLeave(item.label)}
+                      onMouseEnter={(e) => handleMenuOpen(e, item.label)}
+                      onMouseLeave={() => {
+                        // Close menu when leaving the button
+                        setTimeout(() => {
+                          if (!document.querySelector(`[data-menu="${item.label}"]:hover`)) {
+                            handleMenuClose(item.label);
+                          }
+                        }, 100);
+                      }}
                       sx={{ 
                         color: 'text.primary',
                         fontWeight: 500,
@@ -515,11 +513,17 @@ export default function Header() {
                       {item.label}
                     </Button>
                     <Menu
+                      data-menu={item.label}
                       anchorEl={anchorEls[item.label]}
                       open={Boolean(anchorEls[item.label])}
                       onClose={() => handleMenuClose(item.label)}
-                      onMouseEnter={() => setHoveredMenu(item.label)}
-                      onMouseLeave={() => handleMenuLeave(item.label)}
+                      onMouseEnter={() => {
+                        // Keep menu open when hovering over it
+                      }}
+                      onMouseLeave={() => {
+                        // Close menu when leaving the menu area
+                        handleMenuClose(item.label);
+                      }}
                       MenuListProps={{
                         'aria-labelledby': 'basic-button',
                       }}
