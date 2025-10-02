@@ -5,6 +5,7 @@ import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import CustomButton from '@/components/ui/CustomButton';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 
 export const metadata: Metadata = {
   title: 'Contact Us | Africa Energy Technology Conference 2026',
@@ -58,10 +59,13 @@ const departments = [
 export default function ContactPage() {
   return (
     <>
-      <Hero
+      <PageBreadcrumb
         title="Contact Us"
         subtitle="We're here to help - get in touch with our team"
-        height="40vh"
+        backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        breadcrumbItems={[
+          { label: 'Contact', href: '/contact' }
+        ]}
       />
 
       <main>

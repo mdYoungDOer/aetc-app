@@ -109,6 +109,10 @@ export default function Gallery2025Page() {
         title="2025 Photo Gallery"
         subtitle="Relive the moments from AETC 2025"
         backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        breadcrumbItems={[
+          { label: 'Media', href: '#' },
+          { label: '2025 Gallery', href: '/gallery/2025' }
+        ]}
       />
 
       <main>

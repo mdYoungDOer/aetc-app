@@ -120,6 +120,10 @@ export default function PartnershipPage() {
         title="Partner With Us"
         subtitle="Join us in shaping Africa's energy future"
         backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        breadcrumbItems={[
+          { label: 'Get Involved', href: '#' },
+          { label: 'Partner With Us', href: '/partnership' }
+        ]}
       />
 
       <main>

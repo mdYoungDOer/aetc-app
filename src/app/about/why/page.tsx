@@ -71,6 +71,10 @@ export default function WhyAttendPage() {
         title="Why Attend AETC 2026"
         subtitle="Join Africa's premier energy technology gathering"
         backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        breadcrumbItems={[
+          { label: 'About AETC', href: '/about' },
+          { label: 'Why Attend', href: '/about/why' }
+        ]}
       />
 
       <main>

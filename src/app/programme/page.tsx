@@ -75,6 +75,9 @@ export default function ProgrammePage() {
         title="Conference Programme"
         subtitle="Explore our comprehensive schedule and sessions"
         backgroundImage="/Images/AETC 2025 PICS 1-69.JPG"
+        breadcrumbItems={[
+          { label: 'Programme', href: '/programme' }
+        ]}
       />
 
       <main>

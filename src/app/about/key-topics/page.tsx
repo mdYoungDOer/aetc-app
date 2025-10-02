@@ -56,6 +56,10 @@ export default function KeyTopicsPage() {
         title="Key Topics"
         subtitle="Exploring critical themes in Africa's energy transformation"
         backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        breadcrumbItems={[
+          { label: 'About AETC', href: '/about' },
+          { label: 'Key Topics', href: '/about/key-topics' }
+        ]}
       />
 
       <main>

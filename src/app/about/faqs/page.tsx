@@ -67,6 +67,10 @@ export default function FAQsPage() {
         title="AETC FAQs"
         subtitle="Frequently asked questions about the conference"
         backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        breadcrumbItems={[
+          { label: 'About AETC', href: '/about' },
+          { label: 'FAQs', href: '/about/faqs' }
+        ]}
       />
 
       <main>

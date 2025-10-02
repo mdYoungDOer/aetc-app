@@ -23,6 +23,9 @@ export default function AboutPage() {
           title="About AETC 2026"
           subtitle="Innovate, Invest, Implement: Revolutionised Financing for Sustainable Energy Sector Growth in Africa"
           backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+          breadcrumbItems={[
+            { label: 'About AETC', href: '/about' }
+          ]}
         />
 
       <main>

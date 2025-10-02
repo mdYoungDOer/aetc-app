@@ -80,6 +80,10 @@ export default function ExhibitPage() {
         title="Apply To Exhibit"
         subtitle="Showcase your solutions at AETC 2026"
         backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        breadcrumbItems={[
+          { label: 'Get Involved', href: '#' },
+          { label: 'Apply To Exhibit', href: '/exhibit' }
+        ]}
       />
 
       <main>

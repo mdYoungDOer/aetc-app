@@ -23,6 +23,9 @@ export default function SpeakersPage() {
         title="Our Speakers"
         subtitle="Learn from leading experts in energy technology and innovation"
         backgroundImage="/Images/AETC 2025 PICS 1-77 (1).JPG"
+        breadcrumbItems={[
+          { label: 'Speakers', href: '/speakers' }
+        ]}
       />
 
       <main>

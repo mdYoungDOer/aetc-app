@@ -64,6 +64,10 @@ export default function VisaSupportPage() {
         title="VISA Support Letter Request"
         subtitle="Get assistance with your travel documentation"
         backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        breadcrumbItems={[
+          { label: 'Travel', href: '#' },
+          { label: 'VISA Support', href: '/visa-support' }
+        ]}
       />
 
       <main>

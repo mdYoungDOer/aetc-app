@@ -82,6 +82,9 @@ export default function RegistrationPage() {
         title="Registration & Tickets"
         subtitle="Secure your spot at Africa's premier energy technology conference"
         backgroundImage="/Images/AETC 2025 PICS 1-59 (1).JPG"
+        breadcrumbItems={[
+          { label: 'Registration', href: '/registration' }
+        ]}
       />
 
       <main>

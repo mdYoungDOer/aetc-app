@@ -85,6 +85,10 @@ export default function TravelPage() {
         title="Travel & Accommodation"
         subtitle="Plan your journey to AETC 2026 in Accra, Ghana"
         backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        breadcrumbItems={[
+          { label: 'Travel', href: '#' },
+          { label: 'Travel & Accommodation', href: '/travel' }
+        ]}
       />
 
       <main>

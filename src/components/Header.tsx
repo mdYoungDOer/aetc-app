@@ -97,6 +97,7 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [anchorEls, setAnchorEls] = React.useState<{ [key: string]: HTMLElement | null }>({});
   const [mobileExpanded, setMobileExpanded] = React.useState<{ [key: string]: boolean }>({});
+  const [hoveredMenu, setHoveredMenu] = React.useState<string | null>(null);
   const { theme, setTheme } = useNextTheme();
   const muiTheme = useTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
@@ -117,6 +118,22 @@ export default function Header() {
 
   const handleMenuClose = (label: string) => {
     setAnchorEls({ ...anchorEls, [label]: null });
+    setHoveredMenu(null);
+  };
+
+  const handleMenuHover = (event: React.MouseEvent<HTMLElement>, label: string) => {
+    setHoveredMenu(label);
+    setAnchorEls({ ...anchorEls, [label]: event.currentTarget });
+  };
+
+  const handleMenuLeave = (label: string) => {
+    // Add a small delay to allow moving to submenu
+    setTimeout(() => {
+      if (hoveredMenu !== label) {
+        setAnchorEls({ ...anchorEls, [label]: null });
+        setHoveredMenu(null);
+      }
+    }, 150);
   };
 
   const handleMobileExpand = (label: string) => {
@@ -477,6 +494,8 @@ export default function Header() {
                   <>
                     <Button
                       onClick={(e) => handleMenuOpen(e, item.label)}
+                      onMouseEnter={(e) => handleMenuHover(e, item.label)}
+                      onMouseLeave={() => handleMenuLeave(item.label)}
                       sx={{ 
                         color: 'text.primary',
                         fontWeight: 500,
@@ -499,6 +518,8 @@ export default function Header() {
                       anchorEl={anchorEls[item.label]}
                       open={Boolean(anchorEls[item.label])}
                       onClose={() => handleMenuClose(item.label)}
+                      onMouseEnter={() => setHoveredMenu(item.label)}
+                      onMouseLeave={() => handleMenuLeave(item.label)}
                       MenuListProps={{
                         'aria-labelledby': 'basic-button',
                       }}
