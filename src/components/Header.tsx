@@ -37,7 +37,6 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Home', path: '/' },
   {
     label: 'About AETC',
     path: '/about',
@@ -72,7 +71,7 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    label: 'Plan Your Trip',
+    label: 'Travel',
     path: '#',
     children: [
       { label: 'Conference Venue', path: '/venue' },
@@ -478,7 +477,20 @@ export default function Header() {
                   <>
                     <Button
                       onClick={(e) => handleMenuOpen(e, item.label)}
-                      sx={{ color: 'text.primary' }}
+                      sx={{ 
+                        color: 'text.primary',
+                        fontWeight: 500,
+                        px: 2,
+                        py: 1,
+                        borderRadius: '8px',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          backgroundColor: 'primary.main',
+                          color: 'white',
+                          transform: 'translateY(-1px)',
+                          boxShadow: '0 4px 12px rgba(41, 57, 114, 0.2)',
+                        },
+                      }}
                       endIcon={<ChevronDown size={16} />}
                     >
                       {item.label}
@@ -490,8 +502,20 @@ export default function Header() {
                       MenuListProps={{
                         'aria-labelledby': 'basic-button',
                       }}
+                      sx={{
+                        '& .MuiPaper-root': {
+                          mt: 1,
+                          borderRadius: '12px',
+                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+                          border: '1px solid rgba(0, 0, 0, 0.08)',
+                          minWidth: 220,
+                          overflow: 'hidden',
+                        },
+                      }}
+                      transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+                      anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
                     >
-                      {item.children.map((child) => (
+                      {item.children.map((child, index) => (
                         <MenuItem
                           key={child.label}
                           component={child.path.startsWith('http') ? 'a' : Link}
@@ -503,6 +527,28 @@ export default function Header() {
                               handleSmoothScroll(e, child.path);
                             }
                             handleMenuClose(item.label);
+                          }}
+                          sx={{
+                            py: 1.5,
+                            px: 2,
+                            fontSize: '0.9rem',
+                            fontWeight: 500,
+                            color: 'text.primary',
+                            borderBottom: index < item.children!.length - 1 ? '1px solid rgba(0, 0, 0, 0.06)' : 'none',
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                              backgroundColor: 'primary.main',
+                              color: 'white',
+                              transform: 'translateX(4px)',
+                            },
+                            '&:first-of-type': {
+                              borderTopLeftRadius: '12px',
+                              borderTopRightRadius: '12px',
+                            },
+                            '&:last-of-type': {
+                              borderBottomLeftRadius: '12px',
+                              borderBottomRightRadius: '12px',
+                            },
                           }}
                         >
                           {child.label}
@@ -521,8 +567,18 @@ export default function Header() {
                     }}
                     sx={{
                       color: isActive(item.path) ? 'primary.main' : 'text.primary',
-                      fontWeight: isActive(item.path) ? 600 : 400,
+                      fontWeight: isActive(item.path) ? 600 : 500,
+                      px: 2,
+                      py: 1,
+                      borderRadius: '8px',
+                      transition: 'all 0.3s ease',
                       position: 'relative',
+                      '&:hover': {
+                        backgroundColor: 'primary.main',
+                        color: 'white',
+                        transform: 'translateY(-1px)',
+                        boxShadow: '0 4px 12px rgba(41, 57, 114, 0.2)',
+                      },
                       '&::after': isActive(item.path)
                         ? {
                             content: '""',

@@ -7,32 +7,28 @@ import Image from 'next/image';
 // import { GyeNyameIcon, KentePatternIcon } from '@/components/icons';
 
 const footerLinks = {
-  'About AETC': [
+  'About & Information': [
     { label: 'About The Conference', path: '/about' },
     { label: 'Key Topics', path: '/about/key-topics' },
     { label: 'Why Attend AETC', path: '/about/why' },
     { label: 'AETC FAQs', path: '/about/faqs' },
+    { label: 'Speakers', path: '/speakers' },
+    { label: 'Programme', path: '/programme' },
+    { label: 'Conference Venue', path: '/venue' },
   ],
-  'Get Involved': [
+  'Get Involved & Travel': [
     { label: 'Apply To Sponsor', path: '/sponsors' },
     { label: 'Apply To Exhibit', path: '/exhibit' },
     { label: 'Apply To Speak', path: '/speakers#call-for-speakers' },
     { label: 'Partner With Us', path: '/partnership' },
-    { label: 'Apply for Press & Media Pass', path: '/media-pass' },
-    { label: 'Calls For Abstracts', path: '/abstracts' },
-  ],
-  'Plan Your Trip': [
-    { label: 'Conference Venue', path: '/venue' },
-    { label: 'VISA Support Letter Request', path: '/visa-support' },
+    { label: 'VISA Support', path: '/visa-support' },
     { label: 'Travel & Accommodation', path: '/travel' },
-    { label: 'Accra, Ghana', path: '/accra' },
+    { label: 'Registration', path: '/registration' },
   ],
-  'Media': [
+  'Media & Support': [
     { label: 'Press Releases', path: '/news' },
     { label: '2025 Photo Gallery', path: '/gallery/2025' },
     { label: '2024 Photo Gallery', path: '/gallery/2024' },
-  ],
-  'Support': [
     { label: 'Contact Us', path: '/contact' },
     { label: 'Privacy Policy', path: '/privacy' },
     { label: 'Terms & Conditions', path: '/terms' },
