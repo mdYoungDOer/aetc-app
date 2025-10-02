@@ -20,7 +20,7 @@ export default function VenuePage() {
       <PageBreadcrumb
         title="Labadi Beach Hotel"
         subtitle="Ghana's Premier Beachfront Conference Destination"
-        backgroundImage="/images-optimized/aetc-2025-pics-1-67.webp"
+        backgroundImage="/Labadi/Labadi-Beach-Hotel-13.jpg"
         breadcrumbItems={[
           { label: 'Venue', href: '/venue' }
         ]}
@@ -37,9 +37,19 @@ export default function VenuePage() {
               >
                 Conference Venue
               </Typography>
-              <Typography variant="h3" sx={{ fontWeight: 700, mb: 3, color: 'primary.main' }}>
-                Labadi Beach Hotel
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+                <Image
+                  src="/Labadi/lbhbiglogo-e1618274195690-copy.png"
+                  alt="Labadi Beach Hotel Logo"
+                  width={80}
+                  height={60}
+                  style={{ objectFit: 'contain' }}
+                  priority
+                />
+                <Typography variant="h3" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                  Labadi Beach Hotel
+                </Typography>
+              </Box>
               
               <Box sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'flex-start' }}>
                 <MapPin size={24} color="#FBA91E" style={{ flexShrink: 0, marginTop: 4 }} />
@@ -96,7 +106,7 @@ export default function VenuePage() {
                 }}
               >
                 <Image
-                  src="/images-optimized/aetc-2025-pics-1-67.webp"
+                  src="/Labadi/expedia_group-55963-94296f-669411.jpg"
                   alt="Labadi Beach Hotel exterior"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -265,14 +275,146 @@ export default function VenuePage() {
                 }}
               >
                 <Image
-                  src="/images-optimized/aetc-2025-pics-1-69.webp"
-                  alt="Labadi Beach Hotel room"
+                  src="/Labadi/LUXURY-ROOM-DOUBLE-BED-TWO-scaled.jpg"
+                  alt="Labadi Beach Hotel luxury room"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   style={{ objectFit: 'cover' }}
                   loading="lazy"
                   quality={90}
                   priority={false}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </Section>
+
+        {/* Hotel Gallery */}
+        <Section id="hotel-gallery" title="Hotel Gallery" subtitle="Experience the beauty and luxury of Labadi Beach Hotel" py={10}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} md={4}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: '250px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
+                }}
+              >
+                <Image
+                  src="/Labadi/292483655.jpg"
+                  alt="Labadi Beach Hotel view"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  style={{ objectFit: 'cover' }}
+                  loading="lazy"
+                  quality={85}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: '250px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
+                }}
+              >
+                <Image
+                  src="/Labadi/labadi-beach-hotel-habitacion-125b013c.jpg"
+                  alt="Labadi Beach Hotel room"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  style={{ objectFit: 'cover' }}
+                  loading="lazy"
+                  quality={85}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: '250px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
+                }}
+              >
+                <Image
+                  src="/Labadi/accra-labadi-beach-hotel-image-65.JPEG"
+                  alt="Labadi Beach Hotel facilities"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  style={{ objectFit: 'cover' }}
+                  loading="lazy"
+                  quality={85}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: '250px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
+                }}
+              >
+                <Image
+                  src="/Labadi/e28c27d8.jpg"
+                  alt="Labadi Beach Hotel beachfront"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  style={{ objectFit: 'cover' }}
+                  loading="lazy"
+                  quality={85}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: '250px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
+                }}
+              >
+                <Image
+                  src="/Labadi/LUXURY-ROOM-DOUBLE-BED-TWO-scaled.jpg"
+                  alt="Labadi Beach Hotel luxury suite"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  style={{ objectFit: 'cover' }}
+                  loading="lazy"
+                  quality={85}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: '250px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
+                }}
+              >
+                <Image
+                  src="/Labadi/Labadi-Beach-Hotel-13.jpg"
+                  alt="Labadi Beach Hotel conference facilities"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  style={{ objectFit: 'cover' }}
+                  loading="lazy"
+                  quality={85}
                 />
               </Box>
             </Grid>
