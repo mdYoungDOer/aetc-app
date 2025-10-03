@@ -235,7 +235,15 @@ export default function HomepageTickets() {
 
                     {/* Price Section */}
                     <Box sx={{ p: 3, textAlign: 'center', borderBottom: '1px solid', borderColor: 'divider' }}>
-                    <Typography variant="h3" sx={{ fontWeight: 700, color: colors.primary, mb: 1 }}>
+                    <Typography 
+                      variant="h5" 
+                      sx={{ 
+                        fontWeight: 700, 
+                        color: colors.primary, 
+                        mb: 1,
+                        fontSize: { xs: '1.4rem', md: '1.5rem' }
+                      }}
+                    >
                       {GhanaVATCalculator.formatCurrency(calculateTicketVAT(ticket.price).totalPrice)}
                     </Typography>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>

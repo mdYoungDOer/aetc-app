@@ -545,6 +545,7 @@ export const cleanEmailTemplates = {
     customerEmail: string;
     newPassword: string;
     loginUrl: string;
+    resetUrl: string;
   }) => {
     return `
 <!DOCTYPE html>
@@ -653,29 +654,39 @@ export const cleanEmailTemplates = {
             <div class="subtitle">Africa Energy Technology Conference</div>
         </div>
 
-        <h2>Password Reset Complete, ${data.customerName}!</h2>
+        <h2>Password Reset Request, ${data.customerName}!</h2>
         
-        <p>Your password has been successfully reset. Here are your new login credentials:</p>
+        <p>We received a request to reset your password for your AETC 2026 account. You have two options to proceed:</p>
 
-        <div class="credentials-box">
-            <div class="credential-item">
-                <span class="label">Email Address:</span>
-                <div class="value">${data.customerEmail}</div>
+        <div style="background: #f8f9fa; border: 2px solid #293972; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <h3 style="color: #293972; margin-top: 0;">Option 1: Use Your New Temporary Password</h3>
+            <div class="credentials-box">
+                <div class="credential-item">
+                    <span class="label">Email Address:</span>
+                    <div class="value">${data.customerEmail}</div>
+                </div>
+                <div class="credential-item">
+                    <span class="label">Temporary Password:</span>
+                    <div class="value">${data.newPassword}</div>
+                </div>
             </div>
-            <div class="credential-item">
-                <span class="label">New Password:</span>
-                <div class="value">${data.newPassword}</div>
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="${data.loginUrl}" class="login-button">Sign In with Temporary Password</a>
             </div>
         </div>
 
-        <div style="text-align: center;">
-            <a href="${data.loginUrl}" class="login-button">Access Your Dashboard</a>
+        <div style="background: #e3f2fd; border: 2px solid #2196f3; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <h3 style="color: #1976d2; margin-top: 0;">Option 2: Set Your Own Password (Recommended)</h3>
+            <p>For better security, you can set your own password using our secure reset form:</p>
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="${data.resetUrl || `${data.loginUrl}?reset=true&email=${encodeURIComponent(data.customerEmail)}`}" class="login-button" style="background: #2196f3;">Set Your Own Password</a>
+            </div>
         </div>
 
         <div class="security-note">
             <h3>Security Information</h3>
-            <p><strong>Important:</strong> Please save these new credentials in a secure location. For security reasons, we recommend changing your password after your first login.</p>
-            <p>If you did not request this password reset, please contact our support team immediately.</p>
+            <p><strong>Important:</strong> The temporary password is only valid for 24 hours. For security reasons, we recommend using Option 2 to set your own password.</p>
+            <p>If you did not request this password reset, please contact our support team immediately at <a href="mailto:support@aetc.africa" style="color: #293972;">support@aetc.africa</a></p>
         </div>
 
         <div class="footer">

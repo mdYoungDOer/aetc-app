@@ -171,10 +171,11 @@ export default function RegistrationPage() {
                         </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 1 }}>
                           <Typography
-                            variant="h3"
+                            variant="h5"
                             sx={{
-                              fontWeight: 800,
+                              fontWeight: 700,
                               color: popular ? 'secondary.main' : 'primary.main',
+                              fontSize: { xs: '1.4rem', md: '1.5rem' },
                             }}
                           >
                             {GhanaVATCalculator.formatCurrency(calculateTicketVAT(ticket.price).totalPrice)}
