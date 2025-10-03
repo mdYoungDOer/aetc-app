@@ -25,6 +25,9 @@ export default function UserLoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showResetForm, setShowResetForm] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetMessage, setResetMessage] = useState('');
   const { signIn } = useAuth();
   const router = useRouter();
 
@@ -44,6 +47,33 @@ export default function UserLoginPage() {
       setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetLoading(true);
+    setResetMessage('');
+
+    try {
+      const response = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setResetMessage('Password reset instructions have been sent to your email.');
+        setShowResetForm(false);
+      } else {
+        setResetMessage(result.error || 'Failed to send reset instructions.');
+      }
+    } catch (err: any) {
+      setResetMessage(err.message || 'An error occurred');
+    } finally {
+      setResetLoading(false);
     }
   };
 
@@ -145,22 +175,84 @@ export default function UserLoginPage() {
 
             <Divider sx={{ my: 3 }} />
 
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Don't have an account yet?
-              </Typography>
-              <Typography variant="body2">
-                Your account was created when you purchased your ticket. 
-                Check your email for login details or contact support.
-              </Typography>
-            </Box>
+            {!showResetForm ? (
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Don't have your login details?
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 2 }}>
+                  Your account was created when you purchased your ticket. 
+                  Check your email for your login credentials (email and password).
+                </Typography>
+                <Typography variant="body2" color="primary.main" sx={{ fontWeight: 600, mb: 2 }}>
+                  Look for the email titled "Your AETC 2026 Account Credentials"
+                </Typography>
+                <Button
+                  variant="text"
+                  onClick={() => setShowResetForm(true)}
+                  sx={{ textTransform: 'none', color: 'primary.main' }}
+                >
+                  Forgot Password? Reset Here
+                </Button>
+              </Box>
+            ) : (
+              <Box>
+                <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
+                  Reset Password
+                </Typography>
+                <Box component="form" onSubmit={handlePasswordReset}>
+                  <TextField
+                    label="Email Address"
+                    type="email"
+                    fullWidth
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={resetLoading}
+                    sx={{ mb: 3 }}
+                  />
+                  
+                  {resetMessage && (
+                    <Alert severity={resetMessage.includes('sent') ? 'success' : 'error'} sx={{ mb: 3 }}>
+                      {resetMessage}
+                    </Alert>
+                  )}
+
+                  <CustomButton
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    disabled={resetLoading}
+                    sx={{
+                      backgroundColor: 'secondary.main',
+                      color: '#000',
+                      py: 2,
+                      mb: 2,
+                      '&:hover': {
+                        backgroundColor: 'secondary.dark',
+                      },
+                    }}
+                  >
+                    {resetLoading ? 'Sending...' : 'Send Reset Instructions'}
+                  </CustomButton>
+
+                  <Button
+                    variant="text"
+                    onClick={() => setShowResetForm(false)}
+                    sx={{ textTransform: 'none', width: '100%' }}
+                  >
+                    Back to Login
+                  </Button>
+                </Box>
+              </Box>
+            )}
           </CustomCard>
 
           <Box sx={{ textAlign: 'center', mt: 3 }}>
             <Typography variant="body2" color="text.secondary">
               Need help? Contact us at{' '}
-              <Link href="mailto:support@aetconference.com" color="primary">
-                support@aetconference.com
+              <Link href="mailto:support@aetc.africa" color="primary">
+                support@aetc.africa
               </Link>
             </Typography>
           </Box>

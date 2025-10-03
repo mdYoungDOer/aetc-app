@@ -17,7 +17,7 @@ export class SendGridService {
   private fromName: string;
 
   constructor() {
-    this.fromEmail = process.env.SENDGRID_FROM_EMAIL || 'notify@ardentwebservices.com';
+    this.fromEmail = process.env.SENDGRID_FROM_EMAIL || 'noreply@aetc.africa';
     this.fromName = process.env.SENDGRID_FROM_NAME || 'AETC 2026';
   }
 

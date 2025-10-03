@@ -113,15 +113,24 @@ export async function POST(request: NextRequest) {
     }
 
 
-    // Check if user exists, if not, create account and send OTP
-    let sendOtp = false;
+    // Check if user exists and if they've accessed their dashboard
+    let shouldSendCredentials = false;
+    let userPassword = '';
+    
     if (!order.user_id) {
+      // New user - create account and send credentials
       try {
-        // Create user account
+        userPassword = `AETC${Math.floor(Math.random() * 10000)}${Math.floor(Math.random() * 1000)}`;
+        
         const { data: authData, error: authError } = await supabase.auth.admin.createUser({
           email: order.customer_email,
-          password: Math.random().toString(36).slice(-8), // Random password
-          email_confirm: false,
+          password: userPassword,
+          email_confirm: true,
+          user_metadata: {
+            name: order.customer_name,
+            phone: order.customer_phone,
+            role: 'user'
+          }
         });
 
         if (authData.user) {
@@ -137,42 +146,50 @@ export async function POST(request: NextRequest) {
             .update({ user_id: authData.user.id })
             .eq('order_id', order.id);
 
-          // Send OTP
-          const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-          
-          // Store OTP in database (you might want to create an otp table)
-          await supabase
-            .from('user_tickets')
-            .update({ 
-              qr_code: JSON.stringify({ 
-                ...JSON.parse(userTickets[0]?.qr_code || '{}'), 
-                otp: otpCode 
-              })
-            })
-            .eq('order_id', order.id);
-
-          // Send OTP email with clean template
-          try {
-            const otpEmailHtml = cleanEmailTemplates.accountVerification({
-              customerName: order.customer_name,
-              customerEmail: order.customer_email,
-              otpCode,
-              expiresIn: '15 minutes'
-            });
-
-            await sendGridService.sendEmail({
-              to: order.customer_email,
-              subject: 'Verify Your AETC 2026 Account',
-              html: otpEmailHtml
-            });
-          } catch (emailError) {
-            console.error('Error sending OTP email:', emailError);
-          }
-
-          sendOtp = true;
+          shouldSendCredentials = true;
         }
       } catch (error) {
         console.error('Error creating user account:', error);
+      }
+    } else {
+      // Existing user - check if they've accessed dashboard before
+      try {
+        const { data: userTickets, error: ticketsError } = await supabase
+          .from('user_tickets')
+          .select('dashboard_accessed')
+          .eq('user_id', order.user_id)
+          .limit(1);
+
+        // If no dashboard access recorded, send credentials
+        if (!ticketsError && (!userTickets || userTickets.length === 0 || !userTickets[0].dashboard_accessed)) {
+          userPassword = `AETC${Math.floor(Math.random() * 10000)}${Math.floor(Math.random() * 1000)}`;
+          shouldSendCredentials = true;
+        }
+      } catch (error) {
+        console.error('Error checking dashboard access:', error);
+        // If we can't check, err on the side of sending credentials
+        userPassword = `AETC${Math.floor(Math.random() * 10000)}${Math.floor(Math.random() * 1000)}`;
+        shouldSendCredentials = true;
+      }
+    }
+
+    // Send credentials email only if needed
+    if (shouldSendCredentials) {
+      try {
+        const credentialsEmailHtml = cleanEmailTemplates.accountCredentials({
+          customerName: order.customer_name,
+          customerEmail: order.customer_email,
+          password: userPassword,
+          loginUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://aetc.africa'}/auth/user-login`
+        });
+
+        await sendGridService.sendEmail({
+          to: order.customer_email,
+          subject: 'Your AETC 2026 Account Credentials',
+          html: credentialsEmailHtml
+        });
+      } catch (emailError) {
+        console.error('Error sending credentials email:', emailError);
       }
     }
 
@@ -180,6 +197,9 @@ export async function POST(request: NextRequest) {
     try {
       // Use the first QR code for the email (or generate a summary QR)
       const primaryQRCode = qrCodes.length > 0 ? qrCodes[0].qrCode : null;
+      
+      console.log('QR Code for email:', primaryQRCode ? 'Present' : 'Missing');
+      console.log('QR Code length:', primaryQRCode ? primaryQRCode.length : 0);
       
       const ticketEmailHtml = cleanEmailTemplates.ticketPurchaseSuccess({
         customerName: order.customer_name,
@@ -211,7 +231,6 @@ export async function POST(request: NextRequest) {
       },
       qrCode: qrCodes.length > 0 ? qrCodes[0].qrCode : null,
       tickets: userTickets,
-      sendOtp,
     });
 
   } catch (error) {

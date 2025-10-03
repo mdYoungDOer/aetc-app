@@ -11,6 +11,7 @@ import CountdownTimer from '@/components/CountdownTimer';
 import SponsorsSection from '@/components/SponsorsSection';
 import HomepageSpeakers from '@/components/HomepageSpeakers';
 import KeyStatsSection from '@/components/KeyStatsSection';
+import HomepageTickets from '@/components/HomepageTickets';
 // import { 
 //   SankofaIcon, 
 //   KentePatternIcon, 
@@ -382,6 +383,9 @@ export default function HomePage() {
         >
           <HomepageSpeakers />
         </Section>
+
+        {/* Tickets Section */}
+        <HomepageTickets />
 
         {/* Sponsors Section */}
         <SponsorsSection />

@@ -441,9 +441,19 @@ export default function TicketPurchasePage() {
                   <CustomButton
                     variant="outlined"
                     startIcon={<Download size={20} />}
-                    onClick={() => {/* Download PDF logic */}}
+                    onClick={() => {
+                      if (qrCode) {
+                        // Create a download link for the QR code
+                        const link = document.createElement('a');
+                        link.href = qrCode;
+                        link.download = `aetc-2026-ticket-${orderData?.id || 'ticket'}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }
+                    }}
                   >
-                    Download PDF
+                    Download QR Code
                   </CustomButton>
                   <CustomButton
                     variant="contained"
