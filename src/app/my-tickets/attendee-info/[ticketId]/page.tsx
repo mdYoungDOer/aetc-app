@@ -66,7 +66,7 @@ interface TicketData {
 function AttendeeInfoForm() {
   const params = useParams();
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [activeStep, setActiveStep] = useState(0);
   const [ticketData, setTicketData] = useState<TicketData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -114,6 +114,23 @@ function AttendeeInfoForm() {
 
   const loadTicketData = useCallback(async () => {
     try {
+      // Validate ticketId parameter
+      const ticketId = Array.isArray(params.ticketId) ? params.ticketId[0] : params.ticketId;
+      if (!ticketId || ticketId === 'undefined') {
+        throw new Error('Invalid ticket ID provided');
+      }
+
+      // Check if user is authenticated
+      if (!user?.id) {
+        throw new Error('User not authenticated');
+      }
+
+      // Validate UUID format
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(ticketId)) {
+        throw new Error('Invalid ticket ID format');
+      }
+
       const { data, error } = await supabase
         .from('user_tickets')
         .select(`
@@ -128,11 +145,14 @@ function AttendeeInfoForm() {
             )
           )
         `)
-        .eq('id', params.ticketId)
+        .eq('id', ticketId)
         .eq('user_id', user?.id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw new Error(`Failed to load ticket: ${error.message}`);
+      }
       
       setTicketData({
         id: data.id,
@@ -150,10 +170,17 @@ function AttendeeInfoForm() {
   }, [user?.id, params.ticketId]);
 
   useEffect(() => {
-    if (params.ticketId) {
+    // Redirect to login if not authenticated
+    if (!authLoading && !user) {
+      router.push('/auth/user-login');
+      return;
+    }
+
+    // Load ticket data if authenticated and ticketId is available
+    if (user && params.ticketId && params.ticketId !== 'undefined') {
       loadTicketData();
     }
-  }, [params.ticketId, loadTicketData]);
+  }, [params.ticketId, loadTicketData, user, router]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -746,11 +773,14 @@ function AttendeeInfoForm() {
     }
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <Section py={10}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '400px', gap: 2 }}>
           <CircularProgress size={40} />
+          <Typography variant="body2" color="text.secondary">
+            {authLoading ? 'Checking authentication...' : 'Loading ticket information...'}
+          </Typography>
         </Box>
       </Section>
     );
@@ -761,15 +791,31 @@ function AttendeeInfoForm() {
       <Section py={10}>
         <Box sx={{ maxWidth: 600, mx: 'auto', textAlign: 'center' }}>
           <Alert severity="error" sx={{ mb: 3 }}>
-            {error}
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              Unable to Load Ticket Information
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              {error}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Please make sure you're logged in and have access to this ticket.
+            </Typography>
           </Alert>
-          <CustomButton
-            variant="outlined"
-            startIcon={<ArrowLeft size={20} />}
-            onClick={() => router.push('/my-tickets')}
-          >
-            Back to My Tickets
-          </CustomButton>
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <CustomButton
+              variant="outlined"
+              startIcon={<ArrowLeft size={20} />}
+              onClick={() => router.push('/my-tickets')}
+            >
+              Back to My Tickets
+            </CustomButton>
+            <CustomButton
+              variant="contained"
+              onClick={() => router.push('/auth/user-login')}
+            >
+              Sign In
+            </CustomButton>
+          </Box>
         </Box>
       </Section>
     );
