@@ -21,7 +21,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import { Menu as MenuIcon, X, ChevronDown, Moon, Sun, Search, Ticket } from 'lucide-react';
+import { Menu as MenuIcon, X, ChevronDown, Moon, Sun, Search, Ticket, User, LogIn } from 'lucide-react';
 import GlobalSearch from './GlobalSearch';
 import TopBar from './TopBar';
 import Image from 'next/image';
@@ -29,6 +29,8 @@ import Link from 'next/link';
 import { useTheme as useNextTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
+import { createClient } from '@supabase/supabase-js';
 
 interface NavItem {
   label: string;
@@ -100,12 +102,43 @@ export default function Header() {
   const { theme, setTheme } = useNextTheme();
   const muiTheme = useTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
+  const { user, loading: authLoading } = useAuth();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [hasIncompleteForms, setHasIncompleteForms] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Check for incomplete attendee forms
+  useEffect(() => {
+    const checkIncompleteForms = async () => {
+      if (user) {
+        try {
+          const supabase = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+          );
+          
+          const { data: userTickets } = await supabase
+            .from('user_tickets')
+            .select(`
+              id,
+              attendees(id)
+            `)
+            .eq('user_id', user.id);
+          
+          const hasIncomplete = userTickets?.some(ticket => !ticket.attendees || ticket.attendees.length === 0);
+          setHasIncompleteForms(hasIncomplete || false);
+        } catch (error) {
+          console.error('Error checking incomplete forms:', error);
+        }
+      }
+    };
+
+    checkIncompleteForms();
+  }, [user]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -218,6 +251,58 @@ export default function Header() {
             )}
           </Box>
         ))}
+        
+        {/* User Account Section */}
+        {!authLoading && (
+          <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>
+            <Button
+              component={Link}
+              href={user ? "/my-tickets" : "/auth/user-login"}
+              variant={user ? "contained" : "outlined"}
+              fullWidth
+              startIcon={
+                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                  {user ? <Ticket size={18} /> : <LogIn size={18} />}
+                  {user && hasIncompleteForms && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: -2,
+                        right: -2,
+                        width: 6,
+                        height: 6,
+                        backgroundColor: '#FBA91E',
+                        borderRadius: '50%',
+                        animation: 'pulse 2s infinite',
+                        '@keyframes pulse': {
+                          '0%': { opacity: 1 },
+                          '50%': { opacity: 0.5 },
+                          '100%': { opacity: 1 },
+                        },
+                      }}
+                    />
+                  )}
+                </Box>
+              }
+              sx={{
+                backgroundColor: user ? 'primary.main' : 'transparent',
+                color: user ? 'white' : 'primary.main',
+                borderColor: 'primary.main',
+                fontWeight: 600,
+                py: 1.5,
+                mb: 2,
+                '&:hover': {
+                  backgroundColor: user ? 'primary.dark' : 'primary.light',
+                  color: 'white',
+                  transform: 'translateY(-1px)',
+                },
+              }}
+              onClick={() => setMobileOpen(false)}
+            >
+              {user ? (hasIncompleteForms ? "Complete Attendee Info" : "My Tickets") : "Login to Access Tickets"}
+            </Button>
+          </Box>
+        )}
         
         {/* Mobile Buy Pass Button */}
         <Box sx={{ p: 2, mt: 2 }}>
@@ -476,24 +561,22 @@ export default function Header() {
                 key={item.label}
                 sx={{
                   position: 'relative',
-                  '&:hover .submenu': {
-                    display: 'block',
-                  },
+                }}
+                onMouseEnter={(e) => {
+                  if (item.children) {
+                    handleMenuOpen(e, item.label);
+                  }
+                }}
+                onMouseLeave={() => {
+                  if (item.children) {
+                    handleMenuClose(item.label);
+                  }
                 }}
               >
                 {item.children ? (
                   <>
                     <Button
                       onClick={(e) => handleMenuOpen(e, item.label)}
-                      onMouseEnter={(e) => handleMenuOpen(e, item.label)}
-                      onMouseLeave={() => {
-                        // Close menu when leaving the button
-                        setTimeout(() => {
-                          if (!document.querySelector(`[data-menu="${item.label}"]:hover`)) {
-                            handleMenuClose(item.label);
-                          }
-                        }, 100);
-                      }}
                       sx={{ 
                         color: 'text.primary',
                         fontWeight: 500,
@@ -513,21 +596,15 @@ export default function Header() {
                       {item.label}
                     </Button>
                     <Menu
-                      data-menu={item.label}
                       anchorEl={anchorEls[item.label]}
                       open={Boolean(anchorEls[item.label])}
                       onClose={() => handleMenuClose(item.label)}
-                      onMouseEnter={() => {
-                        // Keep menu open when hovering over it
-                      }}
-                      onMouseLeave={() => {
-                        // Close menu when leaving the menu area
-                        handleMenuClose(item.label);
-                      }}
                       MenuListProps={{
                         'aria-labelledby': 'basic-button',
+                        onMouseLeave: () => handleMenuClose(item.label),
                       }}
                       sx={{
+                        pointerEvents: 'auto',
                         '& .MuiPaper-root': {
                           mt: 1,
                           borderRadius: '12px',
@@ -645,6 +722,52 @@ export default function Header() {
               </AnimatePresence>
             )}
           </IconButton>
+
+          {/* User Account/Ticket Access */}
+          {!authLoading && (
+            <Box sx={{ position: 'relative', mr: 1 }}>
+              <IconButton 
+                component={Link} 
+                href={user ? "/my-tickets" : "/auth/user-login"}
+                sx={{ 
+                  backgroundColor: user ? 'primary.main' : 'transparent',
+                  color: user ? 'white' : 'text.primary',
+                  border: user ? 'none' : '1px solid',
+                  borderColor: 'divider',
+                  '&:hover': {
+                    backgroundColor: user ? 'primary.dark' : 'action.hover',
+                    color: user ? 'white' : 'primary.main',
+                    transform: 'scale(1.05)',
+                  },
+                  transition: 'all 0.2s ease-in-out',
+                }} 
+                title={user ? (hasIncompleteForms ? "Complete Attendee Information" : "View My Tickets") : "Login to Access Tickets"}
+              >
+                {user ? <Ticket size={20} /> : <LogIn size={20} />}
+              </IconButton>
+              
+              {/* Notification Badge */}
+              {user && hasIncompleteForms && (
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 4,
+                    right: 4,
+                    width: 8,
+                    height: 8,
+                    backgroundColor: '#FBA91E',
+                    borderRadius: '50%',
+                    animation: 'pulse 2s infinite',
+                    '@keyframes pulse': {
+                      '0%': { opacity: 1 },
+                      '50%': { opacity: 0.5 },
+                      '100%': { opacity: 1 },
+                    },
+                  }}
+                />
+              )}
+            </Box>
+          )}
 
           {/* Buy Pass Button */}
           <Button

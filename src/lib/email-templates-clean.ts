@@ -686,5 +686,239 @@ export const cleanEmailTemplates = {
 </body>
 </html>
     `;
-  }
+  },
+
+  attendeeConfirmation: ({
+    attendeeName,
+    attendeeEmail,
+    ticketName,
+    ticketType,
+    conferenceDate,
+    conferenceVenue,
+    verificationToken,
+    loginUrl,
+  }: {
+    attendeeName: string;
+    attendeeEmail: string;
+    ticketName: string;
+    ticketType: string;
+    conferenceDate: string;
+    conferenceVenue: string;
+    verificationToken: string;
+    loginUrl: string;
+  }) => `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Your AETC 2026 Attendee Information Confirmation</title>
+      <style>
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          margin: 0;
+          padding: 0;
+          background-color: #f8f9fa;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          background-color: #ffffff;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+          background: linear-gradient(135deg, #293972 0%, #151443 100%);
+          color: white;
+          padding: 40px 30px;
+          text-align: center;
+        }
+        .header h1 {
+          margin: 0;
+          font-size: 28px;
+          font-weight: 700;
+        }
+        .header p {
+          margin: 10px 0 0 0;
+          font-size: 16px;
+          opacity: 0.9;
+        }
+        .content {
+          padding: 40px 30px;
+        }
+        .success-icon {
+          text-align: center;
+          margin-bottom: 30px;
+        }
+        .success-icon .icon {
+          width: 80px;
+          height: 80px;
+          background: linear-gradient(135deg, #78C044 0%, #5A9A2E 100%);
+          border-radius: 50%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 36px;
+          color: white;
+          margin-bottom: 20px;
+        }
+        .ticket-info {
+          background-color: #f8f9fa;
+          border-radius: 8px;
+          padding: 25px;
+          margin: 30px 0;
+          border-left: 4px solid #FBA91E;
+        }
+        .ticket-info h3 {
+          margin: 0 0 15px 0;
+          color: #293972;
+          font-size: 18px;
+        }
+        .info-row {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 10px;
+          padding-bottom: 8px;
+          border-bottom: 1px solid #e9ecef;
+        }
+        .info-row:last-child {
+          border-bottom: none;
+          margin-bottom: 0;
+        }
+        .info-label {
+          font-weight: 600;
+          color: #666;
+        }
+        .info-value {
+          color: #333;
+          font-weight: 500;
+        }
+        .cta-button {
+          display: inline-block;
+          background: linear-gradient(135deg, #FBA91E 0%, #E8960A 100%);
+          color: white;
+          text-decoration: none;
+          padding: 15px 30px;
+          border-radius: 8px;
+          font-weight: 600;
+          text-align: center;
+          margin: 20px 0;
+          transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(251, 169, 30, 0.3);
+        }
+        .footer {
+          background-color: #f8f9fa;
+          padding: 30px;
+          text-align: center;
+          border-top: 1px solid #e9ecef;
+        }
+        .footer p {
+          margin: 0;
+          color: #666;
+          font-size: 14px;
+        }
+        .footer a {
+          color: #293972;
+          text-decoration: none;
+        }
+        .highlight {
+          background-color: #fff3cd;
+          border: 1px solid #ffeaa7;
+          border-radius: 6px;
+          padding: 15px;
+          margin: 20px 0;
+        }
+        .highlight p {
+          margin: 0;
+          color: #856404;
+          font-size: 14px;
+        }
+        @media (max-width: 600px) {
+          .container {
+            margin: 0;
+            border-radius: 0;
+          }
+          .header, .content, .footer {
+            padding: 20px;
+          }
+          .info-row {
+            flex-direction: column;
+          }
+          .info-label {
+            margin-bottom: 5px;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>Attendee Information Confirmed</h1>
+          <p>Your AETC 2026 registration details have been successfully submitted</p>
+        </div>
+        
+        <div class="content">
+          <div class="success-icon">
+            <div class="icon">✓</div>
+            <h2 style="margin: 0; color: #293972;">Thank You, ${attendeeName}!</h2>
+            <p style="color: #666; margin: 10px 0 0 0;">Your attendee information has been successfully submitted and confirmed.</p>
+          </div>
+
+          <div class="ticket-info">
+            <h3>Your Conference Details</h3>
+            <div class="info-row">
+              <span class="info-label">Ticket Type:</span>
+              <span class="info-value">${ticketName} (${ticketType})</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Conference Date:</span>
+              <span class="info-value">${conferenceDate}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Venue:</span>
+              <span class="info-value">${conferenceVenue}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Email:</span>
+              <span class="info-value">${attendeeEmail}</span>
+            </div>
+          </div>
+
+          <div class="highlight">
+            <p><strong>Important:</strong> Your attendee information is now on file and will be used for conference planning, networking opportunities, and personalized experiences. You can view and update your information anytime through your dashboard.</p>
+          </div>
+
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${loginUrl}" class="cta-button">View My Tickets & Information</a>
+          </div>
+
+          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 30px 0;">
+            <h3 style="margin: 0 0 15px 0; color: #293972;">What's Next?</h3>
+            <ul style="margin: 0; padding-left: 20px; color: #666;">
+              <li>You'll receive conference updates and important information via email</li>
+              <li>Your networking preferences will help us connect you with relevant attendees</li>
+              <li>Dietary and accessibility requirements will be noted for the event</li>
+              <li>You can update your information anytime before the conference</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p>
+            Questions? Contact us at <a href="mailto:support@aetc.africa">support@aetc.africa</a>
+          </p>
+          <p style="margin-top: 15px; font-size: 12px; color: #999;">
+            This email was sent to ${attendeeEmail} because you submitted attendee information for AETC 2026.
+          </p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
 };

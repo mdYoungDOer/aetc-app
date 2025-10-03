@@ -38,6 +38,7 @@ import CustomButton from '@/components/ui/CustomButton';
 import CustomCard from '@/components/ui/CustomCard';
 import Section from '@/components/ui/Section';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import AttendeeForm from '@/components/AttendeeForm';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -55,6 +56,14 @@ interface UserTicket {
   qr_code: string;
   created_at: string;
   customer_name: string;
+  attendee_info?: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    form_completed_at: string;
+    is_verified: boolean;
+  };
   customer_email: string;
   customer_phone: string;
 }
@@ -65,6 +74,25 @@ export default function MyTicketsPage() {
   const [tickets, setTickets] = useState<UserTicket[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [selectedTicketForAttendee, setSelectedTicketForAttendee] = useState<string | null>(null);
+  const [showAttendeeForm, setShowAttendeeForm] = useState(false);
+
+  const handleAttendeeFormOpen = (ticketId: string) => {
+    setSelectedTicketForAttendee(ticketId);
+    setShowAttendeeForm(true);
+  };
+
+  const handleAttendeeFormClose = () => {
+    setSelectedTicketForAttendee(null);
+    setShowAttendeeForm(false);
+  };
+
+  const handleAttendeeFormSuccess = () => {
+    setShowAttendeeForm(false);
+    setSelectedTicketForAttendee(null);
+    // Reload tickets to show updated attendee info
+    loadUserTickets();
+  };
 
   const loadUserTickets = useCallback(async () => {
     try {
@@ -84,6 +112,14 @@ export default function MyTicketsPage() {
               name,
               type
             )
+          ),
+          attendees(
+            id,
+            first_name,
+            last_name,
+            email,
+            form_completed_at,
+            is_verified
           )
         `)
         .eq('user_id', user?.id)
@@ -342,6 +378,38 @@ Please bring this ticket and a valid ID to the conference.
                                     View QR
                                   </CustomButton>
                                 )}
+                                
+                                {/* Attendee Information Button */}
+                                <CustomButton
+                                  variant={ticket.attendee_info ? "outlined" : "contained"}
+                                  size="small"
+                                  startIcon={<User size={16} />}
+                                  onClick={() => handleAttendeeFormOpen(ticket.id)}
+                                  fullWidth
+                                  sx={{
+                                    mt: 1,
+                                    backgroundColor: ticket.attendee_info ? 'transparent' : 'primary.main',
+                                    color: ticket.attendee_info ? 'primary.main' : 'white',
+                                    borderColor: 'primary.main',
+                                    '&:hover': {
+                                      backgroundColor: ticket.attendee_info ? 'primary.light' : 'primary.dark',
+                                      color: 'white',
+                                    },
+                                  }}
+                                >
+                                  {ticket.attendee_info ? 'Update Attendee Info' : 'Add Attendee Info'}
+                                </CustomButton>
+                                
+                                {ticket.attendee_info && (
+                                  <Box sx={{ mt: 1, p: 2, backgroundColor: 'success.light', borderRadius: 1 }}>
+                                    <Typography variant="caption" color="success.dark" sx={{ fontWeight: 600 }}>
+                                      ✓ Attendee information completed
+                                    </Typography>
+                                    <Typography variant="caption" display="block" color="success.dark">
+                                      {ticket.attendee_info.first_name} {ticket.attendee_info.last_name}
+                                    </Typography>
+                                  </Box>
+                                )}
                               </Box>
                             </Box>
                           </Grid>
@@ -423,6 +491,43 @@ Please bring this ticket and a valid ID to the conference.
           </Box>
         </Section>
       </main>
+
+      {/* Attendee Form Modal */}
+      {showAttendeeForm && selectedTicketForAttendee && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            p: 2,
+          }}
+        >
+          <Box
+            sx={{
+              maxWidth: '90vw',
+              maxHeight: '90vh',
+              overflow: 'auto',
+              backgroundColor: 'white',
+              borderRadius: 2,
+              position: 'relative',
+            }}
+          >
+            <AttendeeForm
+              userTicketId={selectedTicketForAttendee}
+              ticketName={tickets.find(t => t.id === selectedTicketForAttendee)?.ticket_name || 'Ticket'}
+              onSuccess={handleAttendeeFormSuccess}
+              onCancel={handleAttendeeFormClose}
+            />
+          </Box>
+        </Box>
+      )}
     </>
   );
 }

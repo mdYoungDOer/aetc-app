@@ -9,7 +9,6 @@ import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import CustomButton from '@/components/ui/CustomButton';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-import PaystackDebug from '@/components/PaystackDebug';
 import { createClient } from '@supabase/supabase-js';
 import { calculateTicketVAT, GhanaVATCalculator } from '@/lib/vat-calculator';
 // import { ElephantIcon, KentePatternIcon } from '@/components/icons';
@@ -310,10 +309,6 @@ export default function RegistrationPage() {
           </Box>
         </Section>
 
-        {/* Debug Section - Remove in production */}
-        <Section id="debug" title="Paystack Debug Info" backgroundColor="paper" py={5}>
-          <PaystackDebug />
-        </Section>
       </main>
 
     </>
