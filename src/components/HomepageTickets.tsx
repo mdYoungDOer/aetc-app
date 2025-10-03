@@ -28,6 +28,7 @@ import {
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
+import { calculateTicketVAT, GhanaVATCalculator } from '@/lib/vat-calculator';
 import CustomButton from '@/components/ui/CustomButton';
 import CustomCard from '@/components/ui/CustomCard';
 import Section from '@/components/ui/Section';
@@ -234,11 +235,14 @@ export default function HomepageTickets() {
 
                     {/* Price Section */}
                     <Box sx={{ p: 3, textAlign: 'center', borderBottom: '1px solid', borderColor: 'divider' }}>
-                      <Typography variant="h3" sx={{ fontWeight: 700, color: colors.primary, mb: 1 }}>
-                        ₵{ticket.price.toLocaleString()}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                    <Typography variant="h3" sx={{ fontWeight: 700, color: colors.primary, mb: 1 }}>
+                      {GhanaVATCalculator.formatCurrency(calculateTicketVAT(ticket.price).totalPrice)}
+                    </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                         per person
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontStyle: 'italic' }}>
+                        *Includes Ghana VAT & levies
                       </Typography>
                     </Box>
 

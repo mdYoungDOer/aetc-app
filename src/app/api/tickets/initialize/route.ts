@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { paystackService } from '@/lib/paystack';
+import { calculateTicketVAT } from '@/lib/vat-calculator';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -31,8 +32,9 @@ export async function POST(request: NextRequest) {
 
     // No availability checks - tickets are unlimited
 
-    // Calculate total
-    const totalAmount = ticket.price * quantity;
+    // Calculate total with VAT
+    const vatBreakdown = calculateTicketVAT(ticket.price);
+    const totalAmount = vatBreakdown.totalPrice * quantity;
 
     // Generate Paystack reference
     const reference = paystackService.generateReference('AETC');

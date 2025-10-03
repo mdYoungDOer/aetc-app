@@ -31,6 +31,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/hooks/useAuth';
 import { createClient } from '@supabase/supabase-js';
+import { calculateTicketVAT, GhanaVATCalculator } from '@/lib/vat-calculator';
+import VATBreakdownComponent from '@/components/VATBreakdown';
 import CustomButton from '@/components/ui/CustomButton';
 import CustomCard from '@/components/ui/CustomCard';
 import Section from '@/components/ui/Section';
@@ -252,7 +254,8 @@ export default function TicketPurchasePage() {
 
   if (!ticket) return null;
 
-  const totalAmount = ticket.price * (quantity || 1);
+  const vatBreakdown = calculateTicketVAT(ticket.price);
+  const totalAmount = vatBreakdown.totalPrice * (quantity || 1);
 
   return (
     <Section py={10}>
@@ -506,9 +509,9 @@ export default function TicketPurchasePage() {
               <Divider sx={{ my: 2 }} />
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2">Ticket Price:</Typography>
+                <Typography variant="body2">Ticket Price (incl. VAT):</Typography>
                 <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                  ₵{ticket.price.toLocaleString()}
+                  {GhanaVATCalculator.formatCurrency(vatBreakdown.totalPrice)}
                 </Typography>
               </Box>
               
@@ -526,10 +529,19 @@ export default function TicketPurchasePage() {
                   Total:
                 </Typography>
                 <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>
-                  ₵{totalAmount.toLocaleString()}
+                  {GhanaVATCalculator.formatCurrency(totalAmount)}
                 </Typography>
               </Box>
             </CustomCard>
+          </Grid>
+
+          {/* VAT Breakdown */}
+          <Grid item xs={12} md={8}>
+            <VATBreakdownComponent 
+              breakdown={vatBreakdown} 
+              ticketName={ticket.name}
+              quantity={quantity || 1}
+            />
           </Grid>
         </Grid>
       </Box>

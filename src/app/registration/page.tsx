@@ -11,6 +11,7 @@ import CustomButton from '@/components/ui/CustomButton';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import PaystackDebug from '@/components/PaystackDebug';
 import { createClient } from '@supabase/supabase-js';
+import { calculateTicketVAT, GhanaVATCalculator } from '@/lib/vat-calculator';
 // import { ElephantIcon, KentePatternIcon } from '@/components/icons';
 
 const supabase = createClient(
@@ -177,11 +178,14 @@ export default function RegistrationPage() {
                               color: popular ? 'secondary.main' : 'primary.main',
                             }}
                           >
-                            ₵{ticket.price.toLocaleString()}
+                            {GhanaVATCalculator.formatCurrency(calculateTicketVAT(ticket.price).totalPrice)}
                           </Typography>
                         </Box>
-                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
+                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
                           {ticket.description}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: 'text.secondary', fontStyle: 'italic' }}>
+                          *Price includes Ghana VAT (15%) and government levies (6%)
                         </Typography>
                         <List sx={{ mb: 3, flexGrow: 1, pl: 0 }}>
                           {ticket.features.map((feature, idx) => (
