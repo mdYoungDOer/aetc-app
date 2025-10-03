@@ -102,7 +102,7 @@ CREATE POLICY "Users can manage their own attendees" ON attendees
 CREATE POLICY "Admins can view all attendees" ON attendees
   FOR SELECT USING (
     EXISTS (
-      SELECT 1 FROM user_roles 
+      SELECT 1 FROM admin_roles 
       WHERE user_id = auth.uid() 
       AND role IN ('super_admin', 'admin')
     )
@@ -112,7 +112,7 @@ CREATE POLICY "Admins can view all attendees" ON attendees
 CREATE POLICY "Admins can update all attendees" ON attendees
   FOR UPDATE USING (
     EXISTS (
-      SELECT 1 FROM user_roles 
+      SELECT 1 FROM admin_roles 
       WHERE user_id = auth.uid() 
       AND role IN ('super_admin', 'admin')
     )

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   Box,
   Typography,
@@ -38,7 +39,6 @@ import CustomButton from '@/components/ui/CustomButton';
 import CustomCard from '@/components/ui/CustomCard';
 import Section from '@/components/ui/Section';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-import AttendeeForm from '@/components/AttendeeForm';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -74,25 +74,6 @@ export default function MyTicketsPage() {
   const [tickets, setTickets] = useState<UserTicket[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [selectedTicketForAttendee, setSelectedTicketForAttendee] = useState<string | null>(null);
-  const [showAttendeeForm, setShowAttendeeForm] = useState(false);
-
-  const handleAttendeeFormOpen = (ticketId: string) => {
-    setSelectedTicketForAttendee(ticketId);
-    setShowAttendeeForm(true);
-  };
-
-  const handleAttendeeFormClose = () => {
-    setSelectedTicketForAttendee(null);
-    setShowAttendeeForm(false);
-  };
-
-  const handleAttendeeFormSuccess = () => {
-    setShowAttendeeForm(false);
-    setSelectedTicketForAttendee(null);
-    // Reload tickets to show updated attendee info
-    loadUserTickets();
-  };
 
   const loadUserTickets = useCallback(async () => {
     try {
@@ -381,10 +362,11 @@ Please bring this ticket and a valid ID to the conference.
                                 
                                 {/* Attendee Information Button */}
                                 <CustomButton
+                                  component={Link}
+                                  href={`/my-tickets/attendee-info/${ticket.id}`}
                                   variant={ticket.attendee_info ? "outlined" : "contained"}
                                   size="small"
                                   startIcon={<User size={16} />}
-                                  onClick={() => handleAttendeeFormOpen(ticket.id)}
                                   fullWidth
                                   sx={{
                                     mt: 1,
@@ -492,42 +474,6 @@ Please bring this ticket and a valid ID to the conference.
         </Section>
       </main>
 
-      {/* Attendee Form Modal */}
-      {showAttendeeForm && selectedTicketForAttendee && (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            p: 2,
-          }}
-        >
-          <Box
-            sx={{
-              maxWidth: '90vw',
-              maxHeight: '90vh',
-              overflow: 'auto',
-              backgroundColor: 'white',
-              borderRadius: 2,
-              position: 'relative',
-            }}
-          >
-            <AttendeeForm
-              userTicketId={selectedTicketForAttendee}
-              ticketName={tickets.find(t => t.id === selectedTicketForAttendee)?.ticket_name || 'Ticket'}
-              onSuccess={handleAttendeeFormSuccess}
-              onCancel={handleAttendeeFormClose}
-            />
-          </Box>
-        </Box>
-      )}
     </>
   );
 }
