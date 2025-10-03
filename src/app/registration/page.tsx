@@ -1,73 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Box, Grid, Typography, List, ListItem, ListItemIcon, ListItemText, CircularProgress } from '@mui/material';
-import { Check, ArrowRight, Star } from 'lucide-react';
-import { motion } from 'framer-motion';
-import Hero from '@/components/ui/Hero';
-import Section from '@/components/ui/Section';
-import CustomCard from '@/components/ui/CustomCard';
+import {
+  Box,
+  Typography,
+  Grid,
+  Alert,
+} from '@mui/material';
+import { useTickets } from '@/hooks/useTickets';
+import TicketCard from '@/components/TicketCard';
+import { TicketGridSkeleton } from '@/components/ui/TicketCardSkeleton';
 import CustomButton from '@/components/ui/CustomButton';
+import Section from '@/components/ui/Section';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-import { createClient } from '@supabase/supabase-js';
-import { calculateTicketVAT, GhanaVATCalculator } from '@/lib/vat-calculator';
-// import { ElephantIcon, KentePatternIcon } from '@/components/icons';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
-interface Ticket {
-  id: string;
-  name: string;
-  type: string;
-  price: number;
-  description: string;
-  features: string[];
-  active: boolean;
-}
 
 export default function RegistrationPage() {
-  const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { tickets, loading, error } = useTickets();
 
-  useEffect(() => {
-    loadTickets();
-  }, []);
-
-  const loadTickets = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('tickets')
-        .select('*')
-        .eq('active', true)
-        .order('price');
-
-      if (error) throw error;
-      setTickets(data || []);
-    } catch (error) {
-      console.error('Error loading tickets:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleBuyTicket = (ticket: Ticket) => {
+  const handleBuyTicket = (ticket: any) => {
     window.location.href = `/purchase/${ticket.id}`;
-  };
-
-  const getTicketBadge = (type: string) => {
-    switch (type) {
-      case 'earlybird':
-        return 'BEST VALUE';
-      case 'vip':
-        return 'PREMIUM';
-      case 'student':
-        return 'SPECIAL OFFER';
-      default:
-        return null;
-    }
   };
 
   const isPopular = (type: string) => type === 'earlybird';
@@ -87,8 +37,20 @@ export default function RegistrationPage() {
         {/* Ticket Selection */}
         <Section id="ticket-types" title="Choose Your Pass" subtitle="All prices in Ghana Cedis (₵)" py={10}>
           {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
+            <Grid container spacing={4}>
+              <TicketGridSkeleton count={4} />
+            </Grid>
+          ) : error ? (
+            <Box sx={{ textAlign: 'center', py: 8 }}>
+              <Alert severity="error" sx={{ mb: 3 }}>
+                {error}
+              </Alert>
+              <CustomButton
+                variant="outlined"
+                onClick={() => window.location.reload()}
+              >
+                Try Again
+              </CustomButton>
             </Box>
           ) : tickets.length === 0 ? (
             <Box sx={{ textAlign: 'center', py: 8 }}>
@@ -101,217 +63,109 @@ export default function RegistrationPage() {
             </Box>
           ) : (
             <Grid container spacing={4} sx={{ mb: 6 }}>
-              {tickets.map((ticket, index) => {
-                const badge = getTicketBadge(ticket.type);
-                const popular = isPopular(ticket.type);
-
-                return (
-                  <Grid item xs={12} md={6} lg={3} key={ticket.id}>
-                    <CustomCard
-                      sx={{
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        position: 'relative',
-                        overflow: 'hidden',
-                        ...(popular && {
-                          border: '2px solid',
-                          borderColor: 'secondary.main',
-                          transform: { md: 'scale(1.05)' },
-                          zIndex: 2,
-                        }),
-                      }}
-                      hoverEffect={!popular}
-                    >
-                      {/* Kente Pattern Background for VIP tickets - DISABLED */}
-                      {/* {ticket.type.toLowerCase().includes('vip') && (
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            opacity: 0.03,
-                            zIndex: 0,
-                          }}
-                        >
-                          <KentePatternIcon size={100} opacity={0.05} />
-                        </Box>
-                      )} */}
-                      <Box sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                        {badge && (
-                          <Box
-                            sx={{
-                              backgroundColor:
-                                badge === 'BEST VALUE'
-                                  ? 'secondary.main'
-                                  : badge === 'PREMIUM'
-                                  ? 'primary.main'
-                                  : 'success.main',
-                              color: badge === 'SPECIAL OFFER' ? '#000' : '#FFFFFF',
-                              px: 2,
-                              py: 0.5,
-                              borderRadius: '4px',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: 0.5,
-                              mb: 2,
-                              fontSize: '0.75rem',
-                              fontWeight: 700,
-                              width: 'fit-content',
-                            }}
-                          >
-                            {badge === 'BEST VALUE' && <Star size={14} />}
-                            {badge}
-                          </Box>
-                        )}
-                        <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
-                          {ticket.name}
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 1 }}>
-                          <Typography
-                            variant="h5"
-                            sx={{
-                              fontWeight: 700,
-                              color: popular ? 'secondary.main' : 'primary.main',
-                              fontSize: { xs: '1.4rem', md: '1.5rem' },
-                            }}
-                          >
-                            {GhanaVATCalculator.formatCurrency(calculateTicketVAT(ticket.price).totalPrice)}
-                          </Typography>
-                        </Box>
-                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                          {ticket.description}
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: 'text.secondary', fontStyle: 'italic' }}>
-                          *Price includes Ghana VAT (15%) and government levies (6%)
-                        </Typography>
-                        <List sx={{ mb: 3, flexGrow: 1, pl: 0 }}>
-                          {ticket.features.map((feature, idx) => (
-                            <ListItem key={idx} sx={{ px: 0, py: 0.5 }}>
-                              <ListItemIcon sx={{ minWidth: 32 }}>
-                                <Check size={18} color="#78C044" />
-                              </ListItemIcon>
-                              <ListItemText
-                                primary={feature}
-                                primaryTypographyProps={{
-                                  variant: 'body2',
-                                  sx: { lineHeight: 1.6 },
-                                }}
-                              />
-                            </ListItem>
-                          ))}
-                        </List>
-                        <CustomButton
-                          variant={popular ? 'contained' : 'outlined'}
-                          fullWidth
-                          onClick={() => handleBuyTicket(ticket)}
-                          sx={{
-                            ...(popular && {
-                              backgroundColor: 'secondary.main',
-                              color: '#000',
-                              '&:hover': {
-                                backgroundColor: '#e59915',
-                              },
-                            }),
-                            ...(!popular && {
-                              borderColor: 'primary.main',
-                              color: 'primary.main',
-                            }),
-                          }}
-                        >
-                          Buy Now <ArrowRight size={18} style={{ marginLeft: 8 }} />
-                        </CustomButton>
-                      </Box>
-                    </CustomCard>
-                  </Grid>
-                );
-              })}
+              {tickets.map((ticket, index) => (
+                <Grid item xs={12} md={6} lg={3} key={ticket.id}>
+                  <TicketCard
+                    ticket={ticket}
+                    variant="registration"
+                    onBuyClick={handleBuyTicket}
+                    isPopular={isPopular(ticket.type)}
+                  />
+                </Grid>
+              ))}
             </Grid>
           )}
-        </Section>
 
-        {/* Group Discounts */}
-        <Section backgroundColor="paper" py={8}>
-          <Grid container spacing={6} alignItems="center">
-            <Grid item xs={12} md={6}>
-              <Typography
-                variant="overline"
-                sx={{ color: 'secondary.main', fontWeight: 600, letterSpacing: 1 }}
-              >
-                Special Offers
-              </Typography>
-              <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-                Group & Corporate Packages
-              </Typography>
-              <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.8 }}>
-                Bring your team to AETC 2026 and save with our group discount rates. Perfect for
-                organizations looking to invest in their team's professional development.
-              </Typography>
-              <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8 }}>
-                Contact us at{' '}
-                <Box component="span" sx={{ color: 'secondary.main', fontWeight: 600 }}>
-                  registration@aetconference.com
-                </Box>{' '}
-                for custom corporate packages.
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <CustomCard accentColor="success" sx={{ p: 4 }}>
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
-                  Group Discount Tiers
-                </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  {[
-                    { size: '3-5 attendees', discount: '10% off' },
-                    { size: '6-10 attendees', discount: '15% off' },
-                    { size: '11-20 attendees', discount: '20% off' },
-                    { size: '21+ attendees', discount: 'Custom pricing' },
-                  ].map((tier, idx) => (
-                    <Box
-                      key={idx}
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        p: 2,
-                        backgroundColor: 'background.paper',
-                        borderRadius: '4px',
-                      }}
-                    >
-                      <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                        {tier.size}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        sx={{ fontWeight: 700, color: 'success.main' }}
-                      >
-                        {tier.discount}
-                      </Typography>
-                    </Box>
-                  ))}
+          {/* Registration Benefits */}
+          <Box sx={{ mt: 8, p: 4, backgroundColor: 'grey.50', borderRadius: 2 }}>
+            <Typography variant="h5" sx={{ fontWeight: 700, mb: 3, textAlign: 'center' }}>
+              What's Included in Your Pass
+            </Typography>
+            
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={4}>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                    🎯 Full Conference Access
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Access to all sessions, workshops, and networking events
+                  </Typography>
                 </Box>
-              </CustomCard>
+              </Grid>
+              
+              <Grid item xs={12} md={4}>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                    🍽️ Catered Meals
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Breakfast, lunch, and refreshments throughout the conference
+                  </Typography>
+                </Box>
+              </Grid>
+              
+              <Grid item xs={12} md={4}>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                    📱 Digital Materials
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Conference app, presentation slides, and networking directory
+                  </Typography>
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
-        </Section>
+          </Box>
 
-        {/* Payment Info */}
-        <Section backgroundColor="dark" py={6}>
-          <Box sx={{ textAlign: 'center', maxWidth: 600, mx: 'auto' }}>
-            <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: '#FFFFFF' }}>
-              Secure Payment Options
+          {/* Payment Information */}
+          <Box sx={{ mt: 6, p: 4, backgroundColor: 'primary.light', borderRadius: 2, color: 'primary.contrastText' }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+              💳 Secure Payment Options
             </Typography>
-            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.87)', lineHeight: 1.8 }}>
-              We accept payments via mobile money, bank transfer, and major credit cards. All
-              transactions are secured and processed in Ghana Cedis (₵) through Paystack.
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              We accept all major payment methods through our secure Paystack payment gateway:
             </Typography>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              {['💳 Credit/Debit Cards', '🏦 Bank Transfer', '📱 Mobile Money', '🌍 International Cards'].map((method, index) => (
+                <Typography key={index} variant="body2" sx={{ fontWeight: 500 }}>
+                  {method}
+                </Typography>
+              ))}
+            </Box>
+          </Box>
+
+          {/* Contact Information */}
+          <Box sx={{ mt: 6, textAlign: 'center' }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+              Need Help with Registration?
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              Our support team is here to assist you with any questions about registration or payments.
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <CustomButton
+                variant="outlined"
+                href="mailto:support@aetc.africa"
+              >
+                📧 Email Support
+              </CustomButton>
+              <CustomButton
+                variant="outlined"
+                href="tel:+233502519909"
+              >
+                📞 Call Support
+              </CustomButton>
+              <CustomButton
+                variant="outlined"
+                href="/contact"
+              >
+                💬 Contact Form
+              </CustomButton>
+            </Box>
           </Box>
         </Section>
-
       </main>
-
     </>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -19,6 +19,7 @@ import {
   ListItemText,
   Divider,
   Avatar,
+  Skeleton,
 } from '@mui/material';
 import { 
   QrCode, 
@@ -34,16 +35,11 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
-import { createClient } from '@supabase/supabase-js';
+import { useUserTickets } from '@/hooks/useTickets';
 import CustomButton from '@/components/ui/CustomButton';
 import CustomCard from '@/components/ui/CustomCard';
 import Section from '@/components/ui/Section';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface UserTicket {
   id: string;
@@ -56,6 +52,8 @@ interface UserTicket {
   qr_code: string;
   created_at: string;
   customer_name: string;
+  customer_email: string;
+  customer_phone: string;
   attendee_info?: {
     id: string;
     first_name: string;
@@ -63,417 +61,282 @@ interface UserTicket {
     email: string;
     form_completed_at: string;
     is_verified: boolean;
-  };
-  customer_email: string;
-  customer_phone: string;
+  } | null;
 }
 
 export default function MyTicketsPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-  const [tickets, setTickets] = useState<UserTicket[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  const loadUserTickets = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from('user_tickets')
-        .select(`
-          *,
-          orders!inner(
-            id,
-            customer_name,
-            customer_email,
-            customer_phone,
-            total_amount,
-            status,
-            created_at,
-            tickets!inner(
-              name,
-              type
-            )
-          ),
-          attendees(
-            id,
-            first_name,
-            last_name,
-            email,
-            form_completed_at,
-            is_verified
-          )
-        `)
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      const formattedTickets = data?.map(ticket => ({
-        id: ticket.id,
-        order_id: ticket.orders.id,
-        ticket_name: ticket.orders.tickets.name,
-        ticket_type: ticket.orders.tickets.type,
-        quantity: ticket.orders.quantity || 1,
-        total_amount: ticket.orders.total_amount,
-        status: ticket.orders.status,
-        qr_code: ticket.qr_code,
-        created_at: ticket.orders.created_at,
-        customer_name: ticket.orders.customer_name,
-        customer_email: ticket.orders.customer_email,
-        customer_phone: ticket.orders.customer_phone,
-      })) || [];
-
-      setTickets(formattedTickets);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [user?.id]);
+  const { tickets, loading, error, refreshTickets } = useUserTickets(user?.id);
 
   useEffect(() => {
     if (!authLoading && !user) {
       router.push('/auth/user-login');
       return;
     }
-    
-    if (user) {
-      loadUserTickets();
+  }, [user, authLoading, router]);
+
+  const downloadQRCode = async (qrCodeData: string, ticketName: string) => {
+    try {
+      const link = document.createElement('a');
+      link.href = qrCodeData;
+      link.download = `aetc-2026-${ticketName.replace(/\s+/g, '-').toLowerCase()}-qr.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading QR code:', error);
     }
-  }, [user, authLoading, router, loadUserTickets]);
-
-  const downloadTicket = (ticket: UserTicket) => {
-    // Create a simple ticket PDF content
-    const ticketContent = `
-AETC 2026 TICKET
-================
-
-Ticket Holder: ${ticket.customer_name}
-Email: ${ticket.customer_email}
-Phone: ${ticket.customer_phone}
-
-Ticket Type: ${ticket.ticket_name}
-Quantity: ${ticket.quantity}
-Total Paid: ₵${ticket.total_amount.toLocaleString()}
-
-Order ID: ${ticket.order_id}
-Purchase Date: ${new Date(ticket.created_at).toLocaleDateString()}
-
-Status: ${ticket.status.toUpperCase()}
-
-Please bring this ticket and a valid ID to the conference.
-    `;
-
-    const blob = new Blob([ticketContent], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `aetc-2026-ticket-${ticket.order_id}.txt`;
-    a.click();
-    window.URL.revokeObjectURL(url);
   };
 
-  if (authLoading || loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-        <CircularProgress size={60} />
-      </Box>
-    );
-  }
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'paid':
+        return 'success';
+      case 'pending':
+        return 'warning';
+      case 'failed':
+        return 'error';
+      default:
+        return 'default';
+    }
+  };
 
-  if (!user) {
-    return null; // Will redirect to login
+  const getStatusIcon = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'paid':
+        return <CheckCircle size={16} />;
+      case 'pending':
+        return <Clock size={16} />;
+      default:
+        return <Ticket size={16} />;
+    }
+  };
+
+  if (authLoading) {
+    return (
+      <Section py={10}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+          <CircularProgress size={40} />
+        </Box>
+      </Section>
+    );
   }
 
   return (
     <>
-      <PageBreadcrumb
+      <PageBreadcrumb 
         title="My Tickets"
-        subtitle="Manage your AETC 2026 conference tickets"
-        backgroundImage="/images-optimized/aetc-2025-pics-1-24.webp"
+        subtitle="Manage your AETC 2026 conference passes"
+        backgroundImage="/Images/AETC 2025 PICS 1-59 (1).JPG"
         breadcrumbItems={[
+          { label: 'Dashboard', href: '/dashboard' },
           { label: 'My Tickets', href: '/my-tickets' }
         ]}
       />
 
       <main>
         <Section py={10}>
-          <Box sx={{ maxWidth: 1200, mx: 'auto' }}>
-            {/* Welcome Section */}
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-                Welcome back, {user.email}!
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                Here are your AETC 2026 conference tickets and important information.
-              </Typography>
-            </Box>
-
-            {error && (
+          {loading ? (
+            <Grid container spacing={4}>
+              {[1, 2, 3].map((i) => (
+                <Grid item xs={12} md={6} lg={4} key={i}>
+                  <CustomCard sx={{ p: 3 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Skeleton variant="circular" width={40} height={40} />
+                      <Box sx={{ ml: 2, flexGrow: 1 }}>
+                        <Skeleton variant="text" width="60%" height={24} />
+                        <Skeleton variant="text" width="40%" height={16} />
+                      </Box>
+                    </Box>
+                    <Skeleton variant="rectangular" width="100%" height={200} sx={{ mb: 2 }} />
+                    <Skeleton variant="text" width="100%" height={20} />
+                    <Skeleton variant="text" width="80%" height={20} />
+                  </CustomCard>
+                </Grid>
+              ))}
+            </Grid>
+          ) : error ? (
+            <Box sx={{ textAlign: 'center', py: 8 }}>
               <Alert severity="error" sx={{ mb: 3 }}>
                 {error}
               </Alert>
-            )}
+              <CustomButton
+                variant="outlined"
+                onClick={refreshTickets}
+              >
+                Try Again
+              </CustomButton>
+            </Box>
+          ) : tickets.length === 0 ? (
+            <Box sx={{ textAlign: 'center', py: 8 }}>
+              <Avatar sx={{ width: 80, height: 80, mx: 'auto', mb: 3, backgroundColor: 'grey.200' }}>
+                <Ticket size={40} color="#666" />
+              </Avatar>
+              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+                No Tickets Found
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
+                You haven't purchased any tickets yet. Get your AETC 2026 pass now!
+              </Typography>
+              <CustomButton
+                variant="contained"
+                component={Link}
+                href="/registration"
+                size="large"
+              >
+                Buy Your Pass
+              </CustomButton>
+            </Box>
+          ) : (
+            <Grid container spacing={4}>
+              {tickets.map((ticket, index) => (
+                <Grid item xs={12} md={6} lg={4} key={ticket.id}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <CustomCard sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                      {/* Header */}
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                        <Avatar sx={{ backgroundColor: 'primary.main', mr: 2 }}>
+                          <Ticket size={24} />
+                        </Avatar>
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
+                            {ticket.ticket_name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary" sx={{ textTransform: 'capitalize' }}>
+                            {ticket.ticket_type} Pass
+                          </Typography>
+                        </Box>
+                        <Chip
+                          label={ticket.status}
+                          color={getStatusColor(ticket.status) as any}
+                          size="small"
+                          icon={getStatusIcon(ticket.status)}
+                        />
+                      </Box>
 
-            {tickets.length === 0 ? (
-              <CustomCard sx={{ p: 4, textAlign: 'center' }}>
-                <Ticket size={60} color="#FBA91E" style={{ marginBottom: 16 }} />
-                <Typography variant="h6" gutterBottom>
-                  No tickets found
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                  You haven't purchased any tickets yet. Browse our available ticket types and secure your spot at AETC 2026.
-                </Typography>
-                <CustomButton
-                  variant="contained"
-                  onClick={() => router.push('/registration')}
-                  sx={{
-                    backgroundColor: 'secondary.main',
-                    color: '#000',
-                    '&:hover': {
-                      backgroundColor: 'secondary.dark',
-                    },
-                  }}
-                >
-                  Browse Tickets
-                </CustomButton>
-              </CustomCard>
-            ) : (
-              <Grid container spacing={3}>
-                {/* Tickets List */}
-                <Grid item xs={12} lg={8}>
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                    Your Tickets ({tickets.length})
-                  </Typography>
-                  
-                  {tickets.map((ticket, index) => (
-                    <motion.div
-                      key={ticket.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <CustomCard sx={{ mb: 3, p: 3 }}>
-                        <Grid container spacing={3} alignItems="center">
-                          <Grid item xs={12} md={8}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                              <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
-                                <Ticket size={24} />
-                              </Avatar>
-                              <Box>
-                                <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                                  {ticket.ticket_name}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                  Order #{ticket.order_id}
-                                </Typography>
-                              </Box>
-                            </Box>
-                            
-                            <List dense>
-                              <ListItem sx={{ px: 0, py: 0.5 }}>
-                                <ListItemIcon sx={{ minWidth: 32 }}>
-                                  <User size={16} color="#FBA91E" />
-                                </ListItemIcon>
-                                <ListItemText 
-                                  primary={ticket.customer_name}
-                                  primaryTypographyProps={{ variant: 'body2' }}
-                                />
-                              </ListItem>
-                              <ListItem sx={{ px: 0, py: 0.5 }}>
-                                <ListItemIcon sx={{ minWidth: 32 }}>
-                                  <Mail size={16} color="#FBA91E" />
-                                </ListItemIcon>
-                                <ListItemText 
-                                  primary={ticket.customer_email}
-                                  primaryTypographyProps={{ variant: 'body2' }}
-                                />
-                              </ListItem>
-                              <ListItem sx={{ px: 0, py: 0.5 }}>
-                                <ListItemIcon sx={{ minWidth: 32 }}>
-                                  <Calendar size={16} color="#FBA91E" />
-                                </ListItemIcon>
-                                <ListItemText 
-                                  primary={`Purchased: ${new Date(ticket.created_at).toLocaleDateString()}`}
-                                  primaryTypographyProps={{ variant: 'body2' }}
-                                />
-                              </ListItem>
-                            </List>
-                          </Grid>
+                      {/* QR Code */}
+                      {ticket.qr_code && (
+                        <Box sx={{ textAlign: 'center', mb: 3 }}>
+                          <Box
+                            component="img"
+                            src={ticket.qr_code}
+                            alt={`QR Code for ${ticket.ticket_name}`}
+                            sx={{
+                              width: 150,
+                              height: 150,
+                              border: '1px solid #e0e0e0',
+                              borderRadius: 2,
+                              mx: 'auto',
+                              display: 'block'
+                            }}
+                          />
+                        </Box>
+                      )}
+
+                      {/* Ticket Details */}
+                      <Box sx={{ flexGrow: 1, mb: 3 }}>
+                        <List dense>
+                          <ListItem sx={{ px: 0, py: 0.5 }}>
+                            <ListItemIcon sx={{ minWidth: 32 }}>
+                              <Calendar size={16} color="#FBA91E" />
+                            </ListItemIcon>
+                            <ListItemText 
+                              primary="Conference Date"
+                              secondary="March 2026"
+                              primaryTypographyProps={{ variant: 'body2', fontWeight: 600 }}
+                              secondaryTypographyProps={{ variant: 'body2' }}
+                            />
+                          </ListItem>
                           
-                          <Grid item xs={12} md={4}>
-                            <Box sx={{ textAlign: { xs: 'left', md: 'right' } }}>
-                              <Chip 
-                                label={ticket.status.toUpperCase()} 
-                                color={ticket.status === 'completed' ? 'success' : 'warning'}
-                                sx={{ mb: 2 }}
-                              />
-                              <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                                ₵{ticket.total_amount.toLocaleString()}
-                              </Typography>
-                              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                                {ticket.quantity} ticket(s)
-                              </Typography>
-                              
-                              <Box sx={{ display: 'flex', gap: 1, flexDirection: { xs: 'row', md: 'column' } }}>
-                                <CustomButton
-                                  variant="outlined"
-                                  size="small"
-                                  startIcon={<Download size={16} />}
-                                  onClick={() => downloadTicket(ticket)}
-                                  fullWidth
-                                >
-                                  Download
-                                </CustomButton>
-                                {ticket.qr_code && (
-                                  <CustomButton
-                                    variant="contained"
-                                    size="small"
-                                    startIcon={<QrCode size={16} />}
-                                    onClick={() => {
-                                      // Create a new window with the QR code
-                                      const qrWindow = window.open('', '_blank', 'width=400,height=400');
-                                      if (qrWindow) {
-                                        qrWindow.document.write(`
-                                          <html>
-                                            <head><title>QR Code - ${ticket.ticket_name}</title></head>
-                                            <body style="text-align: center; padding: 20px; font-family: Arial, sans-serif;">
-                                              <h2>AETC 2026 Ticket QR Code</h2>
-                                              <img src="${ticket.qr_code}" alt="QR Code" style="max-width: 300px; height: auto;">
-                                              <p><strong>Ticket:</strong> ${ticket.ticket_name}</p>
-                                              <p><strong>Order:</strong> ${ticket.order_id}</p>
-                                              <p><strong>Attendee:</strong> ${ticket.customer_name}</p>
-                                            </body>
-                                          </html>
-                                        `);
-                                      }
-                                    }}
-                                    fullWidth
-                                    sx={{
-                                      backgroundColor: 'primary.main',
-                                      '&:hover': {
-                                        backgroundColor: 'primary.dark',
-                                      },
-                                    }}
-                                  >
-                                    View QR
-                                  </CustomButton>
-                                )}
-                                
-                                {/* Attendee Information Button */}
-                                <CustomButton
-                                  component={Link}
-                                  href={`/my-tickets/attendee-info/${ticket.id}`}
-                                  variant={ticket.attendee_info ? "outlined" : "contained"}
-                                  size="small"
-                                  startIcon={<User size={16} />}
-                                  fullWidth
-                                  sx={{
-                                    mt: 1,
-                                    backgroundColor: ticket.attendee_info ? 'transparent' : 'primary.main',
-                                    color: ticket.attendee_info ? 'primary.main' : 'white',
-                                    borderColor: 'primary.main',
-                                    '&:hover': {
-                                      backgroundColor: ticket.attendee_info ? 'primary.light' : 'primary.dark',
-                                      color: 'white',
-                                    },
-                                  }}
-                                >
-                                  {ticket.attendee_info ? 'Update Attendee Info' : 'Add Attendee Info'}
-                                </CustomButton>
-                                
-                                {ticket.attendee_info && (
-                                  <Box sx={{ mt: 1, p: 2, backgroundColor: 'success.light', borderRadius: 1 }}>
-                                    <Typography variant="caption" color="success.dark" sx={{ fontWeight: 600 }}>
-                                      ✓ Attendee information completed
-                                    </Typography>
-                                    <Typography variant="caption" display="block" color="success.dark">
-                                      {ticket.attendee_info.first_name} {ticket.attendee_info.last_name}
-                                    </Typography>
-                                  </Box>
-                                )}
-                              </Box>
-                            </Box>
+                          <ListItem sx={{ px: 0, py: 0.5 }}>
+                            <ListItemIcon sx={{ minWidth: 32 }}>
+                              <MapPin size={16} color="#FBA91E" />
+                            </ListItemIcon>
+                            <ListItemText 
+                              primary="Venue"
+                              secondary="Labadi Beach Hotel, Accra"
+                              primaryTypographyProps={{ variant: 'body2', fontWeight: 600 }}
+                              secondaryTypographyProps={{ variant: 'body2' }}
+                            />
+                          </ListItem>
+                          
+                          <ListItem sx={{ px: 0, py: 0.5 }}>
+                            <ListItemIcon sx={{ minWidth: 32 }}>
+                              <User size={16} color="#FBA91E" />
+                            </ListItemIcon>
+                            <ListItemText 
+                              primary="Customer"
+                              secondary={ticket.customer_name}
+                              primaryTypographyProps={{ variant: 'body2', fontWeight: 600 }}
+                              secondaryTypographyProps={{ variant: 'body2' }}
+                            />
+                          </ListItem>
+                        </List>
+                      </Box>
+
+                      {/* Actions */}
+                      <Box sx={{ mt: 'auto' }}>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <CustomButton
+                              variant="outlined"
+                              size="small"
+                              startIcon={<Download size={16} />}
+                              onClick={() => downloadQRCode(ticket.qr_code, ticket.ticket_name)}
+                              fullWidth
+                            >
+                              Download
+                            </CustomButton>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <CustomButton
+                              component={Link}
+                              href={`/my-tickets/attendee-info/${ticket.id}`}
+                              variant={ticket.attendee_info ? "outlined" : "contained"}
+                              size="small"
+                              startIcon={<User size={16} />}
+                              fullWidth
+                              sx={{
+                                backgroundColor: ticket.attendee_info ? 'transparent' : 'primary.main',
+                                color: ticket.attendee_info ? 'primary.main' : 'white',
+                                borderColor: 'primary.main',
+                                '&:hover': {
+                                  backgroundColor: ticket.attendee_info ? 'primary.light' : 'primary.dark',
+                                  color: 'white',
+                                },
+                              }}
+                            >
+                              {ticket.attendee_info ? 'Update Info' : 'Add Info'}
+                            </CustomButton>
                           </Grid>
                         </Grid>
-                      </CustomCard>
-                    </motion.div>
-                  ))}
+                        
+                        {ticket.attendee_info && (
+                          <Box sx={{ mt: 2, p: 2, backgroundColor: 'success.light', borderRadius: 1 }}>
+                            <Typography variant="caption" color="success.dark" sx={{ fontWeight: 600 }}>
+                              ✓ Attendee information completed
+                            </Typography>
+                            <Typography variant="caption" display="block" color="success.dark">
+                              {ticket.attendee_info.first_name} {ticket.attendee_info.last_name}
+                            </Typography>
+                          </Box>
+                        )}
+                      </Box>
+                    </CustomCard>
+                  </motion.div>
                 </Grid>
-
-                {/* Conference Info Sidebar */}
-                <Grid item xs={12} lg={4}>
-                  <CustomCard sx={{ p: 3, position: 'sticky', top: 20 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                      Conference Information
-                    </Typography>
-                    
-                    <List>
-                      <ListItem sx={{ px: 0, py: 1 }}>
-                        <ListItemIcon sx={{ minWidth: 32 }}>
-                          <Calendar size={20} color="#FBA91E" />
-                        </ListItemIcon>
-                        <ListItemText 
-                          primary="March 2026"
-                          secondary="Conference Dates"
-                        />
-                      </ListItem>
-                      
-                      <ListItem sx={{ px: 0, py: 1 }}>
-                        <ListItemIcon sx={{ minWidth: 32 }}>
-                          <MapPin size={20} color="#FBA91E" />
-                        </ListItemIcon>
-                        <ListItemText 
-                          primary="Labadi Beach Hotel"
-                          secondary="Accra, Ghana"
-                        />
-                      </ListItem>
-                      
-                      <ListItem sx={{ px: 0, py: 1 }}>
-                        <ListItemIcon sx={{ minWidth: 32 }}>
-                          <CheckCircle size={20} color="#78C044" />
-                        </ListItemIcon>
-                        <ListItemText 
-                          primary="Registration Complete"
-                          secondary="You're all set!"
-                        />
-                      </ListItem>
-                    </List>
-
-                    <Divider sx={{ my: 3 }} />
-
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                      Need help? Contact our support team:
-                    </Typography>
-                    
-                    <List dense>
-                      <ListItem sx={{ px: 0, py: 0.5 }}>
-                        <ListItemIcon sx={{ minWidth: 32 }}>
-                          <Mail size={16} color="#FBA91E" />
-                        </ListItemIcon>
-                        <ListItemText 
-                          primary="support@aetconference.com"
-                          primaryTypographyProps={{ variant: 'body2' }}
-                        />
-                      </ListItem>
-                      <ListItem sx={{ px: 0, py: 0.5 }}>
-                        <ListItemIcon sx={{ minWidth: 32 }}>
-                          <Phone size={16} color="#FBA91E" />
-                        </ListItemIcon>
-                        <ListItemText 
-                          primary="+233 502 519 909"
-                          primaryTypographyProps={{ variant: 'body2' }}
-                        />
-                      </ListItem>
-                    </List>
-                  </CustomCard>
-                </Grid>
-              </Grid>
-            )}
-          </Box>
+              ))}
+            </Grid>
+          )}
         </Section>
       </main>
-
     </>
   );
 }
