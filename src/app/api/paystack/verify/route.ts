@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { paystackService } from '@/lib/paystack';
 import { sendGridService } from '@/lib/sendgrid';
+import { cleanEmailTemplates } from '@/lib/email-templates-clean';
+import { QRCodeService } from '@/lib/qr-code';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -26,10 +28,18 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Find the order
+    // Find the order with ticket information
     const { data: order, error: orderError } = await supabase
       .from('orders')
-      .select('*')
+      .select(`
+        *,
+        tickets!inner(
+          id,
+          name,
+          type,
+          price
+        )
+      `)
       .eq('id', orderId)
       .eq('paystack_reference', reference)
       .single();
@@ -62,25 +72,33 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate QR codes for tickets
-    const ticketNumber = `AETC${Date.now()}${Math.floor(Math.random() * 1000)}`;
-    const qrData = JSON.stringify({
-      ticketNumber,
+    const baseQRData = {
       orderId: order.id,
       attendeeName: order.customer_name,
       attendeeEmail: order.customer_email,
-    });
+      ticketType: order.tickets.name,
+      purchaseDate: new Date().toISOString(),
+      eventName: 'Africa Energy Technology Conference 2026',
+      eventDate: 'March 2026',
+      venue: 'Labadi Beach Hotel, Accra, Ghana'
+    };
 
-    // Create user tickets
+    // Generate QR codes for each ticket
+    const qrCodes = await QRCodeService.generateMultipleQRCodes(baseQRData, order.quantity);
+
+    // Create user tickets with individual QR codes
     const userTickets = [];
     for (let i = 0; i < order.quantity; i++) {
+      const qrCodeData = qrCodes[i];
+      
       const { data: userTicket, error: ticketError } = await supabase
         .from('user_tickets')
         .insert([{
           order_id: order.id,
           user_id: order.user_id,
           ticket_id: order.ticket_id,
-          qr_code: qrData,
-          ticket_number: `${ticketNumber}-${i + 1}`,
+          qr_code: qrCodeData.qrCode,
+          ticket_number: qrCodeData.ticketNumber,
           attendee_name: order.customer_name,
           attendee_email: order.customer_email,
         }])
@@ -94,15 +112,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Generate QR code image (you can use a QR code library here)
-    const qrCodeImage = `data:image/svg+xml;base64,${Buffer.from(`
-      <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-        <rect width="200" height="200" fill="white"/>
-        <text x="100" y="100" text-anchor="middle" font-family="Arial" font-size="12">
-          ${ticketNumber}
-        </text>
-      </svg>
-    `).toString('base64')}`;
 
     // Check if user exists, if not, create account and send OTP
     let sendOtp = false;
@@ -135,17 +144,27 @@ export async function POST(request: NextRequest) {
           await supabase
             .from('user_tickets')
             .update({ 
-              qr_code: JSON.stringify({ ...JSON.parse(qrData), otp: otpCode })
+              qr_code: JSON.stringify({ 
+                ...JSON.parse(userTickets[0]?.qr_code || '{}'), 
+                otp: otpCode 
+              })
             })
             .eq('order_id', order.id);
 
-          // Send OTP email with professional template
+          // Send OTP email with clean template
           try {
-            await sendGridService.sendOTP(
-              order.customer_email,
+            const otpEmailHtml = cleanEmailTemplates.accountVerification({
+              customerName: order.customer_name,
+              customerEmail: order.customer_email,
               otpCode,
-              order.customer_name
-            );
+              expiresIn: '15 minutes'
+            });
+
+            await sendGridService.sendEmail({
+              to: order.customer_email,
+              subject: 'Verify Your AETC 2026 Account',
+              html: otpEmailHtml
+            });
           } catch (emailError) {
             console.error('Error sending OTP email:', emailError);
           }
@@ -157,20 +176,26 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Send purchase confirmation email
+    // Send purchase confirmation email with clean template
     try {
-      await sendGridService.sendTicketConfirmation(
-        order.customer_email,
-        {
-          orderId: order.id,
-          customerName: order.customer_name,
-          customerEmail: order.customer_email,
-          totalAmount: order.total_amount,
-          quantity: order.quantity,
-          ticketType: 'Conference Pass', // You might want to get this from ticket data
-        },
-        qrCodeImage
-      );
+      // Use the first QR code for the email (or generate a summary QR)
+      const primaryQRCode = qrCodes.length > 0 ? qrCodes[0].qrCode : null;
+      
+      const ticketEmailHtml = cleanEmailTemplates.ticketPurchaseSuccess({
+        customerName: order.customer_name,
+        customerEmail: order.customer_email,
+        ticketName: order.tickets.name,
+        quantity: order.quantity,
+        totalAmount: order.total_amount,
+        orderId: order.id,
+        qrCode: primaryQRCode || undefined
+      });
+
+      await sendGridService.sendEmail({
+        to: order.customer_email,
+        subject: 'Your AETC 2026 Tickets Are Ready!',
+        html: ticketEmailHtml
+      });
     } catch (emailError) {
       console.error('Error sending confirmation email:', emailError);
     }
@@ -184,7 +209,8 @@ export async function POST(request: NextRequest) {
         total_amount: order.total_amount,
         quantity: order.quantity,
       },
-      qrCode: qrCodeImage,
+      qrCode: qrCodes.length > 0 ? qrCodes[0].qrCode : null,
+      tickets: userTickets,
       sendOtp,
     });
 

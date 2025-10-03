@@ -142,8 +142,15 @@ export default function TicketPurchasePage() {
         throw new Error(result.error || 'Failed to initialize payment');
       }
 
-      // Debug: Check if Paystack key is available
-      const paystackKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || process.env.PAYSTACK_PUBLIC_KEY;
+      // Get Paystack public key from API
+      const configResponse = await fetch('/api/paystack/config');
+      const configResult = await configResponse.json();
+      
+      if (!configResponse.ok) {
+        throw new Error(configResult.error || 'Failed to get Paystack configuration');
+      }
+      
+      const paystackKey = configResult.publicKey;
       console.log('🔍 Paystack Debug Info:');
       console.log('Public Key Available:', !!paystackKey);
       console.log('Public Key Value:', paystackKey ? `${paystackKey.substring(0, 10)}...` : 'undefined');
@@ -441,7 +448,7 @@ export default function TicketPurchasePage() {
                   <CustomButton
                     variant="contained"
                     startIcon={<QrCode size={20} />}
-                    onClick={() => router.push('/dashboard')}
+                    onClick={() => router.push('/my-tickets')}
                     sx={{
                       backgroundColor: 'primary.main',
                       '&:hover': {
@@ -449,7 +456,7 @@ export default function TicketPurchasePage() {
                       },
                     }}
                   >
-                    View Dashboard
+                    View My Tickets
                   </CustomButton>
                 </Box>
               </CustomCard>
