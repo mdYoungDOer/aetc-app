@@ -26,11 +26,6 @@ import {
   Plane,
   CheckCircle,
   ArrowRight,
-  Home,
-  Heart,
-  MessageCircle,
-  Ticket,
-  Settings,
   LogOut,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -825,13 +820,13 @@ function AttendeeInfoForm() {
     <Box sx={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
       {/* Header */}
       <Box sx={{ backgroundColor: 'white', borderBottom: '1px solid #e0e0e0', py: 2 }}>
-        <Box sx={{ maxWidth: '1200px', mx: 'auto', px: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Box sx={{ maxWidth: '1000px', mx: 'auto', px: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <IconButton onClick={() => router.push('/my-tickets')} sx={{ p: 1 }}>
               <ArrowLeft size={24} />
             </IconButton>
             <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              Attendee Information
+              Complete Your Attendee Information
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -852,162 +847,99 @@ function AttendeeInfoForm() {
         </Box>
       </Box>
 
-      <Box sx={{ maxWidth: '1200px', mx: 'auto', p: 3 }}>
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '300px 1fr' }, gap: 4 }}>
-          {/* Left Sidebar */}
-          <Box>
-            <CustomCard sx={{ p: 3, mb: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-                <Box sx={{ 
-                  width: 40, 
-                  height: 40, 
-                  backgroundColor: '#293972', 
-                  borderRadius: '50%', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center' 
-                }}>
-                  <Typography variant="body2" sx={{ color: 'white', fontWeight: 600 }}>
-                    {user?.email?.charAt(0).toUpperCase() || 'U'}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                    {user?.email || 'User'}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Attendee
-                  </Typography>
-                </Box>
-              </Box>
-
-              <Divider sx={{ my: 2 }} />
-
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1, borderRadius: '8px', backgroundColor: '#f8f9fa' }}>
-                  <Home size={18} color="#293972" />
-                  <Typography variant="body2" sx={{ fontWeight: 500 }}>Overview</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1, borderRadius: '8px' }}>
-                  <Heart size={18} color="#666" />
-                  <Typography variant="body2">Favorites</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1, borderRadius: '8px' }}>
-                  <MessageCircle size={18} color="#666" />
-                  <Typography variant="body2">My Inquiries</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1, borderRadius: '8px' }}>
-                  <Ticket size={18} color="#666" />
-                  <Typography variant="body2">Support Tickets</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1, borderRadius: '8px' }}>
-                  <User size={18} color="#666" />
-                  <Typography variant="body2">Profile</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1, borderRadius: '8px' }}>
-                  <Settings size={18} color="#666" />
-                  <Typography variant="body2">Settings</Typography>
-                </Box>
-              </Box>
-            </CustomCard>
-          </Box>
-
-          {/* Main Content */}
-          <Box>
-            {/* Welcome Section */}
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-                Complete Your Attendee Information
-              </Typography>
-              <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-                Help us provide you with the best conference experience by completing your attendee profile.
-              </Typography>
-            </Box>
-
-            {/* Progress Stepper */}
-            <CustomCard sx={{ p: 3, mb: 4 }}>
-              <Stepper activeStep={activeStep} alternativeLabel>
-                {steps.map((step, index) => {
-                  const IconComponent = step.icon;
-                  return (
-                    <Step key={step.label}>
-                      <StepLabel
-                        StepIconComponent={() => (
-                          <Box sx={{ 
-                            width: 40, 
-                            height: 40, 
-                            borderRadius: '50%', 
-                            backgroundColor: activeStep >= index ? step.color : '#e0e0e0',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white'
-                          }}>
-                            <IconComponent size={20} />
-                          </Box>
-                        )}
-                      >
-                        <Typography variant="caption" sx={{ fontWeight: 500 }}>
-                          {step.label}
-                        </Typography>
-                      </StepLabel>
-                    </Step>
-                  );
-                })}
-              </Stepper>
-            </CustomCard>
-
-            {/* Form Content */}
-            <CustomCard sx={{ mb: 4 }}>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeStep}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {getStepContent(activeStep)}
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Navigation Buttons */}
-              <Box sx={{ p: 3, borderTop: '1px solid #e0e0e0', display: 'flex', justifyContent: 'space-between' }}>
-                <CustomButton
-                  variant="outlined"
-                  onClick={handleBack}
-                  disabled={activeStep === 0}
-                  startIcon={<ArrowLeft size={18} />}
-                >
-                  Back
-                </CustomButton>
-
-                {activeStep === steps.length - 1 ? (
-                  <CustomButton
-                    variant="contained"
-                    onClick={handleSubmit}
-                    disabled={submitting}
-                    endIcon={submitting ? <CircularProgress size={18} /> : <CheckCircle size={18} />}
-                    sx={{
-                      backgroundColor: '#4CAF50',
-                      '&:hover': { backgroundColor: '#45a049' }
-                    }}
-                  >
-                    {submitting ? 'Submitting...' : 'Submit Information'}
-                  </CustomButton>
-                ) : (
-                  <CustomButton
-                    variant="contained"
-                    onClick={handleNext}
-                    endIcon={<ArrowRight size={18} />}
-                  >
-                    Next
-                  </CustomButton>
-                )}
-              </Box>
-            </CustomCard>
-          </Box>
+      <Box sx={{ maxWidth: '1000px', mx: 'auto', p: 3 }}>
+        {/* Welcome Section */}
+        <Box sx={{ mb: 4, textAlign: 'center' }}>
+          <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
+            Complete Your Attendee Information
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
+            Help us provide you with the best conference experience by completing your attendee profile.
+          </Typography>
         </Box>
+
+        {/* Progress Stepper */}
+        <CustomCard sx={{ p: 3, mb: 4 }}>
+          <Stepper activeStep={activeStep} alternativeLabel>
+            {steps.map((step, index) => {
+              const IconComponent = step.icon;
+              return (
+                <Step key={step.label}>
+                  <StepLabel
+                    StepIconComponent={() => (
+                      <Box sx={{ 
+                        width: 40, 
+                        height: 40, 
+                        borderRadius: '50%', 
+                        backgroundColor: activeStep >= index ? step.color : '#e0e0e0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white'
+                      }}>
+                        <IconComponent size={20} />
+                      </Box>
+                    )}
+                  >
+                    <Typography variant="caption" sx={{ fontWeight: 500 }}>
+                      {step.label}
+                    </Typography>
+                  </StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+        </CustomCard>
+
+        {/* Form Content */}
+        <CustomCard sx={{ mb: 4 }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeStep}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {getStepContent(activeStep)}
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Navigation Buttons */}
+          <Box sx={{ p: 3, borderTop: '1px solid #e0e0e0', display: 'flex', justifyContent: 'space-between' }}>
+            <CustomButton
+              variant="outlined"
+              onClick={handleBack}
+              disabled={activeStep === 0}
+              startIcon={<ArrowLeft size={18} />}
+            >
+              Back
+            </CustomButton>
+
+            {activeStep === steps.length - 1 ? (
+              <CustomButton
+                variant="contained"
+                onClick={handleSubmit}
+                disabled={submitting}
+                endIcon={submitting ? <CircularProgress size={18} /> : <CheckCircle size={18} />}
+                sx={{
+                  backgroundColor: '#4CAF50',
+                  '&:hover': { backgroundColor: '#45a049' }
+                }}
+              >
+                {submitting ? 'Submitting...' : 'Submit Information'}
+              </CustomButton>
+            ) : (
+              <CustomButton
+                variant="contained"
+                onClick={handleNext}
+                endIcon={<ArrowRight size={18} />}
+              >
+                Next
+              </CustomButton>
+            )}
+          </Box>
+        </CustomCard>
       </Box>
     </Box>
   );
