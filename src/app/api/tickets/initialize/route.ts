@@ -29,10 +29,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Ticket not found or not available' }, { status: 404 });
     }
 
-    // Check availability
-    if (ticket.available < quantity) {
-      return NextResponse.json({ error: 'Not enough tickets available' }, { status: 400 });
-    }
+    // No availability checks - tickets are unlimited
 
     // Calculate total
     const totalAmount = ticket.price * quantity;
@@ -65,11 +62,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
     }
 
-    // Update available stock (optimistic)
-    await supabase
-      .from('tickets')
-      .update({ available: ticket.available - quantity })
-      .eq('id', ticketId);
+    // No stock updates needed - tickets are unlimited
 
     return NextResponse.json({
       amount: paystackService.cedisToPesewas(totalAmount),

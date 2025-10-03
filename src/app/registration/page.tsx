@@ -8,7 +8,6 @@ import Hero from '@/components/ui/Hero';
 import Section from '@/components/ui/Section';
 import CustomCard from '@/components/ui/CustomCard';
 import CustomButton from '@/components/ui/CustomButton';
-import TicketPurchaseModal from '@/components/TicketPurchaseModal';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import PaystackDebug from '@/components/PaystackDebug';
 import { createClient } from '@supabase/supabase-js';
@@ -26,15 +25,12 @@ interface Ticket {
   price: number;
   description: string;
   features: string[];
-  available: number;
   active: boolean;
 }
 
 export default function RegistrationPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     loadTickets();
@@ -58,8 +54,7 @@ export default function RegistrationPage() {
   };
 
   const handleBuyTicket = (ticket: Ticket) => {
-    setSelectedTicket(ticket);
-    setModalOpen(true);
+    window.location.href = `/purchase/${ticket.id}`;
   };
 
   const getTicketBadge = (type: string) => {
@@ -188,9 +183,6 @@ export default function RegistrationPage() {
                         <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
                           {ticket.description}
                         </Typography>
-                        <Typography variant="caption" sx={{ color: 'success.main', mb: 2, fontWeight: 600 }}>
-                          {ticket.available} tickets available
-                        </Typography>
                         <List sx={{ mb: 3, flexGrow: 1, pl: 0 }}>
                           {ticket.features.map((feature, idx) => (
                             <ListItem key={idx} sx={{ px: 0, py: 0.5 }}>
@@ -211,7 +203,6 @@ export default function RegistrationPage() {
                           variant={popular ? 'contained' : 'outlined'}
                           fullWidth
                           onClick={() => handleBuyTicket(ticket)}
-                          disabled={ticket.available === 0}
                           sx={{
                             ...(popular && {
                               backgroundColor: 'secondary.main',
@@ -226,8 +217,7 @@ export default function RegistrationPage() {
                             }),
                           }}
                         >
-                          {ticket.available === 0 ? 'Sold Out' : 'Buy Now'}{' '}
-                          {ticket.available > 0 && <ArrowRight size={18} style={{ marginLeft: 8 }} />}
+                          Buy Now <ArrowRight size={18} style={{ marginLeft: 8 }} />
                         </CustomButton>
                       </Box>
                     </CustomCard>
@@ -322,12 +312,6 @@ export default function RegistrationPage() {
         </Section>
       </main>
 
-      {/* Purchase Modal */}
-      <TicketPurchaseModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        ticket={selectedTicket}
-      />
     </>
   );
 }
