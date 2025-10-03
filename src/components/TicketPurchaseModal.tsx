@@ -93,10 +93,19 @@ export default function TicketPurchaseModal({ open, onClose, ticket }: TicketPur
   // Load Paystack script
   useEffect(() => {
     if (typeof window !== 'undefined' && !(window as any).PaystackPop) {
+      console.log('🔄 Loading Paystack script...');
       const script = document.createElement('script');
       script.src = 'https://js.paystack.co/v1/inline.js';
       script.async = true;
+      script.onload = () => {
+        console.log('✅ Paystack script loaded successfully');
+      };
+      script.onerror = () => {
+        console.error('❌ Failed to load Paystack script');
+      };
       document.head.appendChild(script);
+    } else if ((window as any).PaystackPop) {
+      console.log('✅ Paystack script already loaded');
     }
   }, []);
 
@@ -125,9 +134,24 @@ export default function TicketPurchaseModal({ open, onClose, ticket }: TicketPur
         throw new Error(result.error || 'Failed to initialize payment');
       }
 
+      // Debug: Check if Paystack key is available
+      const paystackKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || process.env.PAYSTACK_PUBLIC_KEY;
+      console.log('🔍 Paystack Debug Info:');
+      console.log('Public Key Available:', !!paystackKey);
+      console.log('Public Key Value:', paystackKey ? `${paystackKey.substring(0, 10)}...` : 'undefined');
+      console.log('Window PaystackPop Available:', !!(window as any).PaystackPop);
+      
+      if (!paystackKey) {
+        throw new Error('Paystack public key is not configured. Please check your environment variables.');
+      }
+
+      if (!(window as any).PaystackPop) {
+        throw new Error('Paystack script not loaded. Please refresh the page and try again.');
+      }
+
       // Use Paystack inline modal instead of redirect
       const handler = (window as any).PaystackPop.setup({
-        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || process.env.PAYSTACK_PUBLIC_KEY,
+        key: paystackKey,
         email: data.customerEmail,
         amount: result.amount,
         currency: 'GHS',

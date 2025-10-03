@@ -10,6 +10,7 @@ import CustomCard from '@/components/ui/CustomCard';
 import CustomButton from '@/components/ui/CustomButton';
 import TicketPurchaseModal from '@/components/TicketPurchaseModal';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import PaystackDebug from '@/components/PaystackDebug';
 import { createClient } from '@supabase/supabase-js';
 // import { ElephantIcon, KentePatternIcon } from '@/components/icons';
 
@@ -313,6 +314,11 @@ export default function RegistrationPage() {
               transactions are secured and processed in Ghana Cedis (₵) through Paystack.
             </Typography>
           </Box>
+        </Section>
+
+        {/* Debug Section - Remove in production */}
+        <Section id="debug" title="Paystack Debug Info" backgroundColor="paper" py={5}>
+          <PaystackDebug />
         </Section>
       </main>
 
